@@ -1,0 +1,14 @@
+table, th, td {
+    border: 1px solid black;
+}
+
+td {
+    text-align: center;
+}
+
+.board-cell {
+    width: 24%;
+    font-size: 50px;
+    text-align: center;
+    border: 1px solid black;
+}
