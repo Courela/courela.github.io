@@ -26,7 +26,7 @@ function parseMenus(data) {
 		var catId = category.id;
 		var catName = category.name;
 		
-		console.log("Category to parse: " + catName);
+		// console.log("Category to parse: " + catName);
 		
 		for (var j = 0; j < category.items.length; j++) {
 			var item = category.items[j];
@@ -75,7 +75,7 @@ function printCategories(categories) {
         var settings = $('#divCategories');
 
         var keys = Object.keys(categories);
-		console.log("Category keys: " + keys);
+		// console.log("Category keys: " + keys);
 		for (var i = 0; i < keys.length; i++) {
 			var category = keys[i];
 		    var checkBox = $('<input type="checkbox" value="' + category + '" title="' + category +'" placeholder="" />');

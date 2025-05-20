@@ -121,7 +121,7 @@ async function login() {
 async function startup() {
 	var restaurantId = sessionStorage.getItem("restaurantId");
 	var token = sessionStorage.getItem("token");
-	var expire = sessionStorage.getItem("expire");
+	var expire = Number(sessionStorage.getItem("expire"));
 	
 	if (restaurantId && token && Date.now() < expire) {
 		console.log("Session authentication used");
@@ -132,7 +132,7 @@ async function startup() {
 	$('#login').click(login);
 
 	$('#chkAllCategories').change(function () {
-		const categories = $('input[type="checkbox"]:checked');
+		const categories = $('#divCategories input[type="checkbox"]:checked');
 		categories.each(function () {
 			var checkBox = $(this);
 			if (checkBox.val() !== 'all') {
@@ -143,4 +143,19 @@ async function startup() {
 		var groupByStatus = groupByDishes(window.mealRequests);
 		recalculateDashboard(groupByStatus);
 	});
+
+	$('#chkAllStatuses').change(function () {
+		const statuses = $('#divStatuses input[type="checkbox"]:checked');
+		statuses.each(function () {
+			var checkBox = $(this);
+			if (checkBox.val() !== 'all') {
+				checkBox.prop('checked', false);
+			}
+		});
+
+		var groupByStatus = groupByDishes(window.mealRequests);
+		recalculateDashboard(groupByStatus);
+	});
+
+	printStatuses(["ORDERED", "COOKING", "READY", "SERVED"]);
 }

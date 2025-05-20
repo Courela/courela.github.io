@@ -10,7 +10,7 @@ function meals(restaurantId, token) {
 		contentType: "application/json",
 		headers: { "Authorization": "Token " + token },
 		success: function (res) {
-			console.log("Meals: " + JSON.stringify(res));
+			// console.log("Meals: " + JSON.stringify(res));
 			var mealRequests = parseMeals(res);
 			window.mealRequests = mealRequests;
 			// printMeals(toPrepareMeals);
@@ -25,13 +25,16 @@ function parseMeals(data) {
 	var toPrepareMeals = [];
 	for (var i = 0; i < data.length; i++) {
 		var order = data[i];
+		if (order.deleted) {
+			continue;
+		}
+
 		var table = order.table;
-		
 		var keys = Object.keys(order.itemstamps);
-		console.log("Keys to parse: " + keys);
+		// console.log("Keys to parse: " + keys);
 		for (var j = 0; j < keys.length; j++) {
 			var item = order.itemstamps[keys[j]];
-			console.log("Item in order: " + JSON.stringify(item));
+			// console.log("Item in order: " + JSON.stringify(item));
 			var id = item.id;
 			var status = item.status;
 			var productId = item.item.id;
@@ -41,7 +44,7 @@ function parseMeals(data) {
 		}
 	}
 	
-	console.log("To prepare: " + JSON.stringify(toPrepareMeals));
+	// console.log("To prepare: " + JSON.stringify(toPrepareMeals));
 	return toPrepareMeals;
 }
 
@@ -82,13 +85,13 @@ function printDashboard(groupByStatus) {
 		
 	if (groupByStatus) {
 		var statuses = Object.keys(groupByStatus);
-		console.log("Keys to parse: " + statuses);
+		// console.log("Keys to parse: " + statuses);
 		for (var i = 0; i < statuses.length; i++) {
 			var status = groupByStatus[statuses[i]];
-			console.log('Item in ' + statuses[i] + ': ' + JSON.stringify(status));
+			// console.log('Item in ' + statuses[i] + ': ' + JSON.stringify(status));
 			
 			var dishes = status.reduce((acc, dish) => {
-				if (inSelectedCategory(dish)) {
+				if (isSelected(dish)) {
 					const key = dish.description;
 					if (!acc[key]) {
 						acc[key] = 0;
@@ -114,8 +117,12 @@ function printDashboard(groupByStatus) {
 	// console.log("Table meals: " + JSON.stringify(table));
 }
 
+function isSelected(dish) {
+	return inSelectedCategory(dish) && inSelectedStatus(dish);
+}
+
 function inSelectedCategory(dish) {
-	const categories = $('input[type="checkbox"]:checked');
+	const categories = $('#divCategories input[type="checkbox"]:checked');
 	const allChecked = categories.length === 1 && categories.val() === 'all';
 	if (allChecked) {
 		return true;
@@ -128,8 +135,28 @@ function inSelectedCategory(dish) {
 	
 	categories.each(function () {
 		const category = $(this).val();
-		console.log("Selected category: " + category);
 		if (menus.find(m => m.category === category && m.itemId === productId)) {
+			console.log("Selected category: " + category);
+			result = true;
+		};
+	});
+
+	return result;
+}
+
+function inSelectedStatus(dish) {
+	const statuses = $('#divStatuses input[type="checkbox"]:checked');
+	const allChecked = statuses.length === 1 && statuses.val() === 'all';
+	if (allChecked) {
+		return true;
+	}
+
+	var result = false;
+	
+	statuses.each(function () {
+		const status = $(this).val();
+		if (dish.status == status) {
+			console.log("Selected status: " + status);
 			result = true;
 		};
 	});
@@ -162,4 +189,21 @@ function recalculateDashboard() {
 	$('#dishes').empty();
 	var groupByStatus = groupByDishes(window.mealRequests);
 	printDashboard(groupByStatus);
+}
+
+function printStatuses(statuses) {
+    if (statuses && statuses.length > 0) {
+        var settings = $('#divStatuses');
+
+        // console.log("Statuses: " + JSON.stringify(statuses));
+		for (var i = 0; i < statuses.length; i++) {
+			var status = statuses[i];
+		    var checkBox = $('<input type="checkbox" value="' + status + '" title="' + status +'" placeholder="" />');
+            checkBox.change(function () {
+                $('#chkAllStatuses').prop('checked', false);
+                recalculateDashboard();
+            });
+            settings.append('<span>' + status + '</span>', checkBox);
+        }
+    }
 }
