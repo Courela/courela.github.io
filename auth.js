@@ -109,53 +109,11 @@ async function login() {
 			var token = sessionStorage.getItem("token");
 
 			displayAll(true);
-			print(restaurantId, token);
+			await print(restaurantId, token);
 		} else {
 			alert('Autenticação falhou!');
 		}
 	} else {
 		alert("Utilizar e Password obrigatórios");
 	}
-}
-
-async function startup() {
-	var restaurantId = sessionStorage.getItem("restaurantId");
-	var token = sessionStorage.getItem("token");
-	var expire = Number(sessionStorage.getItem("expire"));
-	
-	if (restaurantId && token && Date.now() < expire) {
-		console.log("Session authentication used");
-		displayAll(true);
-		print(restaurantId, token);
-	}
-	
-	$('#login').click(login);
-
-	$('#chkAllCategories').change(function () {
-		const categories = $('#divCategories input[type="checkbox"]:checked');
-		categories.each(function () {
-			var checkBox = $(this);
-			if (checkBox.val() !== 'all') {
-				checkBox.prop('checked', false);
-			}
-		});
-
-		var groupByStatus = groupByDishes(window.mealRequests);
-		recalculateDashboard(groupByStatus);
-	});
-
-	$('#chkAllStatuses').change(function () {
-		const statuses = $('#divStatuses input[type="checkbox"]:checked');
-		statuses.each(function () {
-			var checkBox = $(this);
-			if (checkBox.val() !== 'all') {
-				checkBox.prop('checked', false);
-			}
-		});
-
-		var groupByStatus = groupByDishes(window.mealRequests);
-		recalculateDashboard(groupByStatus);
-	});
-
-	printStatuses(["ORDERED", "COOKING", "READY", "SERVED"]);
 }

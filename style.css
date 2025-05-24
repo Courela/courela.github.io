@@ -12,3 +12,12 @@ td {
     text-align: center;
     border: 1px solid black;
 }
+
+div.option {
+    display: inline;
+    margin: 0px 10px;
+}
+
+div.sub-options {
+    margin: 0px 10px;
+}
