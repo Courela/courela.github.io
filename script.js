@@ -1,19 +1,26 @@
 function isSelected(dish) {
-	return (inSelectedCategory(dish) || inSelectedDescription(dish)) && inSelectedStatus(dish);
+	var inAllCategories = inSelectedAllCategories();
+
+	var inCategory = inAllCategories || inSelectedCategory(dish);
+	var inDescription = inAllCategories || inSelectedDescription(dish, inCategory);
+	var inStatus = inSelectedStatus(dish);
+
+	return inCategory && inDescription && inStatus;
+}
+
+function inSelectedAllCategories() {
+	const categories = $('#divCategories input[type="checkbox"]:checked');
+	const allChecked = categories.length === 1 && categories.val() === 'all';
+	return allChecked;
 }
 
 function inSelectedCategory(dish) {
-	const categories = $('#divCategories input[type="checkbox"]:checked');
-	const allChecked = categories.length === 1 && categories.val() === 'all';
-	if (allChecked) {
-		return true;
-	}
-
 	var result = false;
 	
 	const productId = dish.productId;
 	var menus = window.menus;
 	
+	const categories = $('#divCategories input[type="checkbox"]:checked');
 	categories.each(function () {
 		const category = $(this).val();
 		if (menus.find(m => m.category === category && m.itemId === productId)) {
@@ -45,24 +52,31 @@ function inSelectedStatus(dish) {
 	return result;
 }
 
-function inSelectedDescription(dish) {
-	const subCategories = $('#divCategories .sub-options input[type="checkbox"]:checked');
+function inSelectedDescription(dish, inCategory) {
 	var result = false;
-	
-	subCategories.each(function () {
-		const subCat = $(this).val();
-		if (dish.itemDescription == subCat) {
-			console.log("Selected sub-category: " + subCat);
-			result = true;
-		};
-	});
+	if (!inCategory) {
+		return result;
+	}
+
+	const subCategories = $('#divCategories .sub-options input[type="checkbox"]:checked');
+	if (subCategories.length > 0) {
+		subCategories.each(function () {
+			const subCat = $(this).val();
+			if (dish.itemDescription == subCat) {
+				console.log("Selected sub-category: " + subCat);
+				result = true;
+			};
+		});
+	} else {
+		result = true;
+	}
 
 	return result;
 }
 
 async function print(restaurantId, token) {
 	await menus(restaurantId, token);
-	meals(restaurantId, token);
+	await meals(restaurantId, token);
 }
 
 function displayAll(show) {
@@ -82,9 +96,31 @@ function displayAll(show) {
 }
 
 function recalculateDashboard() {
+	console.log('Refreshing dashboard...');
 	$('#dishes').empty();
-	var groupByStatuses = groupByStatus(window.mealRequests, window.descriptionSplit);
+	var meals = window.meals;
+	var mealRequests = parseMeals(meals);
+	var groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
 	printDashboard(groupByStatuses);
+	console.log('Done refreshing dashboard.');
+}
+
+function bindRefresh() {
+	window.intervalId = setInterval(() => {
+		recalculateDashboard();
+	}, window.refeshPeriod);
+}
+
+function bindSettings() {
+	bindSettingsEvents();
+	bindRefresh();
+}
+
+function setSettings() {
+	window.descriptionSplit = true;
+	window.nullDescription = 'Geral';
+	window.showStatuses = ["ORDERED", "COOKING", "READY", "SERVED", "CANCELLED" ];
+	window.refeshPeriod = 3600000;
 }
 
 async function startup() {
@@ -97,17 +133,15 @@ async function startup() {
 	
 	if (restaurantId && token && Date.now() < expire) {
 		console.log("Session authentication used");
-		displayAll(true);
-		await print(restaurantId, token);
+		if (window.location.href.indexOf("index.html") === -1) {
+			displayAll(true);
+			await print(restaurantId, token);
+		} else {
+			window.location.href = "kitchen.html";
+		}
 	}
 	
 	$('#login').click(login);
 
-	bindSettingsEvents();
-}
-
-function setSettings() {
-	window.descriptionSplit = true;
-	window.nullDescription = 'Geral';
-	window.showStatuses = ["ORDERED", "COOKING", "READY", "SERVED", "CANCELLED" ];
+	bindSettings();
 }

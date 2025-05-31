@@ -127,9 +127,12 @@ function printSubCategories(items, opt) {
 				subCheckBox.change(function () {
 					$('#chkAllCategories').prop('checked', false);
 					var self = $(this);
-					var parent = self.parent().parent();
-					var input = parent.children().filter('input');
-					input.prop('checked', false);
+					var directParent = self.parent();
+					var upperParent = directParent.parent();
+					// var catInput = $(upperParent).find('input');
+					// catInput.prop('checked', self.prop('checked').val());
+					var input = upperParent.children().filter('input');
+					input.prop('checked', self.prop('checked'));
 					recalculateDashboard();
 				});
 				subOpt.append('<span>' + descr + '</span>', subCheckBox);
@@ -169,7 +172,9 @@ function bindSettingsEvents() {
 			}
 		});
 
-		var groupByStatuses = groupByStatus(window.mealRequests, window.descriptionSplit);
+		var meals = window.meals;
+		var mealRequests = parseMeals(meals);
+		var groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
 		recalculateDashboard(groupByStatuses);
 	});
 
@@ -182,7 +187,9 @@ function bindSettingsEvents() {
 			}
 		});
 
-		var groupByStatuses = groupByStatus(window.mealRequests, window.descriptionSplit);
+		var meals = window.meals;
+		var mealRequests = parseMeals(meals);
+		var groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
 		recalculateDashboard(groupByStatuses);
 	});
 }

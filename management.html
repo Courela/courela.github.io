@@ -1,0 +1,57 @@
+<html lang="pt">
+	<header>
+		<title>Mesas</title>
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous">
+		</script>
+		<script src="script.js"></script>
+		<script src="auth.js"></script>
+		<script src="menus.js"></script>
+		<script src="meals.js"></script>
+		<link rel="stylesheet" href="management.css">
+		<script>
+            window.showTables = true;
+			$(document).ready(startup);
+		</script>
+	</header>
+	<body>
+		<div id="credentials">
+			<label for="username">Utilizador: </label><input id="username"></input>&nbsp;
+			<label for="password">Password: </label><input id="password" type="password"></input>&nbsp;
+			<button id="login">Entrar</button>
+		</div>
+		<div id="settings" style="display: none;">
+			<p><strong>Definições</strong></p>
+			<div id="divCategories" style="display: flex; align-items: flex-start;">
+				<strong><span>Categorias: </span></strong>
+				<span>Todas</span>
+				<input id="chkAllCategories" type="checkbox" title="Todas" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
+			</div>
+			<br />
+			<div id="divStatuses">
+				<strong><span>Estado: </span></strong>
+				<span>Todos</span>
+				<input id="chkAllStatuses" type="checkbox" title="Todos" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
+			</div>
+		</div>
+		<div id="menusContent" style="display: none;">
+			<!-- <p>Response</p> -->
+			<!-- <p id="auth"></p> -->
+			<!-- <br /> -->
+			
+			<p>Menus</p>
+			<p id="menus"></p>
+		</div>
+		<div id="mealsContent" style="display: none;">
+			<p>Refeições</p>
+			<p id="meals"></p>
+		</div>
+		
+		<div id="dashboard" style="display: none;">
+			<p>Pratos</p>
+			<div id="dishes" style="display: flex; flex-flow: row wrap;"></div>
+		</div>
+	</body>
+</html>

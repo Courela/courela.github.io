@@ -108,8 +108,9 @@ async function login() {
 			var restaurantId = sessionStorage.getItem("restaurantId");
 			var token = sessionStorage.getItem("token");
 
-			displayAll(true);
-			await print(restaurantId, token);
+			// displayAll(true);
+			// await print(restaurantId, token);
+			window.location.href = "kitchen.html";
 		} else {
 			alert('Autenticação falhou!');
 		}
