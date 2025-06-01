@@ -1,11 +1,11 @@
 function prepareAuthentication(username, password) {
-	var authCred = username + ':' + password;
-	var base64Str = btoa(authCred);
-	var now = Date.now();
-	var body = '{"authenticationType":"Basic ","authenticationCredentials":"' + base64Str + '","device":{"_id":"51f6a9113758960f3a9ee701","creationTime":' + now + ',"lastEditTime":' + now + ',"networkAdapters":[],"browser":true,"os":"Windows","size":"desktop"},"referrer":"www.bing.com","referrers":"www.bing.com,www.waiterio.com,www.waiterio.com/pt/pricing,www.waiterio.com/docs/pt,undefined","user":{"language":"pt","_id":"9ea102d713fb1ce2832209ba","creationTime":' + now + ',"lastEditTime":' + now + ',"firstName":"","lastName":"","settings":{"showTips":"NEVER","showSuggestions":true,"ratedAndroidApp":false,"sortOrdersBy":"TABLE_NAME","showOnlyMyOrders":false,"hidePaidOrders":true,"hideOrdersAutomatically":"AT_6AM","ordersLayout":"MULTI_COLUMN_VIEW"}},"expireTime":0}';
+	let authCred = username + ':' + password;
+	let base64Str = btoa(authCred);
+	let now = Date.now();
+	let body = '{"authenticationType":"Basic ","authenticationCredentials":"' + base64Str + '","device":{"_id":"51f6a9113758960f3a9ee701","creationTime":' + now + ',"lastEditTime":' + now + ',"networkAdapters":[],"browser":true,"os":"Windows","size":"desktop"},"referrer":"www.bing.com","referrers":"www.bing.com,www.waiterio.com,www.waiterio.com/pt/pricing,www.waiterio.com/docs/pt,undefined","user":{"language":"pt","_id":"9ea102d713fb1ce2832209ba","creationTime":' + now + ',"lastEditTime":' + now + ',"firstName":"","lastName":"","settings":{"showTips":"NEVER","showSuggestions":true,"ratedAndroidApp":false,"sortOrdersBy":"TABLE_NAME","showOnlyMyOrders":false,"hidePaidOrders":true,"hideOrdersAutomatically":"AT_6AM","ordersLayout":"MULTI_COLUMN_VIEW"}},"expireTime":0}';
 	
 	/*
-	var body = {
+	let body = {
 		"authenticationType":"Basic ",
 		"authenticationCredentials": base64Str,
 		"device": {
@@ -44,7 +44,7 @@ function prepareAuthentication(username, password) {
 }
 
 function authenticateXhr(url, body) {
-	var xhttp = new XMLHttpRequest();
+	let xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 		   // Typical action to be performed when the document is ready:
@@ -77,7 +77,7 @@ async function authenticate(url, data) {
 		
 		// displayAll(true);
 		
-		var token = res.waiterioToken;
+		let token = res.waiterioToken;
 		
 		sessionStorage.setItem("restaurantId", res.roles[0].restaurantId);
 		sessionStorage.setItem("token", token);
@@ -97,16 +97,16 @@ async function authenticate(url, data) {
 async function login() {	
 	console.log("Going to authenticate...");
 	
-	var username = $('#username').val();
-	var password = $('#password').val();
+	let username = $('#username').val();
+	let password = $('#password').val();
 	
 	if (username && password) {
-		var url = 'https://api.waiterio.com/api/v3/authentication';
-		var body = prepareAuthentication(username, password);
+		let url = 'https://api.waiterio.com/api/v3/authentication';
+		let body = prepareAuthentication(username, password);
 		const response = await authenticate(url, body);
 		if (response) {
-			var restaurantId = sessionStorage.getItem("restaurantId");
-			var token = sessionStorage.getItem("token");
+			let restaurantId = sessionStorage.getItem("restaurantId");
+			let token = sessionStorage.getItem("token");
 
 			// displayAll(true);
 			// await print(restaurantId, token);
