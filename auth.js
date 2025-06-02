@@ -79,6 +79,7 @@ async function authenticate(url, data) {
 		
 		let token = res.waiterioToken;
 		
+		sessionStorage.setItem("userId", res.user._id);
 		sessionStorage.setItem("restaurantId", res.roles[0].restaurantId);
 		sessionStorage.setItem("token", token);
 		sessionStorage.setItem("expire", res.waiterioTokenExpireTime);
