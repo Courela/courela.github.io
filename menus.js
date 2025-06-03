@@ -192,4 +192,14 @@ function bindSettingsEvents() {
 		let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
 		recalculateDashboard(groupByStatuses);
 	});
+
+	let refreshPeriod = window.refreshPeriod / 1000;
+	$('#iptRefreshPeriod').val(refreshPeriod);
+
+	$('#btnApplyRefreshPeriod').click(() => {
+		clearInterval(window.intervalId);
+		let newRefreshPeriod = $('#iptRefreshPeriod').val();
+		window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
+		bindRefresh();
+	});
 }

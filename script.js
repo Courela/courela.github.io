@@ -109,7 +109,7 @@ function bindRefresh() {
 	window.intervalId = setInterval(async () => {
 		refreshAuth();
 		// recalculateDashboard();
-	}, window.refeshPeriod);
+	}, window.refreshPeriod);
 }
 
 function bindSettings() {
@@ -121,7 +121,7 @@ function setSettings() {
 	window.descriptionSplit = true;
 	window.nullDescription = 'Geral';
 	window.showStatuses = ["ORDERED", "COOKING", "READY", "SERVED", "CANCELLED" ];
-	window.refeshPeriod = 3600000;
+	window.refreshPeriod = 3600000;
 }
 
 async function startup() {
