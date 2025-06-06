@@ -171,44 +171,69 @@ function toDateTime(timestamp) {
     date.getSeconds();
 }
 
-function markAsServed(evt) {
+async function markAsServed(evt) {
     let anchor = $($(evt)[0].target);
     let table = anchor.text();
     let ids = anchor.parent().find('input');
     let orderId = ids.filter("[name$=orderId]").val();
     let itemId = ids.filter("[name$=itemId]").val();
 
-    let token = sessionStorage.getItem("token");
-    let order = getOrder(orderId, token);
+    let order = await getOrder(orderId);
 
     // let items = Object.keys(order.itemstamps);
-    if (order.itemstamps[itemId]) {
-        order.itemstamps[itemId].status = 'SERVED';
+    if (order && order.itemstamps[itemId]) {
+        order.itemstamps[itemId].status = 'READY';
+        let now = Date.now();
+        order.lastEditTime = now;
+        order.itemstamps[itemId].lastEditTime = now;
     } else {
+        alert('Não encontrado!');
         console.err('Not found: ' + itemId);
     };
+
+    updateOrder(orderId, order);
 
     // let payload = '{"table":"'+table+'","restaurantId":"'+ restaurantId +'","usersIds":["'+sessionStorage.getItem("userId");+'"],"service":"TABLE","_id":"'+orderId+'","shortId":"CP3o","creationTime":1748898713029,"lastEditTime":'+Date.now()+',"itemstamps":{"fdcd66fe3cd328da6ea4d8be":{"id":"fdcd66fe3cd328da6ea4d8be","creationTime":1748898724212,"userId":"3e91b1b06e4744924069fc5c","status":"COOKING","item":{"id":"01dac1fc7243a00c1ed31440","name":"Queijo Seco","price":2.5},"lastEditTime":1748899093389,"course":0,"extras":[]},"63c96d8d747d1c79faf464b3":{"id":"63c96d8d747d1c79faf464b3","creationTime":1748898727043,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"b721fb8b5219d64bd5a4da1e","name":"Prego","price":3.5},"lastEditTime":1748898739325,"course":0,"extras":[]},"d090ad49127dedd32368887a":{"id":"d090ad49127dedd32368887a","creationTime":1748898729392,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"e61f2a8a124321bebb354b5f","name":"Favas com Entrecosto","price":0},"lastEditTime":1748898739325,"course":0,"extras":[]},"251c2ef958123d49c6a59fd1":{"id":"251c2ef958123d49c6a59fd1","creationTime":1748898732787,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"2adb864aa470396550a75af5","name":"Cheesecake","price":2},"lastEditTime":1748898739325,"course":0,"extras":[]}},"customers":1,"customersPaid":0}';
 }
 
-async function getOrder(orderId, token) {
-    let url = 'https://app.waiterio.com/orders/' + orderId;
+async function getOrder(orderId) {
+    let url = 'https://api.waiterio.com/api/v3/meals/' + orderId;
     try {
+        let token = sessionStorage.getItem("token");
         let res = await $.ajax({
             type: "get",
             url: url,
             contentType: "application/json",
             headers: {
-                "Accept": "application/json",
-                // "Referer": "https://app.waiterio.com", 
-                // "Origin": "https://app.waiterio.com",
                 "Authorization": "Token " + token
-                // "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0"
             }
         });
 
         console.log('Order ' + orderId + ': ' + JSON.stringify(res));
 
+        return res;
+    } catch (err) {
+        console.log(err);
+    }
+
+    return null;
+}
+
+async function updateOrder(orderId, order) {
+    let url = 'https://api.waiterio.com/api/v3/meals/' + orderId;
+    try {
+        let token = sessionStorage.getItem("token");
+        let res = await $.ajax({
+            type: "put",
+            url: url,
+            contentType: "application/json",
+            headers: {
+                "Authorization": "Token " + token
+            },
+            data: JSON.stringify(order)
+        });
+
+        console.log('Update order ' + orderId + ': ' + JSON.stringify(res));
     } catch (err) {
         console.log(err);
     }
