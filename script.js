@@ -58,7 +58,15 @@ function inSelectedDescription(dish, inCategory) {
 		return result;
 	}
 
-	const subCategories = $('#divCategories .sub-options input[type="checkbox"]:checked');
+	let menus = window.menus;
+	const productId = dish.productId;
+	let menu =  menus.find(m => m.itemId === productId);
+
+	let categories = $('#divCategories > .option');
+	let span = categories.children().filter('span:contains('+ menu.category +')');
+	let category = span.parent();
+	const subOptions = category.children().filter('.sub-options');
+	const subCategories = subOptions.children().filter('input[type="checkbox"]:checked');
 	if (subCategories.length > 0) {
 		subCategories.each(function () {
 			const subCat = $(this).val();
