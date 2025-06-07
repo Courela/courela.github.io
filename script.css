@@ -24,3 +24,7 @@ div.sub-options {
 .collapse {
     display: inline;
 }
+
+#collapseSettings {
+    cursor: pointer;
+}
