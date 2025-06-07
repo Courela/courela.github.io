@@ -205,8 +205,9 @@ function bindSettingsEvents() {
 		bindRefresh();
 	});
 
-	$('.collapse').on('click', evt => {
-		let div = $(evt.currentTarget);
-		div.toggle();
+	$('#collapseSettings').on('click', evt => {
+		let div = $(evt.currentTarget).parent();
+		let collapseElements = div.children().filter('.collapse');
+		collapseElements.toggle();
 	})
 }
