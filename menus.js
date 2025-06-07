@@ -202,4 +202,9 @@ function bindSettingsEvents() {
 		window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
 		bindRefresh();
 	});
+
+	$('.collapse').on('click', evt => {
+		let div = $(evt.currentTarget);
+		div.toggle();
+	})
 }

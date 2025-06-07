@@ -74,8 +74,10 @@ function inSelectedDescription(dish, inCategory) {
 	return result;
 }
 
-async function print(restaurantId, token) {
-	await getMenus(restaurantId, token);
+async function print(restaurantId, token, showMenus) {
+	if (showMenus) {
+		await getMenus(restaurantId, token);
+	}
 	await getMeals(restaurantId, token);
 }
 
@@ -122,20 +124,21 @@ function setSettings() {
 	window.nullDescription = 'Geral';
 	window.showStatuses = ["ORDERED", "COOKING", "READY", "SERVED", "CANCELLED" ];
 	window.refreshPeriod = 3600000;
+	window.markedAsStatus = 'SERVED';
 }
 
 async function startup() {
 	setSettings();
 	printStatuses(window.showStatuses);
 
-	await refreshAuth();
+	await refreshAuth(true);
 	
 	$('#login').click(login);
 
 	bindSettings();
 }
 
-async function refreshAuth() {
+async function refreshAuth(showMenus) {
 	let restaurantId = sessionStorage.getItem("restaurantId");
 	let token = sessionStorage.getItem("token");
 	let expire = Number(sessionStorage.getItem("expire"));
@@ -144,7 +147,7 @@ async function refreshAuth() {
 		console.log("Session authentication used");
 		if (window.location.href.indexOf("index.html") === -1) {
 			displayAll(true);
-			await print(restaurantId, token);
+			await print(restaurantId, token, showMenus);
 		} else {
 			window.location.href = "kitchen.html";
 		}

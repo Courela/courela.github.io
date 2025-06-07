@@ -182,7 +182,7 @@ async function markAsServed(evt) {
 
     // let items = Object.keys(order.itemstamps);
     if (order && order.itemstamps[itemId]) {
-        order.itemstamps[itemId].status = 'READY';
+        order.itemstamps[itemId].status = window.markedAsStatus;
         let now = Date.now();
         order.lastEditTime = now;
         order.itemstamps[itemId].lastEditTime = now;
