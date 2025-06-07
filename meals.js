@@ -99,6 +99,7 @@ function printDashboard(groupByStatus) {
 	// console.log("Group by: " + JSON.stringify(groupByStatus));
 
 	let domDishes = $("#dishes");
+    domDishes.html('');
 		
 	if (groupByStatus) {
 		let statuses = Object.keys(groupByStatus);

@@ -45,6 +45,8 @@ function parseMenus(data) {
 
 function printMenus(menus) {
 	let domMenus = $("#menus");
+	domMenus.html('');
+
 	let table = $('<table></table>');
 	let header = $("<tr><th>Categoria</th><th>Item</th></tr>");
 	table.append(header);
