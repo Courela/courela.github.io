@@ -167,8 +167,14 @@ function getTablesForDish(dishName, ordersByStatus) {
 
 function toDateTime(timestamp) {
     let date = new Date(timestamp);
-    return date.getDate() + '/' + (date.getMonth() + 1) + '/' +
-    date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' +
+    let fullDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' +
+    date.getFullYear();
+    
+    if (window.showFullDate) {
+        return fullDate + ' ' + date.getHours() + ':' + date.getMinutes() + ':' +
+            date.getSeconds();
+    }
+    return date.getHours() + ':' + date.getMinutes() + ':' +
     date.getSeconds();
 }
 
