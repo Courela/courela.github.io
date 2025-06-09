@@ -175,15 +175,15 @@ function toDateTime(timestamp) {
             date.getSeconds();
     }
     return date.getHours() + ':' + date.getMinutes() + ':' +
-    date.getSeconds();
+        date.getSeconds();
 }
 
 async function markAsServed(evt) {
     let anchor = $($(evt)[0].target);
     let table = anchor.text();
     let ids = anchor.parent().find('input');
-    let orderId = ids.filter("[name$=orderId]").val();
-    let itemId = ids.filter("[name$=itemId]").val();
+    let orderId = ids.filter('[name='+ table +'_orderId]').val();
+    let itemId = ids.filter('[name='+ table +'_itemId]').val();
 
     let order = await getOrder(orderId);
 
