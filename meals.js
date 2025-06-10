@@ -40,7 +40,10 @@ function parseMeals(data) {
 		for (let j = 0; j < keys.length; j++) {
 			let item = order.itemstamps[keys[j]];
 			// console.log("Item in order: " + JSON.stringify(item));
-			let id = item.id;
+			if (item.paid) {
+                continue;
+            }
+            let id = item.id;
 			let status = item.status;
             let created = item.creationTime;
 			let productId = item.item.id;
