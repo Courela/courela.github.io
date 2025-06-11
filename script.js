@@ -120,6 +120,16 @@ function bindRefresh() {
 		refreshAuth();
 		// recalculateDashboard();
 	}, window.refreshPeriod);
+	
+	window.timeLeft = window.refreshPeriod / 1000;
+	
+	window.timeIntervalId = setInterval(() => {
+		if (window.timeLeft <= 0) {
+			window.timeLeft = window.refreshPeriod / 1000;
+		}
+		$('#timer').html(window.timeLeft);
+		window.timeLeft--;
+	}, 1000);
 }
 
 function bindSettings() {

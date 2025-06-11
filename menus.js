@@ -200,6 +200,8 @@ function bindSettingsEvents() {
 
 	$('#btnApplyRefreshPeriod').click(() => {
 		clearInterval(window.intervalId);
+		clearInterval(window.timeIntervalId);
+		
 		let newRefreshPeriod = $('#iptRefreshPeriod').val();
 		window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
 		bindRefresh();
