@@ -14,6 +14,46 @@ function inSelectedAllCategories() {
 	return allChecked;
 }
 
+function isSelectedCategory(category) {
+	let result = false;
+	
+	const categories = $('#divCategories input[type="checkbox"]:checked');
+	let found = categories.filter('[value="'+category+'"]');
+	result = found && found.length > 0;
+	// categories.each(function () {
+	// 	const chkCategory = $(this).val();
+	// 	if (category === chkCategory) {
+	// 		console.log("Selected category: " + category);
+	// 		result = true;
+	// 	};
+	// });
+
+	return result;
+}
+
+function isSelectedDescription(itemCategory, itemDescription) {
+	let result = false;
+	
+	let categories = $('#divCategories > .option');
+	let span = categories.children().filter('span:contains('+ itemCategory +')');
+	let category = span.parent();
+	const subOptions = category.children().filter('.sub-options');
+	const subCategories = subOptions.children().filter('input[type="checkbox"]:checked');
+	if (subCategories.length > 0) {
+		subCategories.each(function () {
+			const subCat = $(this).val();
+			if (itemDescription == subCat) {
+				console.log("Selected sub-category: " + subCat);
+				result = true;
+			};
+		});
+	} else {
+		result = true;
+	}
+
+	return result;
+}
+
 function inSelectedCategory(dish) {
 	let result = false;
 	

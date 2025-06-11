@@ -27,6 +27,10 @@ async function getMeals(restaurantId, token) {
 
 function parseMeals(data) {
 	let toPrepareMeals = [];
+
+    resetMenuDishes();
+    let menus = window.menus;
+
 	for (let i = 0; i < data.length; i++) {
 		let order = data[i];
 		if (order.deleted) {
@@ -50,12 +54,26 @@ function parseMeals(data) {
             let itemName = item.item.name;
 			let description = getItemDescription(productId);
 			
-			toPrepareMeals.push({ "orderId": orderId, "table": table, "itemId": id, "productId": productId, "createdAt": created,  "status": status, "itemName": itemName, "itemDescription": description });
+            let dish = { "orderId": orderId, "table": table, "itemId": id, "productId": productId, "createdAt": created,  "status": status, "itemName": itemName, "itemDescription": description };
+            let categoryItem = menus.find(m => m.itemId === productId);
+            if (categoryItem) {
+                categoryItem.dishes.push(dish);
+            }
+
+			toPrepareMeals.push(dish);
 		}
 	}
 	
 	// console.log("To prepare: " + JSON.stringify(toPrepareMeals));
 	return toPrepareMeals;
+}
+
+function resetMenuDishes() {
+    let menus = window.menus;
+    for (let z = 0; z < menus.length; z++) {
+        const menu = menus[z];
+        menu.dishes = [];
+    }
 }
 
 function groupByStatus(toPrepareMeals, descriptionSplit) {
@@ -103,7 +121,27 @@ function printDashboard(groupByStatus) {
 
 	let domDishes = $("#dishes");
     domDishes.html('');
-		
+
+    let menus = window.menus;
+    for (let x = 0; x < menus.length; x++) {
+        const categoryItem = menus[x];
+        if (inSelectedAllCategories() || (isSelectedCategory(categoryItem.category) && isSelectedDescription(categoryItem.category, categoryItem.description))) {
+            console.log('Found selected category: ', categoryItem.category);
+            let div = $('<div id="cell-' + categoryItem.itemId + '" class="board-cell"></div>');
+            let nrDishes = 0;
+            if (categoryItem.dishes.length > 0) {
+                for (let y = 0; y < categoryItem.dishes.length; y++) {
+                    const dish = categoryItem.dishes[y];
+                    if (isSelected(dish)) {
+                        nrDishes++;
+                    }
+                }
+            }
+            div.append('<span>'+ categoryItem.name +'</span><br /><span>'+ nrDishes.toString() +'</span>');
+            domDishes.append(div);
+        }
+    }
+
 	if (groupByStatus) {
 		let statuses = Object.keys(groupByStatus);
 		// console.log("Keys to parse: " + statuses);
@@ -123,30 +161,8 @@ function printDashboard(groupByStatus) {
                     return acc;
                 }, {});
 
-                // console.log("Dishes: " + JSON.stringify(dishes));
-                let dishNames = Object.keys(dishes);
-                for (let j = 0; j < dishNames.length; j ++) {
-                    let div = $('<div class="board-cell"></div>');
-                    div.append('<span>'+ dishNames[j] +'</span><br /><span>'+ dishes[dishNames[j]].toString() +'</span>');
-                    if (window.showTables) {
-                        let tables = getTablesForDish(dishNames[j], status[statusKeys[k]]);
-                        if (tables) {
-                            for (let l = 0; l < tables.length; l++) {
-                                let orderId = $('<input name="' + tables[l].table + '_orderId" type="hidden" value="' + tables[l].orderId + '"></input>')
-                                let itemId = $('<input name="' + tables[l].table + '_itemId" type="hidden" value="' + tables[l].itemId + '"></input>')
-                                let link = $('<a href="#">' + tables[l].table + '</a>');
-                                let createdDom = $('<span style="font-size: 14px;">' + toDateTime(tables[l].createdAt) + '</span>');
-                                link.on('click', evt => {
-                                    let ok = confirm('Marcar como servido?');
-                                    if (ok) {
-                                        markAsServed(evt);
-                                    }
-                                });
-                                div.append('<br />', orderId, itemId, link, createdDom);
-                            }
-                        }
-                    }
-                    domDishes.append(div);
+                if (window.showTables) {
+                    printCells(k, dishes, status, statusKeys, domDishes);
                 }
             }
 		}
@@ -156,6 +172,34 @@ function printDashboard(groupByStatus) {
 	}
 	
 	// console.log("Table meals: " + JSON.stringify(table));
+}
+
+function printCells(idx, dishes, status, statusKeys, domDishes) {
+    // console.log("Dishes: " + JSON.stringify(dishes));
+    let dishNames = Object.keys(dishes);
+    for (let j = 0; j < dishNames.length; j ++) {
+        let div = $('<div class="board-cell"></div>');
+        div.append('<span>'+ dishNames[j] +'</span><br /><span>'+ dishes[dishNames[j]].toString() +'</span>');
+        if (window.showTables) {
+            let tables = getTablesForDish(dishNames[j], status[statusKeys[idx]]);
+            if (tables) {
+                for (let l = 0; l < tables.length; l++) {
+                    let orderId = $('<input name="' + tables[l].table + '_orderId" type="hidden" value="' + tables[l].orderId + '"></input>')
+                    let itemId = $('<input name="' + tables[l].table + '_itemId" type="hidden" value="' + tables[l].itemId + '"></input>')
+                    let link = $('<a href="#">' + tables[l].table + '</a>');
+                    let createdDom = $('<span style="font-size: 14px;">' + toDateTime(tables[l].createdAt) + '</span>');
+                    link.on('click', evt => {
+                        let ok = confirm('Marcar como servido?');
+                        if (ok) {
+                            markAsServed(evt);
+                        }
+                    });
+                    div.append('<br />', orderId, itemId, link, createdDom);
+                }
+            }
+        }
+        domDishes.append(div);
+    }
 }
 
 function getTablesForDish(dishName, ordersByStatus) {

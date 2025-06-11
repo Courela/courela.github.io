@@ -35,7 +35,7 @@ function parseMenus(data) {
 			let name = item.name;
 			let description = item.description;
 			
-			menus.push({ "category": catName, "itemId": id, "name": name, "description": description });
+			menus.push({ "category": catName, "itemId": id, "name": name, "description": description, "dishes": [] });
 		}
 	}
 	
