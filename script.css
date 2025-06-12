@@ -7,6 +7,7 @@ td {
 }
 
 .board-cell {
+    position: relative;
     text-align: center;
     border: 1px solid black;
 }
@@ -26,4 +27,19 @@ div.sub-options {
 
 #collapseSettings {
     cursor: pointer;
+}
+
+.alignBottom {
+    position: absolute;
+    bottom: 0px;
+}
+
+.top-left {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.tiny {
+    font-size: x-small;
 }

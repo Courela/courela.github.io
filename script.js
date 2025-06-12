@@ -33,7 +33,7 @@ function isSelectedCategory(category) {
 
 function isSelectedDescription(itemCategory, itemDescription) {
 	let result = false;
-	
+
 	let categories = $('#divCategories > .option');
 	let span = categories.children().filter('span:contains('+ itemCategory +')');
 	let category = span.parent();
@@ -150,8 +150,7 @@ function recalculateDashboard() {
 	$('#dishes').empty();
 	let meals = window.meals;
 	let mealRequests = parseMeals(meals);
-	let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
-	printDashboard(groupByStatuses);
+	printDashboard(mealRequests);
 	console.log('Done refreshing dashboard.');
 }
 

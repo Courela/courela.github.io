@@ -2,3 +2,10 @@
     width: 16.5%;
     font-size: 20px;
 }
+
+.time {
+    font-size: 14px;
+    position: absolute;
+    right: 5px;
+    padding: 0px 5px;
+}

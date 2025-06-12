@@ -18,11 +18,10 @@ async function getMeals(restaurantId, token) {
         let mealRequests = parseMeals(res);
         // printMeals(toPrepareMeals);
         
-        let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
-        printDashboard(groupByStatuses);
+        printDashboard(mealRequests);
     } catch (err) {
         console.log(err);
-    }		
+    }
 }
 
 function parseMeals(data) {
@@ -116,12 +115,24 @@ function printMeals(toPrepareMeals) {
 	domMeals.append(table);
 }
 
-function printDashboard(groupByStatus) {
+function printDashboard(mealRequests) {
 	// console.log("Group by: " + JSON.stringify(groupByStatus));
 
 	let domDishes = $("#dishes");
     domDishes.html('');
 
+    if (!window.showTables) {
+        printByDish(domDishes);
+    }
+
+    if (window.showTables) {
+        printByTable(domDishes, mealRequests);
+    }
+	
+	// console.log("Table meals: " + JSON.stringify(table));
+}
+
+function printByDish(domDishes) {
     let menus = window.menus;
     for (let x = 0; x < menus.length; x++) {
         const categoryItem = menus[x];
@@ -129,28 +140,35 @@ function printDashboard(groupByStatus) {
             console.log('Found selected category: ', categoryItem.category);
             let div = $('<div id="cell-' + categoryItem.itemId + '" class="board-cell"></div>');
             let nrDishes = 0;
+            let status = '--';
             if (categoryItem.dishes.length > 0) {
                 for (let y = 0; y < categoryItem.dishes.length; y++) {
                     const dish = categoryItem.dishes[y];
                     if (isSelected(dish)) {
                         nrDishes++;
+                        status = dish.status;
                     }
                 }
             }
-            div.append('<span>'+ categoryItem.name +'</span><br /><span>'+ nrDishes.toString() +'</span>');
+            div.append('<span class="top-left tiny">'+status+'</span>');
+            div.append('<span>'+ categoryItem.name +'</span><br />');
+            div.append('<span class="alignBottom">'+ nrDishes.toString() +'</span>');
             domDishes.append(div);
         }
     }
+}
 
-	if (groupByStatus) {
-		let statuses = Object.keys(groupByStatus);
-		// console.log("Keys to parse: " + statuses);
-		for (let i = 0; i < statuses.length; i++) {
-			let status = groupByStatus[statuses[i]];
-			// console.log('Item in ' + statuses[i] + ': ' + JSON.stringify(status));
-			let statusKeys = Object.keys(status);
-            for (let k = 0; k < statusKeys.length; k++) {
-                let dishes = status[statusKeys[k]].reduce((acc, dish) => {
+function printByTable(domDishes, mealRequests){
+    let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
+    if (groupByStatuses) {
+        let statuses = Object.keys(groupByStatuses);
+        // console.log("Keys to parse: " + statuses);
+        for (let i = 0; i < statuses.length; i++) {
+            let status = groupByStatuses[statuses[i]];
+            // console.log('Item in ' + statuses[i] + ': ' + JSON.stringify(status));
+            let statusKeys = Object.keys(status);
+            for (let keyIndex = 0; keyIndex < statusKeys.length; keyIndex++) {
+                let dishes = status[statusKeys[keyIndex]].reduce((acc, dish) => {
                     if (isSelected(dish)) {
                         const key = dish.itemName;
                         if (!acc[key]) {
@@ -161,17 +179,13 @@ function printDashboard(groupByStatus) {
                     return acc;
                 }, {});
 
-                if (window.showTables) {
-                    printCells(k, dishes, status, statusKeys, domDishes);
-                }
+                printCells(keyIndex, dishes, status, statusKeys, domDishes);
             }
-		}
-	} else {
-		let div = $('<div class="dynamic">Sem refeições</div>');
-		domDishes.append(div);
-	}
-	
-	// console.log("Table meals: " + JSON.stringify(table));
+        }
+    } else {
+        let div = $('<div class="dynamic">Sem refeições</div>');
+        domDishes.append(div);
+    }
 }
 
 function printCells(idx, dishes, status, statusKeys, domDishes) {
@@ -186,15 +200,20 @@ function printCells(idx, dishes, status, statusKeys, domDishes) {
                 for (let l = 0; l < tables.length; l++) {
                     let orderId = $('<input name="' + tables[l].table + '_orderId" type="hidden" value="' + tables[l].orderId + '"></input>')
                     let itemId = $('<input name="' + tables[l].table + '_itemId" type="hidden" value="' + tables[l].itemId + '"></input>')
-                    let link = $('<a href="#">' + tables[l].table + '</a>');
-                    let createdDom = $('<span style="font-size: 14px;">' + toDateTime(tables[l].createdAt) + '</span>');
-                    link.on('click', evt => {
-                        let ok = confirm('Marcar como servido?');
-                        if (ok) {
-                            markAsServed(evt);
-                        }
-                    });
-                    div.append('<br />', orderId, itemId, link, createdDom);
+                    //if (status[statusKeys[idx]] === 'ORDERED') {
+                        let link = $('<a href="#">' + tables[l].table + '</a>');
+                        let createdDom = $('<span class="time">' + toDateTime(tables[l].createdAt) + '</span>');
+                        link.on('click', (evt) => {
+                            let tbl = evt.currentTarget.childNodes[0].data;
+                            let ok = confirm('Marcar prato "' + dishNames[j] + '" para a mesa "' + tbl + '" como servido?');
+                            if (ok) {
+                                markAsServed(evt);
+                            }
+                        });
+                        div.append('<br />', orderId, itemId, link, createdDom);
+                    // } else {
+                    //     div.append(orderId, itemId);
+                    // }
                 }
             }
         }
@@ -214,14 +233,13 @@ function getTablesForDish(dishName, ordersByStatus) {
 
 function toDateTime(timestamp) {
     let date = new Date(timestamp);
-    let fullDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' +
-    date.getFullYear();
-    
     if (window.showFullDate) {
+        let fullDate = date.getDate() + '/' + (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
+            date.getFullYear();
         return fullDate + ' ' + date.getHours() + ':' + date.getMinutes() + ':' +
             date.getSeconds();
     }
-    return date.getHours() + ':' + date.getMinutes() + ':' +
+    return date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0') + ':' +
         date.getSeconds();
 }
 
