@@ -111,11 +111,15 @@ async function login() {
 			sessionStorage.setItem("username", username);
 			// displayAll(true);
 			// await print(restaurantId, token);
-			window.location.href = "kitchen.html";
+			window.location.href = "links.html";
+			
+			// await refreshAuth(true);
+			// $('#credentials').hide();
+			// $('#links').show();
 		} else {
 			alert('Autenticação falhou!');
 		}
 	} else {
-		alert("Utilizar e Password obrigatórios");
+		alert("Utilizador e Password obrigatórios");
 	}
 }

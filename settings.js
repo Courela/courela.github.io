@@ -6,4 +6,5 @@ function setSettings() {
 	window.markedAsStatus = 'SERVED';
 	window.showFullDate = false;
 	window.getMealsBackTo = 6; // hours
+	window.dishWarningThreshold = 20;
 }

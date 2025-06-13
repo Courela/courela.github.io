@@ -197,14 +197,22 @@ function bindSettingsEvents() {
 
 	let refreshPeriod = window.refreshPeriod / 1000;
 	$('#iptRefreshPeriod').val(refreshPeriod);
+	$('#iptdishWarningThreshold').val(window.dishWarningThreshold);
 
-	$('#btnApplyRefreshPeriod').click(() => {
+	$('#btnApply').click(() => {
 		clearInterval(window.intervalId);
 		clearInterval(window.timeIntervalId);
 		
+		let newDishWarningThreshold = $('#iptdishWarningThreshold').val();
+		if (newDishWarningThreshold && newDishWarningThreshold > 0) {
+			window.dishWarningThreshold = newDishWarningThreshold;
+		}
+
 		let newRefreshPeriod = $('#iptRefreshPeriod').val();
 		window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
 		bindRefresh();
+
+		refreshAuth();
 	});
 
 	$('#collapseSettings').on('click', evt => {

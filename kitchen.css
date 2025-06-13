@@ -4,3 +4,11 @@
     height: 210px;
     overflow: hidden;
 }
+
+.warning {
+    background-color: lightyellow;
+}
+
+.small-number {
+    width: 80px;
+}

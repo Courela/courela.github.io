@@ -200,7 +200,14 @@ async function refreshAuth(showMenus) {
 			displayAll(true);
 			await print(restaurantId, token, showMenus);
 		} else {
-			window.location.href = "kitchen.html";
+			// $('#credentials').hide();
+			// $('#links').show();
+		}
+	} else {
+		console.log('Not authenticated');
+		// sessionStorage.clear();
+		if (window.location.href.indexOf("index.html") === -1) {
+			window.location.href = "index.html";
 		}
 	}
 }

@@ -149,6 +149,9 @@ function printByDish(domDishes) {
                         status = dish.status;
                     }
                 }
+                if (nrDishes > window.dishWarningThreshold) {
+                    div.addClass('warning');
+                }
             }
             div.append('<span class="top-left tiny">'+status+'</span>');
             div.append('<span>'+ categoryItem.name +'</span><br />');
