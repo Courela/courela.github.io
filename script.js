@@ -185,6 +185,8 @@ async function startup() {
 	$('#login').click(login);
 
 	bindSettings();
+
+	$('#username').html(sessionStorage.getItem("username"));
 }
 
 async function refreshAuth(showMenus) {

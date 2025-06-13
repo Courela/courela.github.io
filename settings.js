@@ -5,4 +5,5 @@ function setSettings() {
 	window.refreshPeriod = 600000;
 	window.markedAsStatus = 'SERVED';
 	window.showFullDate = false;
+	window.getMealsBackTo = 6; // hours
 }

@@ -1,5 +1,5 @@
 async function getMeals(restaurantId, token) {
-	let startTime = new Date().getTime() - (24 * 60 * 60 * 1000);
+	let startTime = new Date().getTime() - (window.getMealsBackTo * 60 * 60 * 1000);
 	//let url = 'https://api.waiterio.com/api/v3/batch/'
 	let url = 'https://api.waiterio.com/api/v3/meals?restaurantId=' + restaurantId + '&startTime=' + startTime;
 	//let data = '[{"alias":"restaurant","url":"restaurants/'+ restaurantId + '"},{"alias":"meals?restaurantId=' + restaurantId + '&startTime=' + startTime + '"}]';
@@ -258,13 +258,15 @@ async function markAsServed(evt) {
         let now = Date.now();
         order.lastEditTime = now;
         order.itemstamps[itemId].lastEditTime = now;
+        if (!updateOrder(orderId, order)) {
+            alert('Ocorreu um erro! Verifique os logs.');
+        } else {
+            await refreshAuth();
+        };
     } else {
         alert('Não encontrado!');
         console.err('Not found: ' + itemId);
     };
-
-    updateOrder(orderId, order);
-
     // let payload = '{"table":"'+table+'","restaurantId":"'+ restaurantId +'","usersIds":["'+sessionStorage.getItem("userId");+'"],"service":"TABLE","_id":"'+orderId+'","shortId":"CP3o","creationTime":1748898713029,"lastEditTime":'+Date.now()+',"itemstamps":{"fdcd66fe3cd328da6ea4d8be":{"id":"fdcd66fe3cd328da6ea4d8be","creationTime":1748898724212,"userId":"3e91b1b06e4744924069fc5c","status":"COOKING","item":{"id":"01dac1fc7243a00c1ed31440","name":"Queijo Seco","price":2.5},"lastEditTime":1748899093389,"course":0,"extras":[]},"63c96d8d747d1c79faf464b3":{"id":"63c96d8d747d1c79faf464b3","creationTime":1748898727043,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"b721fb8b5219d64bd5a4da1e","name":"Prego","price":3.5},"lastEditTime":1748898739325,"course":0,"extras":[]},"d090ad49127dedd32368887a":{"id":"d090ad49127dedd32368887a","creationTime":1748898729392,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"e61f2a8a124321bebb354b5f","name":"Favas com Entrecosto","price":0},"lastEditTime":1748898739325,"course":0,"extras":[]},"251c2ef958123d49c6a59fd1":{"id":"251c2ef958123d49c6a59fd1","creationTime":1748898732787,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"2adb864aa470396550a75af5","name":"Cheesecake","price":2},"lastEditTime":1748898739325,"course":0,"extras":[]}},"customers":1,"customersPaid":0}';
 }
 
@@ -308,5 +310,7 @@ async function updateOrder(orderId, order) {
         console.log('Update order ' + orderId + ': ' + JSON.stringify(res));
     } catch (err) {
         console.log(err);
+        return false;
     }
+    return true;
 }

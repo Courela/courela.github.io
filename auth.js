@@ -106,9 +106,9 @@ async function login() {
 		let body = prepareAuthentication(username, password);
 		const response = await authenticate(url, body);
 		if (response) {
-			let restaurantId = sessionStorage.getItem("restaurantId");
-			let token = sessionStorage.getItem("token");
-
+			// let restaurantId = sessionStorage.getItem("restaurantId");
+			// let token = sessionStorage.getItem("token");
+			sessionStorage.setItem("username", username);
 			// displayAll(true);
 			// await print(restaurantId, token);
 			window.location.href = "kitchen.html";
