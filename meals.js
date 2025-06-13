@@ -146,7 +146,11 @@ function printByDish(domDishes) {
                     const dish = categoryItem.dishes[y];
                     if (isSelected(dish)) {
                         nrDishes++;
-                        status = dish.status;
+                        if (status === '--') {
+                            status = dish.status;
+                        } else if (status !== 'MULTI' && status !== dish.status) {
+                            status = 'MULTI';
+                        }
                     }
                 }
                 if (nrDishes > window.dishWarningThreshold) {
