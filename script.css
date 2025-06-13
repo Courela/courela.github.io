@@ -47,3 +47,7 @@ div.sub-options {
 .tiny {
     font-size: x-small;
 }
+
+.small-number {
+    width: 80px;
+}

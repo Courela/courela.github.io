@@ -167,11 +167,11 @@ function printByTable(domDishes, mealRequests){
         let statuses = Object.keys(groupByStatuses);
         // console.log("Keys to parse: " + statuses);
         for (let i = 0; i < statuses.length; i++) {
-            let status = groupByStatuses[statuses[i]];
+            let statusDishList = groupByStatuses[statuses[i]];
             // console.log('Item in ' + statuses[i] + ': ' + JSON.stringify(status));
-            let statusKeys = Object.keys(status);
+            let statusKeys = Object.keys(statusDishList);
             for (let keyIndex = 0; keyIndex < statusKeys.length; keyIndex++) {
-                let dishes = status[statusKeys[keyIndex]].reduce((acc, dish) => {
+                let dishes = statusDishList[statusKeys[keyIndex]].reduce((acc, dish) => {
                     if (isSelected(dish)) {
                         const key = dish.itemName;
                         if (!acc[key]) {
@@ -182,7 +182,7 @@ function printByTable(domDishes, mealRequests){
                     return acc;
                 }, {});
 
-                printCells(keyIndex, dishes, status, statusKeys, domDishes);
+                printCells(keyIndex, dishes, statusDishList, statusKeys, statuses[i], domDishes);
             }
         }
     } else {
@@ -191,14 +191,15 @@ function printByTable(domDishes, mealRequests){
     }
 }
 
-function printCells(idx, dishes, status, statusKeys, domDishes) {
+function printCells(idx, dishes, statusDishList, statusKeys, status, domDishes) {
     // console.log("Dishes: " + JSON.stringify(dishes));
     let dishNames = Object.keys(dishes);
     for (let j = 0; j < dishNames.length; j ++) {
         let div = $('<div class="board-cell"></div>');
+        div.append('<span class="top-left tiny">'+status+'</span>');
         div.append('<span>'+ dishNames[j] +'</span><br /><span>'+ dishes[dishNames[j]].toString() +'</span>');
         if (window.showTables) {
-            let tables = getTablesForDish(dishNames[j], status[statusKeys[idx]]);
+            let tables = getTablesForDish(dishNames[j], statusDishList[statusKeys[idx]]);
             if (tables) {
                 for (let l = 0; l < tables.length; l++) {
                     let orderId = $('<input name="' + tables[l].table + '_orderId" type="hidden" value="' + tables[l].orderId + '"></input>')
