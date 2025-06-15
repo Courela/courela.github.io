@@ -82,14 +82,14 @@ async function updateOrder(orderId, order) {
     return true;
 }
 
-async function sendToPrinter(table, quantity, dishName) {
-    let url = window.printerURL + '/order';
+async function sendToPrinter(table, quantity, itemName) {
+    let url = window.printerURL + '/item';
 	try {
-        console.log('Sending to printer: ' + table + ' ' + quantity + ' ' + dishName);
+        console.log('Sending to printer: ' + table + ' ' + quantity + ' ' + itemName);
 		let res = await $.ajax({
 			type: "post",
 			url: url,
-            data: JSON.stringify({ "table": table, "quantity": quantity, "dishName": dishName }),
+            data: JSON.stringify({ "table": table, "quantity": quantity, "itemName": itemName }),
 			contentType: "application/json",
 		});
 	} catch (err) {
