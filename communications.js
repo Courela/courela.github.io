@@ -59,3 +59,18 @@ async function updateOrder(orderId, order) {
     }
     return true;
 }
+
+async function sendToPrinter(table, quantity, dishName) {
+    let url = window.printerURL + '/order';
+	try {
+		let res = await $.ajax({
+			type: "post",
+			url: url,
+            data: JSON.stringify({ "table": table, "quantity": quantity, "dishName": dishName }),
+			contentType: "application/json",
+		});
+	} catch (err) {
+		console.log(err);
+        alert('Impressora falhou.');
+	}
+}
