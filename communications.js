@@ -5,8 +5,10 @@ async function getMenus(restaurantId, token) {
 			type: "get",
 			url: url,
 			contentType: "application/json",
-			headers: { "Authorization": "Token " + token }
+			headers: getAuthHeader()
 		});
+
+        console.log('Receive menus: ' + res.lenght > 0 && res[0].categories ? res[0].categories.lenght : 0);
 		
 		let menus = parseMenus(res);
 		window.menus = menus;
@@ -26,8 +28,10 @@ async function getMeals(restaurantId, token) {
             type: "get",
             url: url,
             contentType: "application/json",
-            headers: { "Authorization": "Token " + token }
+            headers: getAuthHeader()
         });
+
+        console.log('Receive meals: ' + res.lenght);
 
         window.meals = res;
         let mealRequests = parseMeals(res);
@@ -38,21 +42,40 @@ async function getMeals(restaurantId, token) {
     }
 }
 
+async function getOrder(orderId) {
+    let url = window.apiURL + '/meals/' + orderId;
+    try {
+        let res = await $.ajax({
+            type: "get",
+            url: url,
+            contentType: "application/json",
+            headers: getAuthHeader()
+        });
+
+        console.log('Order ' + orderId + ': ' + JSON.stringify(res));
+
+        return res;
+    } catch (err) {
+        console.log(err);
+    }
+
+    return null;
+}
+
 async function updateOrder(orderId, order) {
     let url = window.apiURL + '/meals/' + orderId;
     try {
-        let token = sessionStorage.getItem("token");
+        
         let res = await $.ajax({
             type: "put",
             url: url,
             contentType: "application/json",
-            headers: {
-                "Authorization": "Token " + token
-            },
+            headers: getAuthHeader(),
             data: JSON.stringify(order)
         });
 
-        console.log('Update order ' + orderId + ': ' + JSON.stringify(res));
+        // console.log('Update order ' + orderId + ': ' + JSON.stringify(res));
+        console.log('Update order "' + orderId + '"');
     } catch (err) {
         console.log(err);
         return false;
@@ -63,6 +86,7 @@ async function updateOrder(orderId, order) {
 async function sendToPrinter(table, quantity, dishName) {
     let url = window.printerURL + '/order';
 	try {
+        console.log('Sending to printer: ' + table + ' ' + quantity + ' ' + dishName);
 		let res = await $.ajax({
 			type: "post",
 			url: url,
@@ -73,4 +97,9 @@ async function sendToPrinter(table, quantity, dishName) {
 		console.log(err);
         alert('Impressora falhou.');
 	}
+}
+
+function getAuthHeader() {
+    let token = sessionStorage.getItem("token");
+    return { "Authorization": "Token " + token };
 }

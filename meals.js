@@ -13,10 +13,8 @@ function parseMeals(data) {
 		let table = order.table;
         let orderId = order._id;
 		let keys = Object.keys(order.itemstamps);
-		// console.log("Keys to parse: " + keys);
 		for (let j = 0; j < keys.length; j++) {
 			let item = order.itemstamps[keys[j]];
-			// console.log("Item in order: " + JSON.stringify(item));
 			if (item.paid) {
                 continue;
             }
@@ -37,7 +35,6 @@ function parseMeals(data) {
 		}
 	}
 	
-	// console.log("To prepare: " + JSON.stringify(toPrepareMeals));
 	return toPrepareMeals;
 }
 
@@ -50,7 +47,6 @@ function resetMenuDishes() {
 }
 
 function groupByStatus(toPrepareMeals, descriptionSplit) {
-	// console.log("Before group by: " + JSON.stringify(toPrepareMeals));
 	return toPrepareMeals.reduce((acc, meal) => {
 		const key = meal.status;
 		if (!acc[key]) {
@@ -85,13 +81,10 @@ function printMeals(toPrepareMeals) {
 		table.append(row);
 	}
 	
-	// console.log("Table meals: " + JSON.stringify(table));
 	domMeals.append(table);
 }
 
 function printDashboard(mealRequests) {
-	// console.log("Group by: " + JSON.stringify(groupByStatus));
-
 	let domDishes = $("#dishes");
     domDishes.html('');
 
@@ -102,8 +95,6 @@ function printDashboard(mealRequests) {
     if (window.showTables) {
         printByTable(domDishes, mealRequests);
     }
-	
-	// console.log("Table meals: " + JSON.stringify(table));
 }
 
 function printByDish(domDishes) {
@@ -139,14 +130,45 @@ function printByDish(domDishes) {
     }
 }
 
+function printByTableOrdered(domDishes) {
+    /*let menus = window.menus;
+    for (let x = 0; x < menus.length; x++) {
+        const categoryItem = menus[x];
+        if (inSelectedAllCategories() || (isSelectedCategory(categoryItem.category) && isSelectedDescription(categoryItem.category, categoryItem.description))) {
+            console.log('Found selected category: ', categoryItem.category);
+            let div = $('<div id="cell-' + categoryItem.itemId + '" class="board-cell"></div>');
+            let nrDishes = 0;
+            let status = '--';
+            if (categoryItem.dishes.length > 0) {
+                for (let y = 0; y < categoryItem.dishes.length; y++) {
+                    const dish = categoryItem.dishes[y];
+                    if (isSelected(dish)) {
+                        nrDishes++;
+                        if (status === '--') {
+                            status = dish.status;
+                        } else if (status !== 'MULTI' && status !== dish.status) {
+                            status = 'MULTI';
+                        }
+                    }
+                }
+                if (nrDishes > window.dishWarningThreshold) {
+                    div.addClass('warning');
+                }
+            }
+            div.append('<span class="top-left tiny">'+status+'</span>');
+            div.append('<span>'+ categoryItem.name +'</span><br />');
+            div.append('<span class="alignBottom">'+ nrDishes.toString() +'</span>');
+            domDishes.append(div);
+        }
+    }*/
+}
+
 function printByTable(domDishes, mealRequests){
     let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
     if (groupByStatuses) {
         let statuses = Object.keys(groupByStatuses);
-        // console.log("Keys to parse: " + statuses);
         for (let i = 0; i < statuses.length; i++) {
             let statusDishList = groupByStatuses[statuses[i]];
-            // console.log('Item in ' + statuses[i] + ': ' + JSON.stringify(status));
             let statusKeys = Object.keys(statusDishList);
             for (let keyIndex = 0; keyIndex < statusKeys.length; keyIndex++) {
                 let dishes = statusDishList[statusKeys[keyIndex]].reduce((acc, dish) => {
@@ -234,7 +256,6 @@ async function markAsServed(evt) {
 
     let order = await getOrder(orderId);
 
-    // let items = Object.keys(order.itemstamps);
     if (order && order.itemstamps[itemId]) {
         order.itemstamps[itemId].status = window.markedAsStatus;
         let now = Date.now();
@@ -243,34 +264,14 @@ async function markAsServed(evt) {
         if (!updateOrder(orderId, order)) {
             alert('Ocorreu um erro! Verifique os logs.');
         } else {
-            await refreshAuth();
+            if (window.printerURL) {
+                let item = order.itemstamps[itemId].item;
+                await sendToPrinter(table, 1, item.name);
+                await refreshAuth();
+            }
         };
     } else {
         alert('Não encontrado!');
         console.err('Not found: ' + itemId);
     };
-    // let payload = '{"table":"'+table+'","restaurantId":"'+ restaurantId +'","usersIds":["'+sessionStorage.getItem("userId");+'"],"service":"TABLE","_id":"'+orderId+'","shortId":"CP3o","creationTime":1748898713029,"lastEditTime":'+Date.now()+',"itemstamps":{"fdcd66fe3cd328da6ea4d8be":{"id":"fdcd66fe3cd328da6ea4d8be","creationTime":1748898724212,"userId":"3e91b1b06e4744924069fc5c","status":"COOKING","item":{"id":"01dac1fc7243a00c1ed31440","name":"Queijo Seco","price":2.5},"lastEditTime":1748899093389,"course":0,"extras":[]},"63c96d8d747d1c79faf464b3":{"id":"63c96d8d747d1c79faf464b3","creationTime":1748898727043,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"b721fb8b5219d64bd5a4da1e","name":"Prego","price":3.5},"lastEditTime":1748898739325,"course":0,"extras":[]},"d090ad49127dedd32368887a":{"id":"d090ad49127dedd32368887a","creationTime":1748898729392,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"e61f2a8a124321bebb354b5f","name":"Favas com Entrecosto","price":0},"lastEditTime":1748898739325,"course":0,"extras":[]},"251c2ef958123d49c6a59fd1":{"id":"251c2ef958123d49c6a59fd1","creationTime":1748898732787,"userId":"3e91b1b06e4744924069fc5c","status":"ORDERED","item":{"id":"2adb864aa470396550a75af5","name":"Cheesecake","price":2},"lastEditTime":1748898739325,"course":0,"extras":[]}},"customers":1,"customersPaid":0}';
-}
-
-async function getOrder(orderId) {
-    let url = 'https://api.waiterio.com/api/v3/meals/' + orderId;
-    try {
-        let token = sessionStorage.getItem("token");
-        let res = await $.ajax({
-            type: "get",
-            url: url,
-            contentType: "application/json",
-            headers: {
-                "Authorization": "Token " + token
-            }
-        });
-
-        console.log('Order ' + orderId + ': ' + JSON.stringify(res));
-
-        return res;
-    } catch (err) {
-        console.log(err);
-    }
-
-    return null;
 }

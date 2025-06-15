@@ -110,7 +110,7 @@ async function login() {
 			// let token = sessionStorage.getItem("token");
 			sessionStorage.setItem("username", username);
 			// displayAll(true);
-			// await print(restaurantId, token);
+			// await print(restaurantId);
 			window.location.href = "links.html";
 			
 			// await refreshAuth(true);

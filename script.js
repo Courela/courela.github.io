@@ -122,11 +122,11 @@ function inSelectedDescription(dish, inCategory) {
 	return result;
 }
 
-async function print(restaurantId, token, showMenus) {
+async function print(restaurantId, showMenus) {
 	if (showMenus) {
-		await getMenus(restaurantId, token);
+		await getMenus(restaurantId);
 	}
-	await getMeals(restaurantId, token);
+	await getMeals(restaurantId);
 }
 
 function displayAll(show) {
@@ -191,14 +191,13 @@ async function startup() {
 
 async function refreshAuth(showMenus) {
 	let restaurantId = sessionStorage.getItem("restaurantId");
-	let token = sessionStorage.getItem("token");
 	let expire = Number(sessionStorage.getItem("expire"));
 	
-	if (restaurantId && token && Date.now() < expire) {
+	if (restaurantId && Date.now() < expire) {
 		console.log("Session authentication used");
 		if (window.location.href.indexOf("index.html") === -1) {
 			displayAll(true);
-			await print(restaurantId, token, showMenus);
+			await print(restaurantId, showMenus);
 		} else {
 			// $('#credentials').hide();
 			// $('#links').show();
