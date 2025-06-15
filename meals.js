@@ -121,10 +121,12 @@ function printByDish(domDishes) {
                     div.addClass('warning');
                 }
             }
-            div.append('<span class="top-left tiny">'+status+'</span>');
-            div.append('<span>'+ categoryItem.name +'</span><br />');
-            div.append('<span class="alignBottom">'+ nrDishes.toString() +'</span>');
-            domDishes.append(div);
+            if (categoryItem.available || nrDishes > 0) {
+                div.append('<span class="top-left tiny">'+status+'</span>');
+                div.append('<span>'+ categoryItem.name +'</span><br />');
+                div.append('<span class="alignBottom">'+ nrDishes.toString() +'</span>');
+                domDishes.append(div);
+            }
         }
     }
 }

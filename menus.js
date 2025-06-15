@@ -9,9 +9,10 @@ function parseMenus(data) {
 			let item = category.items[j];
 			let id = item.id;
 			let name = item.name;
+			let available = item.available;
 			let description = item.description;
 			
-			menus.push({ "category": catName, "itemId": id, "name": name, "description": description, "dishes": [] });
+			menus.push({ "category": catName, "itemId": id, "name": name, "available": available, "description": description, "dishes": [] });
 		}
 	}
 	
