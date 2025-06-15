@@ -168,6 +168,7 @@ function bindSettingsEvents() {
 	let refreshPeriod = window.refreshPeriod / 1000;
 	$('#iptRefreshPeriod').val(refreshPeriod);
 	$('#iptdishWarningThreshold').val(window.dishWarningThreshold);
+	$('#iptPrinterURL').val(window.printerURL);
 
 	$('#btnApply').click(() => {
 		clearInterval(window.intervalId);
@@ -180,6 +181,10 @@ function bindSettingsEvents() {
 
 		let newRefreshPeriod = $('#iptRefreshPeriod').val();
 		window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
+
+		let printerURL = $('#iptPrinterURL').val();
+		window.printerURL = printerURL;
+
 		bindRefresh();
 
 		refreshAuth();
