@@ -3,14 +3,10 @@ function parseMenus(data) {
 	let categories = data[0].categories;
 	for (let i = 0; i < categories.length; i++) {
 		let category = categories[i];
-		// let catId = category.id;
 		let catName = category.name;
-		
-		// console.log("Category to parse: " + catName);
 		
 		for (let j = 0; j < category.items.length; j++) {
 			let item = category.items[j];
-			// console.log("Item in menu: " + item);
 			let id = item.id;
 			let name = item.name;
 			let description = item.description;
@@ -19,7 +15,6 @@ function parseMenus(data) {
 		}
 	}
 	
-	// console.log("Menus parsed: " + JSON.stringify(menus));
 	return menus;
 }
 
@@ -38,7 +33,6 @@ function printMenus(menus) {
 		table.append(row);
 	}
 	
-	// console.log("Table menus: " + JSON.stringify(table));
 	domMenus.append(table);
 }
 
@@ -64,7 +58,6 @@ function printCategories(categories, descriptionSplit) {
         let settings = $('#divCategories');
 
         let keys = Object.keys(categories);
-		// console.log("Category keys: " + keys);
 		for (let i = 0; i < keys.length; i++) {
 			let category = keys[i];
 			let opt = $('<div class="option"></div>');
@@ -111,8 +104,6 @@ function printSubCategories(items, opt) {
 					let self = $(this);
 					let directParent = self.parent();
 					let upperParent = directParent.parent();
-					// let catInput = $(upperParent).find('input');
-					// catInput.prop('checked', self.prop('checked').val());
 					let input = upperParent.children().filter('input');
 					input.prop('checked', self.prop('checked'));
 					recalculateDashboard();
@@ -129,7 +120,6 @@ function printStatuses(statuses) {
     if (statuses && statuses.length > 0) {
         let settings = $('#divStatuses');
 
-        // console.log("Statuses: " + JSON.stringify(statuses));
 		for (let i = 0; i < statuses.length; i++) {
 			let status = statuses[i];
 			let opt = $('<div class="option"></div>');

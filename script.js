@@ -43,7 +43,6 @@ function isSelectedDescription(itemCategory, itemDescription) {
 		subCategories.each(function () {
 			const subCat = $(this).val();
 			if (itemDescription == subCat) {
-				console.log("Selected sub-category: " + subCat);
 				result = true;
 			};
 		});
@@ -64,7 +63,6 @@ function inSelectedCategory(dish) {
 	categories.each(function () {
 		const category = $(this).val();
 		if (menus.find(m => m.category === category && m.itemId === productId)) {
-			console.log("Selected category: " + category);
 			result = true;
 		};
 	});
@@ -84,7 +82,6 @@ function inSelectedStatus(dish) {
 	statuses.each(function () {
 		const status = $(this).val();
 		if (dish.status == status) {
-			console.log("Selected status: " + status);
 			result = true;
 		};
 	});
@@ -111,7 +108,6 @@ function inSelectedDescription(dish, inCategory) {
 		subCategories.each(function () {
 			const subCat = $(this).val();
 			if (dish.itemDescription == subCat) {
-				console.log("Selected sub-category: " + subCat);
 				result = true;
 			};
 		});
@@ -198,13 +194,9 @@ async function refreshAuth(showMenus) {
 		if (window.location.href.indexOf("index.html") === -1) {
 			displayAll(true);
 			await print(restaurantId, showMenus);
-		} else {
-			// $('#credentials').hide();
-			// $('#links').show();
 		}
 	} else {
 		console.log('Not authenticated');
-		// sessionStorage.clear();
 		if (window.location.href.indexOf("index.html") === -1) {
 			window.location.href = "index.html";
 		}

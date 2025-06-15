@@ -102,7 +102,6 @@ function printByDish(domDishes) {
     for (let x = 0; x < menus.length; x++) {
         const categoryItem = menus[x];
         if (inSelectedAllCategories() || (isSelectedCategory(categoryItem.category) && isSelectedDescription(categoryItem.category, categoryItem.description))) {
-            console.log('Found selected category: ', categoryItem.category);
             let div = $('<div id="cell-' + categoryItem.itemId + '" class="board-cell"></div>');
             let nrDishes = 0;
             let status = '--';

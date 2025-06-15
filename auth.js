@@ -68,8 +68,6 @@ async function authenticate(url, data) {
 			contentType: "application/json"
 		});
 		
-		console.log(res);
-		
 		console.log("User: " + res.user._id);
 		console.log("Restaurant: " + res.roles[0].restaurantId);
 		console.log("Token: " + res.waiterioToken);

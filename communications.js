@@ -1,4 +1,4 @@
-async function getMenus(restaurantId, token) {
+async function getMenus(restaurantId) {
 	let url = window.apiURL + '/menus?restaurantId=' + restaurantId;
 	try {
 		let res = await $.ajax({
@@ -8,7 +8,7 @@ async function getMenus(restaurantId, token) {
 			headers: getAuthHeader()
 		});
 
-        console.log('Receive menus: ' + res.lenght > 0 && res[0].categories ? res[0].categories.lenght : 0);
+        console.log('Receive menus: ' + (res.length > 0 && res[0].categories ? res[0].categories.length : 0));
 		
 		let menus = parseMenus(res);
 		window.menus = menus;
@@ -19,7 +19,7 @@ async function getMenus(restaurantId, token) {
 	}
 }
 
-async function getMeals(restaurantId, token) {
+async function getMeals(restaurantId) {
 	let startTime = new Date().getTime() - (window.getMealsBackTo * 60 * 60 * 1000);
 	let url = window.apiURL + '/meals?restaurantId=' + restaurantId + '&startTime=' + startTime;
 
@@ -31,7 +31,7 @@ async function getMeals(restaurantId, token) {
             headers: getAuthHeader()
         });
 
-        console.log('Receive meals: ' + res.lenght);
+        console.log('Receive meals: ' + res.length);
 
         window.meals = res;
         let mealRequests = parseMeals(res);
@@ -74,7 +74,6 @@ async function updateOrder(orderId, order) {
             data: JSON.stringify(order)
         });
 
-        // console.log('Update order ' + orderId + ': ' + JSON.stringify(res));
         console.log('Update order "' + orderId + '"');
     } catch (err) {
         console.log(err);
