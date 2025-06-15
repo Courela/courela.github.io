@@ -1,37 +1,37 @@
 p {
     margin: 3px 3px;
-}
+}    
 
 table, th, td {
     border: 1px solid black;
-}
+}    
 
 td {
     text-align: center;
-}
+}    
+
+div.credentials {
+    margin: 20px;
+}    
+
+div.option {
+    display: inline;
+    margin: 0px 10px;
+}    
+
+div.sub-options {
+    margin: 0px 10px;
+}    
 
 .board-cell {
     position: relative;
     text-align: center;
     border: 1px solid black;
-}
-
-div.option {
-    display: inline;
-    margin: 0px 10px;
-}
-
-div.sub-options {
-    margin: 0px 10px;
-}
+}    
 
 .collapse {
     display: inline;
-}
-
-#collapseSettings {
-    cursor: pointer;
-}
+}    
 
 .alignBottom {
     position: absolute;
@@ -50,4 +50,8 @@ div.sub-options {
 
 .small-number {
     width: 80px;
+}
+
+#collapseSettings {
+    cursor: pointer;
 }

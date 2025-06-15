@@ -1,4 +1,5 @@
 function setSettings() {
+	window.apiURL = 'https://api.waiterio.com/api/v3';
 	window.descriptionSplit = true;
 	window.nullDescription = 'Geral';
 	window.showStatuses = ["ORDERED", "COOKING", "READY", "SERVED", "CANCELLED" ];

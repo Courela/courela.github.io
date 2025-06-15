@@ -1,29 +1,3 @@
-async function getMeals(restaurantId, token) {
-	let startTime = new Date().getTime() - (window.getMealsBackTo * 60 * 60 * 1000);
-	//let url = 'https://api.waiterio.com/api/v3/batch/'
-	let url = 'https://api.waiterio.com/api/v3/meals?restaurantId=' + restaurantId + '&startTime=' + startTime;
-	//let data = '[{"alias":"restaurant","url":"restaurants/'+ restaurantId + '"},{"alias":"meals?restaurantId=' + restaurantId + '&startTime=' + startTime + '"}]';
-
-    try {
-        let res = await $.ajax({
-            type: "get",
-            url: url,
-            //data: data,
-            contentType: "application/json",
-            headers: { "Authorization": "Token " + token }
-        });
-
-        // console.log("Meals: " + JSON.stringify(res));
-        window.meals = res;
-        let mealRequests = parseMeals(res);
-        // printMeals(toPrepareMeals);
-        
-        printDashboard(mealRequests);
-    } catch (err) {
-        console.log(err);
-    }
-}
-
 function parseMeals(data) {
 	let toPrepareMeals = [];
 
@@ -299,26 +273,4 @@ async function getOrder(orderId) {
     }
 
     return null;
-}
-
-async function updateOrder(orderId, order) {
-    let url = 'https://api.waiterio.com/api/v3/meals/' + orderId;
-    try {
-        let token = sessionStorage.getItem("token");
-        let res = await $.ajax({
-            type: "put",
-            url: url,
-            contentType: "application/json",
-            headers: {
-                "Authorization": "Token " + token
-            },
-            data: JSON.stringify(order)
-        });
-
-        console.log('Update order ' + orderId + ': ' + JSON.stringify(res));
-    } catch (err) {
-        console.log(err);
-        return false;
-    }
-    return true;
 }

@@ -6,17 +6,19 @@
 			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
 			crossorigin="anonymous">
 		</script>
+		<script src="communications.js"></script>
 		<script src="script.js"></script>
 		<script src="settings.js"></script>
 		<script src="auth.js"></script>
 		<script src="menus.js"></script>
 		<script src="meals.js"></script>
+		<link rel="stylesheet" href="script.css">
 		<script>
 			$(document).ready(startup);
 		</script>
 	</header>
 	<body>
-		<div id="credentials" style="margin: 20px;">
+		<div id="credentials" class="credentials">
 			<label for="username">Utilizador: </label><input id="username"></input>&nbsp;
 			<label for="password">Password: </label><input id="password" type="password"></input>&nbsp;
 			<button id="login">Entrar</button>

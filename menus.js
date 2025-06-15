@@ -1,23 +1,3 @@
-async function getMenus(restaurantId, token) {
-	let url = 'https://api.waiterio.com/api/v3/menus?restaurantId=' + restaurantId;
-	try {
-		let res = await $.ajax({
-			type: "get",
-			url: url,
-			contentType: "application/json",
-			headers: { "Authorization": "Token " + token }
-		});
-		
-		let menus = parseMenus(res);
-		window.menus = menus;
-		// printMenus(menus);
-		let categories = getCategories(menus);
-		printCategories(categories, window.descriptionSplit);
-	} catch (err) {
-		console.log(err);
-	}
-}
-
 function parseMenus(data) {
 	let menus = [];
 	let categories = data[0].categories;
