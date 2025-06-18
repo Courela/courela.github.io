@@ -98,6 +98,22 @@ async function sendToPrinter(table, quantity, itemName) {
 	}
 }
 
+async function sendItemsToPrinter(data) {
+    let url = window.printerURL + '/items';
+	try {
+        console.log('Sending items to printer: ' + JSON.stringify(data));
+		let res = await $.ajax({
+			type: "post",
+			url: url,
+            data: JSON.stringify(data),
+			contentType: "application/json",
+		});
+	} catch (err) {
+		console.log(err);
+        alert('Impressora falhou.');
+	}
+}
+
 function getAuthHeader() {
     let token = sessionStorage.getItem("token");
     return { "Authorization": "Token " + token };

@@ -185,7 +185,7 @@ function printByOrders(domDishes, mealRequests) {
             }
             let ok = confirm('Imprimir categorias seleccionadas para a mesa ' + tbl + '? ' );
             if (ok) {
-                // sendToPrinter();
+                sendItemsToPrinter(req);
             }
         });
         domTable.append(domTableLink);

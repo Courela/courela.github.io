@@ -8,5 +8,5 @@ function setSettings() {
 	window.showFullDate = false;
 	window.getMealsBackTo = 6; // hours
 	window.dishWarningThreshold = 20;
-	window.printerURL = 'http://192.168.1.83:8001/api';
+	window.printerURL = 'http://192.168.1.64:8001/api';
 }
