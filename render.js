@@ -68,7 +68,7 @@ function printByDish(domDishes) {
     }
 }
 
-function printByTableOrdered(domDishes) {
+function printByTableOrdered(domDishes, mealRequests) {
     if (mealRequests) {
         let dishes = mealRequests.reduce((acc, dish) => {
             if (isSelected(dish)) {
