@@ -52,7 +52,7 @@ async function getOrder(orderId) {
             headers: getAuthHeader()
         });
 
-        console.log('Order ' + orderId + ': ' + JSON.stringify(res));
+        // console.log('Order ' + orderId + ': ' + JSON.stringify(res));
 
         return res;
     } catch (err) {
