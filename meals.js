@@ -120,8 +120,8 @@ async function markAsServed(evt) {
             if (window.printerURL) {
                 let item = order.itemstamps[itemId].item;
                 await sendToPrinter(table, 1, item.name);
-                await refreshAuth();
             }
+            await refreshAuth();
         };
     } else {
         alert('Não encontrado!');
