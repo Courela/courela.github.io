@@ -6,6 +6,9 @@ div.timer {
 
 div.timer > span {
     font-size: 40px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
 .board-cell {
