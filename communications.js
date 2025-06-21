@@ -85,6 +85,9 @@ async function updateOrder(orderId, order) {
 
 async function sendToPrinter(table, quantity, itemName) {
     let url = window.printServerURL + '/item';
+    if (window.printerAddr) {
+        url = url + '?printer=' + window.printerAddr;
+    }
 	try {
         console.log('Sending to printer: ' + table + ' ' + quantity + ' ' + itemName);
 		let res = await $.ajax({
