@@ -8,7 +8,7 @@ function setSettings() {
 	window.showFullDate = false;
 	window.getMealsBackTo = 3; // hours
 	window.dishWarningThreshold = 20;
-	window.printServerURL = 'http://192.168.1.64:8001/api';
+	window.printServerURL = 'https://192.168.1.64:3000/api';
 	window.printerAddr = '192.168.1.204';
 	window.printOnly = false;
 }
