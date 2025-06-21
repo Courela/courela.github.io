@@ -159,5 +159,5 @@ async function markCategoriesAsServed(order) {
         }
     });
 
-    return updateOrder(orderId, order);
+    return updateOrder(order._id, order);
 }
