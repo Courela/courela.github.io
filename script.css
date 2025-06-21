@@ -8,7 +8,14 @@ table, th, td {
 
 td {
     text-align: center;
-}    
+}
+
+div.timer > span {
+    font-size: 40px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
 
 div.credentials {
     margin: 20px;

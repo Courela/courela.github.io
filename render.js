@@ -190,27 +190,58 @@ function printByOrders(domDishes, mealRequests) {
     for (let i = 0; i < tables.length; i++) {
         let table = tables[i];
         const items = groupByTables[table];
-        let domTable = $('<p></p>');
-        let domTableLink = $('<a href="#">'+ table +'</a>');
-        domTableLink.on('click', (evt) => {
-            let tbl = evt.currentTarget.childNodes[0].data;
-            let req = { "table": tbl, "items": [] };
-            for (let j = 0; j < items.length; j++) {
-                if (isSelected(items[j])) {
-                    let item = req.items.find(it => it.name === items[j].itemName);
-                    if (item) {
-                        item.quantity++; 
-                    } else {
-                        req.items.push({ "quantity": 1, "name": items[j].itemName });
-                    }
-                }
+        let showTable = false;
+        for (let j = 0; j < items.length; j++) {
+            if (isSelected(items[j])) {
+                showTable = true;
             }
-            let ok = confirm('Imprimir categorias seleccionadas para a mesa ' + tbl + '? ' );
-            if (ok) {
-                sendItemsToPrinter(req);
+        }
+        if (showTable) {
+            let domTable = $('<p></p>');
+            let domTableLink = $('<a href="#">'+ table +'</a>');
+            domTableLink.on('click', (evt) => onTableClick(evt, items));
+            domTable.append(domTableLink);
+            domDishes.append(domTable);
+        }
+    }
+}
+
+async function onTableClick (evt, items) {
+    let tbl = evt.currentTarget.childNodes[0].data;
+    let req = { "table": tbl, "items": [] };
+    for (let j = 0; j < items.length; j++) {
+        if (isSelected(items[j])) {
+            let item = req.items.find(it => it.name === items[j].itemName);
+            if (item) {
+                item.quantity++; 
+            } else {
+                req.items.push({ 
+                    "quantity": 1, 
+                    "name": items[j].itemName, 
+                    "orderId": items[j].orderId, 
+                    "productId": items[j].productId
+                });
             }
-        });
-        domTable.append(domTableLink);
-        domDishes.append(domTable);
+        }
+    }
+    if (req.items.length === 0) {
+        alert('Nada para imprimir.');
+        return;
+    }
+    let ok = confirm('Imprimir categorias seleccionadas para a mesa ' + tbl + '? ' );
+    if (ok) {
+        let orderId = req.items[0].orderId;
+        let order = await getOrder(orderId);
+        if (!window.printOnly) {
+            let updated = await markCategoriesAsServed(order);
+            if (!updated) {
+                alert('Ocorreu um erro! Verifique os logs.');
+                return;
+            }
+            await refreshAuth();
+        }
+        if (window.printServerURL) {
+            sendItemsToPrinter(req);
+        }
     }
 }

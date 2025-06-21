@@ -12,7 +12,14 @@ function parseMenus(data) {
 			let available = item.available;
 			let description = item.description;
 			
-			menus.push({ "category": catName, "itemId": id, "name": name, "available": available, "description": description, "dishes": [] });
+			menus.push({
+				"category": catName,
+				"itemId": id,
+				"name": name,
+				"available": available,
+				"description": description,
+				"dishes": []
+			});
 		}
 	}
 	
@@ -136,6 +143,24 @@ function printStatuses(statuses) {
 }
 
 function bindSettingsEvents() {
+	bindCheckBoxes();
+
+	let refreshPeriod = window.refreshPeriod / 1000;
+	$('#iptRefreshPeriod').val(refreshPeriod);
+	$('#iptdishWarningThreshold').val(window.dishWarningThreshold);
+	$('#iptPrintServerURL').val(window.printServerURL);
+	$('#iptPrinterAddr').val(window.printerAddr);
+
+	$('#btnApply').click(onApplyClick);
+
+	$('#collapseSettings').on('click', evt => {
+		let div = $(evt.currentTarget).parent();
+		let collapseElements = div.children().filter('.collapse');
+		collapseElements.toggle();
+	});
+}
+
+function bindCheckBoxes() {
 	$('#chkAllCategories').change(function () {
 		const categories = $('#divCategories input[type="checkbox"]:checked');
 		categories.each(function () {
@@ -166,34 +191,33 @@ function bindSettingsEvents() {
 		recalculateDashboard(groupByStatuses);
 	});
 
-	let refreshPeriod = window.refreshPeriod / 1000;
-	$('#iptRefreshPeriod').val(refreshPeriod);
-	$('#iptdishWarningThreshold').val(window.dishWarningThreshold);
-	$('#iptPrinterURL').val(window.printerURL);
-
-	$('#btnApply').click(() => {
-		clearInterval(window.intervalId);
-		clearInterval(window.timeIntervalId);
-		
-		let newDishWarningThreshold = $('#iptdishWarningThreshold').val();
-		if (newDishWarningThreshold && newDishWarningThreshold > 0) {
-			window.dishWarningThreshold = newDishWarningThreshold;
-		}
-
-		let newRefreshPeriod = $('#iptRefreshPeriod').val();
-		window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
-
-		let printerURL = $('#iptPrinterURL').val();
-		window.printerURL = printerURL;
-
-		bindRefresh();
-
-		refreshAuth();
+	$('#chkPrintOnly').prop('checked', window.printOnly);
+	$('#chkPrintOnly').change((evt) => {
+		let checkBox = $(evt.target);
+		let checkedStatus = checkBox.prop('checked');
+		window.printOnly = checkedStatus;
 	});
+}
 
-	$('#collapseSettings').on('click', evt => {
-		let div = $(evt.currentTarget).parent();
-		let collapseElements = div.children().filter('.collapse');
-		collapseElements.toggle();
-	})
+function onApplyClick() {
+	clearInterval(window.intervalId);
+	clearInterval(window.timeIntervalId);
+	
+	let newDishWarningThreshold = $('#iptdishWarningThreshold').val();
+	if (newDishWarningThreshold && newDishWarningThreshold > 0) {
+		window.dishWarningThreshold = newDishWarningThreshold;
+	}
+
+	let newRefreshPeriod = $('#iptRefreshPeriod').val();
+	window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
+
+	let printServerURL = $('#iptPrintServerURL').val();
+	window.printServerURL = printServerURL;
+
+	let printerAddr = $('#iptPrinterAddr').val();
+	window.printerAddr = printerAddr;
+
+	bindRefresh();
+
+	refreshAuth();
 }

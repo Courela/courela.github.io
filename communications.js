@@ -20,8 +20,9 @@ async function getMenus(restaurantId) {
 }
 
 async function getMeals(restaurantId) {
-	let startTime = new Date().getTime() - (window.getMealsBackTo * 60 * 60 * 1000);
-	let url = window.apiURL + '/meals?restaurantId=' + restaurantId + '&startTime=' + startTime;
+	let currentTime = new Date().getTime();
+    let startTime = window.getMealsBackTo * 60 * 60 * 1000;
+	let url = window.apiURL + '/meals?restaurantId=' + restaurantId + '&startTime=' + (currentTime - startTime);
 
     try {
         let res = await $.ajax({
@@ -83,7 +84,7 @@ async function updateOrder(orderId, order) {
 }
 
 async function sendToPrinter(table, quantity, itemName) {
-    let url = window.printerURL + '/item';
+    let url = window.printServerURL + '/item';
 	try {
         console.log('Sending to printer: ' + table + ' ' + quantity + ' ' + itemName);
 		let res = await $.ajax({
@@ -99,10 +100,13 @@ async function sendToPrinter(table, quantity, itemName) {
 }
 
 async function sendItemsToPrinter(data) {
-    let url = window.printerURL + '/items';
+    let url = window.printServerURL + '/items';
+    if (window.printerAddr) {
+        url = url + '?printer=' + window.printerAddr;
+    }
 	try {
         console.log('Sending items to printer: ' + JSON.stringify(data));
-		let res = await $.ajax({
+		await $.ajax({
 			type: "post",
 			url: url,
             data: JSON.stringify(data),

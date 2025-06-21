@@ -14,24 +14,43 @@
 		<script src="meals.js"></script>
         <script src="render.js"></script>
         <link rel="stylesheet" href="script.css">
-		<link rel="stylesheet" href="management.css">
 		<script>
             window.showOrders = true;
 			$(document).ready(startup);
 		</script>
 	</header>
 	<body>
-        <div id="divCategories" style="display: flex; align-items: flex-start;">
-            <strong><span>Categorias: </span></strong>
-            <span>Todas</span>
-            <input id="chkAllCategories" type="checkbox" title="Todas" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
-        </div>
-        <br />
-        <div id="divStatuses">
-            <strong><span>Estado: </span></strong>
-            <span>Todos</span>
-            <input id="chkAllStatuses" type="checkbox" title="Todos" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
-        </div>
+		<div id="settings" style="display: none;">
+			<span style="font-size: small;"><b>Utilizador:</b> <span id="username" style="font-size: small;"></span></span><br />
+			<p id="collapseSettings"><strong>Definições</strong> <img src="collapse.png" height="15px" width="15px" title="Encolher" /></p>
+            <div class="collapse">
+                <div>
+                    <strong><span>Recarregar em (segundos): </span></strong>
+                    <input id="iptRefreshPeriod" type="number" class="small-number" title="Recarregar" />
+					<strong><span>Endereço impressora: </span></strong>
+                    <input id="iptPrintServerURL" type="text" style="width: 300px;" title="Endereço impressora" />
+					<strong><span>Imprimir para: </span></strong>
+                    <input id="iptPrinterAddr" type="text" style="width: 300px;" title="IP Impressora" />
+                    <button id="btnApply" title="Aplicar">Aplicar</button>
+					<span>Imprimir apenas</span>
+					<input id="chkPrintOnly" type="checkbox" title="Imprimir apenas" placeholder="" />
+                </div>
+				<div id="divCategories" style="display: flex; align-items: flex-start;">
+					<strong><span>Categorias: </span></strong>
+					<span>Todas</span>
+					<input id="chkAllCategories" type="checkbox" title="Todas" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
+				</div>
+				<br />
+				<div id="divStatuses">
+					<strong><span>Estado: </span></strong>
+					<span>Todos</span>
+					<input id="chkAllStatuses" type="checkbox" title="Todos" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
+				</div>
+			</div>
+			<div style="position: absolute; top: 20px; right: 20px;">
+				<span id="timer" style="font-size: 40px;">--</span>
+			</div>
+		</div>
         <div id="dashboard" style="display: none;">
 			<p>Pedidos</p>
 			<div id="dishes" style="display: flex; flex-flow: row wrap;"></div>

@@ -25,7 +25,16 @@ function parseMeals(data) {
             let itemName = item.item.name;
 			let description = getItemDescription(productId);
 			
-            let dish = { "orderId": orderId, "table": table, "itemId": id, "productId": productId, "createdAt": created,  "status": status, "itemName": itemName, "itemDescription": description };
+            let dish = {
+                "orderId": orderId,
+                "table": table,
+                "itemId": id,
+                "productId": productId,
+                "createdAt": created,
+                "status": status,
+                "itemName": itemName,
+                "itemDescription": description
+            };
             let categoryItem = menus.find(m => m.itemId === productId);
             if (categoryItem) {
                 categoryItem.dishes.push(dish);
@@ -53,7 +62,10 @@ function groupByStatus(toPrepareMeals, descriptionSplit) {
 			acc[key] = {};
 		}
 
-        const descr = meal.itemDescription && meal.itemDescription != 'null' ? meal.itemDescription : window.nullDescription;
+        const descr = 
+            meal.itemDescription && meal.itemDescription != 'null' ?
+                meal.itemDescription :
+                window.nullDescription;
         if (descriptionSplit) {
             if (!acc[key][descr]) {
                 acc[key][descr] = [];
@@ -117,7 +129,7 @@ async function markAsServed(evt) {
         if (!updateOrder(orderId, order)) {
             alert('Ocorreu um erro! Verifique os logs.');
         } else {
-            if (window.printerURL) {
+            if (window.printServerURL) {
                 let item = order.itemstamps[itemId].item;
                 await sendToPrinter(table, 1, item.name);
             }
@@ -127,4 +139,25 @@ async function markAsServed(evt) {
         alert('Não encontrado!');
         console.err('Not found: ' + itemId);
     };
+}
+
+async function markCategoriesAsServed(order) {
+    const categories = $('#divCategories input[type="checkbox"]:checked');
+    categories.each(function () {
+        const category = $(this).val();
+        let selectedItems = menus.filter(m => m.category === category);
+        let keys = Object.keys(order.itemstamps);
+        for (let i = 0; i < keys.length; i++) {
+            const requestedItem = order.itemstamps[keys[i]];
+            let selectedItem = selectedItems.filter(m => m.itemId === requestedItem.item.id);
+            if (selectedItem && selectedItem.length > 0) {
+                requestedItem.status = window.markedAsStatus;
+                let now = Date.now();
+                order.lastEditTime = now;
+                requestedItem.lastEditTime = now;
+            }
+        }
+    });
+
+    return updateOrder(orderId, order);
 }
