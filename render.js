@@ -45,7 +45,7 @@ function printByDish(domDishes) {
             if (categoryItem.dishes.length > 0) {
                 for (let y = 0; y < categoryItem.dishes.length; y++) {
                     const dish = categoryItem.dishes[y];
-                    if (isSelected(dish)) {
+                    if (isSelected(dish) && isShowTable(dish.table)) {
                         nrDishes++;
                         if (status === '--') {
                             status = dish.status;
@@ -66,6 +66,16 @@ function printByDish(domDishes) {
             }
         }
     }
+}
+
+function isShowTable(table) {
+    let result = false;
+    try {
+        result = table && parseInt(table) < window.showTableThreshold;
+    } catch(err) {
+        console.error(err);
+    }
+    return result;
 }
 
 function printByTableOrdered(domDishes, mealRequests) {
