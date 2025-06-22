@@ -156,12 +156,18 @@ function bindSettingsEvents() {
 		const element = window.printServerURLOptions[i];
 		printServerURL.append(new Option(element, element));
 	}
+	printServerURL.on('change', function() {
+        $('#imgChanges').show();
+    });
 
 	let printerAddr = $('#sltPrinterAddr');
 	for (let i = 0; i < window.printerAddrOptions.length; i++) {
 		const element = window.printerAddrOptions[i];
 		printerAddr.append(new Option(element, element));
 	}
+	printerAddr.on('change', function() {
+        $('#imgChanges').show();
+    });
 
 	$('#btnApply').click(onApplyClick);
 
@@ -238,6 +244,8 @@ function onApplyClick() {
 	}
 
 	bindRefresh();
+
+	$('#imgChanges').hide();
 
 	refreshAuth();
 }
