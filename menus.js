@@ -148,8 +148,20 @@ function bindSettingsEvents() {
 	let refreshPeriod = window.refreshPeriod / 1000;
 	$('#iptRefreshPeriod').val(refreshPeriod);
 	$('#iptdishWarningThreshold').val(window.dishWarningThreshold);
-	$('#iptPrintServerURL').val(window.printServerURL);
-	$('#iptPrinterAddr').val(window.printerAddr);
+	// $('#iptPrintServerURL').val(window.printServerURL);
+	// $('#iptPrinterAddr').val(window.printerAddr);
+
+	let printServerURL = $('#sltPrintServerURL');
+	for (let i = 0; i < window.printServerURLOptions.length; i++) {
+		const element = window.printServerURLOptions[i];
+		printServerURL.append(new Option(element, element));
+	}
+
+	let printerAddr = $('#sltPrinterAddr');
+	for (let i = 0; i < window.printerAddrOptions.length; i++) {
+		const element = window.printerAddrOptions[i];
+		printerAddr.append(new Option(element, element));
+	}
 
 	$('#btnApply').click(onApplyClick);
 
@@ -211,11 +223,19 @@ function onApplyClick() {
 	let newRefreshPeriod = $('#iptRefreshPeriod').val();
 	window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
 
-	let printServerURL = $('#iptPrintServerURL').val();
-	window.printServerURL = printServerURL;
+	let printServerURL = $('#sltPrintServerURL').val();
+	if (printServerURL) {
+		window.printServerURL = 'https://192.168.' + printServerURL;
+	} else {
+		window.printServerURL = '';
+	}
 
-	let printerAddr = $('#iptPrinterAddr').val();
-	window.printerAddr = printerAddr;
+	let printerAddr = $('#sltPrinterAddr').val();
+	if (printerAddr) {
+		window.printerAddr = '192.168.' + printerAddr;
+	} else {
+		window.printerAddr = '';
+	}
 
 	bindRefresh();
 
