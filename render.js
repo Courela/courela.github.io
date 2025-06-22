@@ -76,7 +76,7 @@ function printByTableOrdered(domDishes, mealRequests) {
                 if (!acc[key]) {
                     acc[key] = [];
                 }
-                acc[key].push(dish);
+                acc[key] = insertOrdered(acc[key], dish);
             }
             return acc;
         }, {});
@@ -86,6 +86,16 @@ function printByTableOrdered(domDishes, mealRequests) {
         let div = $('<div class="dynamic">Sem refeições</div>');
         domDishes.append(div);
     }
+}
+
+function insertOrdered(arr, dish) {
+  const index = arr.findIndex((arrDish) => arrDish.createdAt > dish.createdAt);
+  if (index === -1) {
+    arr.push(dish); // Add to the end if no larger element is found
+  } else {
+    arr.splice(index, 0, dish); // Insert at the correct position
+  }
+  return arr;
 }
 
 function printCellsOrdered(dishes,status, domDishes) {
