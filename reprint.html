@@ -28,9 +28,14 @@
                     <strong><span>Recarregar em (segundos): </span></strong>
                     <input id="iptRefreshPeriod" type="number" class="small-number" title="Recarregar" />
 					<strong><span>Endereço impressora: </span></strong>
-                    <input id="iptPrintServerURL" type="text" style="width: 300px;" title="Endereço impressora" />
+                    <select id="sltPrintServerURL" name="printServerURL" style="width: 300px;" title="URL Print Server">
+						<option value=""></option>
+					</select>
 					<strong><span>Imprimir para: </span></strong>
-                    <input id="iptPrinterAddr" type="text" style="width: 300px;" title="IP Impressora" />
+					<select id="sltPrinterAddr" name="printerAddr" style="width: 300px;" title="Printer Address">
+						<option value=""></option>
+					</select>
+					<img id="imgChanges" src="red-circle.png" alt="red-cicle" style="width: 15px; height: 15px; display: none;"/>
                     <button id="btnApply" title="Aplicar">Aplicar</button>
 					<span>Imprimir apenas</span>
 					<input id="chkPrintOnly" type="checkbox" title="Imprimir apenas" placeholder="" />
