@@ -11,6 +11,9 @@ function parseMeals(data) {
 		}
 
 		let table = order.table;
+        if (!isShowTable(table)) {
+            continue;
+        }
         let orderId = order._id;
 		let keys = Object.keys(order.itemstamps);
 		for (let j = 0; j < keys.length; j++) {
@@ -45,6 +48,16 @@ function parseMeals(data) {
 	}
 	
 	return toPrepareMeals;
+}
+
+function isShowTable(table) {
+    let result = false;
+    try {
+        result = table && parseInt(table) < window.showTableThreshold;
+    } catch(err) {
+        console.error(err);
+    }
+    return result;
 }
 
 function resetMenuDishes() {
