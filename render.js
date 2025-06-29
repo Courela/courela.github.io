@@ -154,7 +154,7 @@ function printByOrders(domDishes, mealRequests) {
             }
         }
         if (showTable) {
-            let domTable = $('<p></p>');
+            let domTable = $('<p class="box"></p>');
             let domTableLink = $('<a href="#">'+ table +'</a>');
             domTableLink.on('click', (evt) => onTableClick(evt, items));
             domTable.append(domTableLink);
@@ -185,7 +185,7 @@ async function onTableClick (evt, items) {
         alert('Nada para imprimir.');
         return;
     }
-    let ok = confirm('Imprimir categorias seleccionadas para a mesa ' + tbl + '? ' );
+    let ok = confirm('Marcar items das categorias seleccionadas, para a mesa ' + tbl + ', como servidos? ' );
     if (ok) {
         let orderId = req.items[0].orderId;
         let order = await getOrder(orderId);
