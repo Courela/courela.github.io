@@ -177,8 +177,6 @@ async function startup() {
 	printStatuses(window.showStatuses);
 
 	await refreshAuth(true);
-	
-	$('#login').click(login);
 
 	bindSettings();
 

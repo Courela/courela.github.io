@@ -85,7 +85,7 @@ async function authenticate(url, data) {
 		return true;
 	}
 	catch (err) {
-		alert(JSON.stringify(err));
+		console.error(err);
 		displayAll(false);
 	}
 	
@@ -96,6 +96,8 @@ async function authenticate(url, data) {
 async function login() {	
 	console.log("Going to authenticate...");
 	
+	let result = false;
+
 	let username = $('#username').val();
 	let password = $('#password').val();
 	
@@ -114,10 +116,13 @@ async function login() {
 			// await refreshAuth(true);
 			// $('#credentials').hide();
 			// $('#links').show();
+			result = true;
 		} else {
-			alert('Autenticação falhou!');
+			alert('Autentica\xE7\xE3o falhou!');
 		}
 	} else {
-		alert("Utilizador e Password obrigatórios");
+		alert("Utilizador e Password obrigat\xF3rios");
 	}
+
+	return result;
 }
