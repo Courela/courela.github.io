@@ -6,7 +6,7 @@ function setSettings() {
 	window.refreshPeriod = 60000;
 	window.markedAsStatus = 'SERVED';
 	window.showFullDate = false;
-	window.getMealsBackTo = 3; // hours
+	window.getMealsBackTo = 5; // hours
 	window.dishWarningThreshold = 20;
 	window.printServerURLOptions = [ '1.64:3000/api', '10.116:3000/api' ];
 	window.printServerURL = ''
