@@ -62,3 +62,11 @@ div.sub-options {
 #collapseSettings {
     cursor: pointer;
 }
+
+#sltPrintServerURL {
+    width: 200px;
+}
+
+#sltPrinterAddr {
+    width: 150px;
+}
