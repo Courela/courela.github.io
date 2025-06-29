@@ -171,6 +171,8 @@ function bindSettingsEvents() {
 
 	$('#btnApply').click(onApplyClick);
 
+	$('#btnRefreshMenu').click(onRefreshMenu);
+
 	$('#collapseSettings').on('click', evt => {
 		let div = $(evt.currentTarget).parent();
 		let collapseElements = div.children().filter('.collapse');
@@ -246,6 +248,16 @@ function onApplyClick() {
 	bindRefresh();
 
 	$('#imgChanges').hide();
+
+	refreshAuth();
+}
+
+async function onRefreshMenu() {
+	let domCategories = $("#divCategories .option");
+    domCategories.remove();
+
+	let restaurantId = sessionStorage.getItem("restaurantId");
+	await getMenus(restaurantId);
 
 	refreshAuth();
 }
