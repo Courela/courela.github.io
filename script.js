@@ -1,3 +1,115 @@
+function bindSettingsEvents() {
+	bindCheckBoxes();
+
+	let refreshPeriod = window.refreshPeriod / 1000;
+	$('#iptRefreshPeriod').val(refreshPeriod);
+	$('#iptdishWarningThreshold').val(window.dishWarningThreshold);
+
+	bindPrinterSettings();
+
+	$('#btnApply').click(onApplyClick);
+
+	$('#btnRefreshMenu').click(onRefreshMenu);
+
+	$('#collapseSettings').on('click', evt => {
+		let div = $(evt.currentTarget).parent();
+		let collapseElements = div.children().filter('.collapse');
+		collapseElements.toggle();
+	});
+}
+
+function bindCheckBoxes() {
+	$('#chkAllCategories').change(function () {
+		const categories = $('#divCategories input[type="checkbox"]:checked');
+		categories.each(function () {
+			let checkBox = $(this);
+			if (checkBox.val() !== 'all') {
+				checkBox.prop('checked', false);
+			}
+		});
+
+		let meals = window.meals;
+		let mealRequests = parseMeals(meals);
+		let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
+		recalculateDashboard(groupByStatuses);
+	});
+
+	$('#chkAllStatuses').change(function () {
+		const statuses = $('#divStatuses input[type="checkbox"]:checked');
+		statuses.each(function () {
+			let checkBox = $(this);
+			if (checkBox.val() !== 'all') {
+				checkBox.prop('checked', false);
+			}
+		});
+
+		let meals = window.meals;
+		let mealRequests = parseMeals(meals);
+		let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
+		recalculateDashboard(groupByStatuses);
+	});
+
+	$('#chkPrintOnly').prop('checked', window.printOnly);
+	$('#chkPrintOnly').change((evt) => {
+		let checkBox = $(evt.target);
+		let checkedStatus = checkBox.prop('checked');
+		window.printOnly = checkedStatus;
+	});
+}
+
+function bindPrinterSettings() {
+	let printServerURL = $('#sltPrintServerURL');
+	for (let i = 0; i < window.printServerURLOptions.length; i++) {
+		const element = window.printServerURLOptions[i];
+		printServerURL.append(new Option(element, element));
+	}
+	printServerURL.on('change', function() {
+        $('#imgChanges').show();
+    });
+
+	let printerAddr = $('#sltPrinterAddr');
+	for (let i = 0; i < window.printerAddrOptions.length; i++) {
+		const element = window.printerAddrOptions[i];
+		printerAddr.append(new Option(element, element));
+	}
+	printerAddr.on('change', function() {
+        $('#imgChanges').show();
+    });
+}
+
+function onApplyClick() {
+	clearInterval(window.intervalId);
+	clearInterval(window.timeIntervalId);
+	
+	let newDishWarningThreshold = $('#iptdishWarningThreshold').val();
+	if (newDishWarningThreshold && newDishWarningThreshold > 0) {
+		window.dishWarningThreshold = newDishWarningThreshold;
+	}
+
+	let newRefreshPeriod = $('#iptRefreshPeriod').val();
+	window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
+
+	let printServerURL = $('#sltPrintServerURL').val();
+	if (printServerURL) {
+		window.printServerURL = 'https://192.168.' + printServerURL;
+	} else {
+		window.printServerURL = '';
+	}
+
+	let printerAddr = $('#sltPrinterAddr').val();
+	if (printerAddr) {
+		window.printerAddr = '192.168.' + printerAddr;
+	} else {
+		window.printerAddr = '';
+	}
+
+	bindRefresh();
+
+	$('#imgChanges').hide();
+
+	refreshAuth();
+}
+
 function isSelected(dish) {
 	let inAllCategories = inSelectedAllCategories();
 
@@ -20,13 +132,6 @@ function isSelectedCategory(category) {
 	const categories = $('#divCategories input[type="checkbox"]:checked');
 	let found = categories.filter('[value="'+category+'"]');
 	result = found && found.length > 0;
-	// categories.each(function () {
-	// 	const chkCategory = $(this).val();
-	// 	if (category === chkCategory) {
-	// 		console.log("Selected category: " + category);
-	// 		result = true;
-	// 	};
-	// });
 
 	return result;
 }
