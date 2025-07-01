@@ -122,7 +122,7 @@ function printCellsOrdered(dishes,status, domDishes) {
                     let itemId = $('<input name="' + tables[l].table + '_itemId" type="hidden" value="' + tables[l].itemId + '"></input>')
                     //if (status[statusKeys[idx]] === 'ORDERED') {
                         let link = $('<a href="#">' + tables[l].table + '</a>');
-                        let createdDom = $('<span class="time">' + toDateTime(tables[l].createdAt) + '</span>');
+                        let createdDom = $('<span class="time">' + toDateTime(tables[l].createdAt, window.showFullDate) + '</span>');
                         link.on('click', (evt) => {
                             let tbl = evt.currentTarget.childNodes[0].data;
                             let ok = confirm('Marcar prato "' + dishNames[j] + '" para a mesa "' + tbl + '" como servido?');
@@ -148,16 +148,23 @@ function printByOrders(domDishes, mealRequests) {
         let table = tables[i];
         const items = groupByTables[table];
         let showTable = false;
+        let selectedItems = [];
         for (let j = 0; j < items.length; j++) {
             if (isSelected(items[j])) {
                 showTable = true;
+                selectedItems.push(items[j]);
             }
         }
         if (showTable) {
             let domTable = $('<p class="box"></p>');
-            let domTableLink = $('<a href="#">'+ table +'</a>');
-            domTableLink.on('click', (evt) => onTableClick(evt, items));
+            let domTableLink = $('<a href="#">'+ table +'</a><br/>');
             domTable.append(domTableLink);
+            for (let j = 0; j < selectedItems.length; j++) {
+                const item = selectedItems[j];
+                let domTime = toDateTime(item.createdAt, window.showFullDate);
+                domTable.append($('<div>' + item.itemName + ' ' + domTime + '</div>'));
+            }
+            domTableLink.on('click', (evt) => onTableClick(evt, items));
             domDishes.append(domTable);
         }
     }

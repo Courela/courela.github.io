@@ -100,18 +100,6 @@ function getTablesForDish(dishName, ordersByStatus) {
     return result;
 }
 
-function toDateTime(timestamp) {
-    let date = new Date(timestamp);
-    if (window.showFullDate) {
-        let fullDate = date.getDate() + '/' + (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
-            date.getFullYear();
-        return fullDate + ' ' + date.getHours() + ':' + date.getMinutes() + ':' +
-            date.getSeconds();
-    }
-    return date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0') + ':' +
-        date.getSeconds();
-}
-
 async function markAsServed(evt) {
     let anchor = $($(evt)[0].target);
     let table = anchor.text();

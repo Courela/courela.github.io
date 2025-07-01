@@ -305,3 +305,15 @@ async function refreshAuth(showMenus) {
 		}
 	}
 }
+
+function toDateTime(timestamp, showFullDate) {
+    let date = new Date(timestamp);
+    if (showFullDate) {
+        let fullDate = date.getDate() + '/' + (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
+            date.getFullYear();
+        return fullDate + ' ' + date.getHours() + ':' + date.getMinutes() + ':' +
+            date.getSeconds();
+    }
+    return date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0') + ':' +
+        date.getSeconds();
+}
