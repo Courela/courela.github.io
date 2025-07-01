@@ -1,0 +1,10 @@
+p.box {
+    border: 1px solid black;
+    padding: 3px;
+    margin: 0px;
+    text-align: center;
+}
+
+p.box > div {
+    text-align: justify;
+}
