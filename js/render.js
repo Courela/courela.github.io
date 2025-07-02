@@ -35,9 +35,10 @@ function renderDashboard(mealRequests) {
 
 function renderByDish(domDishes) {
     let menus = window.menus;
+    let allCategories = inSelectedAllCategories();
     for (let x = 0; x < menus.length; x++) {
         const categoryItem = menus[x];
-        if (inSelectedAllCategories() || (isSelectedCategory(categoryItem.category) && isSelectedDescription(categoryItem.category, categoryItem.description))) {
+        if (allCategories || (isSelectedCategory(categoryItem.category) && isSelectedDescription(categoryItem.category, categoryItem.description))) {
             let nrDishes = 0;
             let status = '--';
             if (categoryItem.dishes.length > 0) {
@@ -52,12 +53,12 @@ function renderByDish(domDishes) {
                         }
                     }
                 }
-                if (nrDishes > window.dishWarningThreshold) {
-                    div.addClass('warning');
-                }
             }
             if (categoryItem.available || nrDishes > 0) {
                 let div = $('<div id="cell-' + categoryItem.itemId + '" class="board-cell"></div>');
+                if (nrDishes > window.dishWarningThreshold) {
+                    div.addClass('warning');
+                }
                 div.append('<span class="top-left tiny">'+status+'</span>');
                 div.append('<span>'+ categoryItem.name +'</span><br />');
                 div.append('<span class="alignBottom">'+ nrDishes.toString() +'</span>');
