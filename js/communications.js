@@ -13,7 +13,7 @@ async function getMenus(restaurantId) {
 		let menus = parseMenus(res);
 		window.menus = menus;
 		let categories = getCategories(menus);
-		printCategories(categories, window.descriptionSplit);
+		renderCategories(categories, window.descriptionSplit);
 	} catch (err) {
 		console.log(err);
 	}
@@ -37,7 +37,7 @@ async function getMeals(restaurantId) {
         window.meals = res;
         let mealRequests = parseMeals(res);
         
-        printDashboard(mealRequests);
+        renderDashboard(mealRequests);
     } catch (err) {
         console.log(err);
     }

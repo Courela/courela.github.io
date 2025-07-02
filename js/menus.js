@@ -26,7 +26,7 @@ function parseMenus(data) {
 	return menus;
 }
 
-function printMenus(menus) {
+function renderMenus(menus) {
 	let domMenus = $("#menus");
 	domMenus.html('');
 
@@ -61,7 +61,7 @@ function getItemDescription(itemId) {
 	return item && item.description ? item.description : window.nullDescription;
 }
 
-function printCategories(categories, descriptionSplit) {
+function renderCategories(categories, descriptionSplit) {
     if (categories) {
         let settings = $('#divCategories');
 
@@ -81,7 +81,7 @@ function printCategories(categories, descriptionSplit) {
 
 			if (descriptionSplit) {
 				let items = categories[category];
-				printSubCategories(items, opt);
+				renderSubCategories(items, opt);
 			}
 
 			settings.append(opt);
@@ -89,7 +89,7 @@ function printCategories(categories, descriptionSplit) {
     }
 }
 
-function printSubCategories(items, opt) {
+function renderSubCategories(items, opt) {
 	let subOpt = $('<div class="sub-options"></div>');
 	let descriptions = items.reduce((acc, item) => {
 		let key = item.description && item.description !== 'null' ? item.description : "Geral";
@@ -124,7 +124,7 @@ function printSubCategories(items, opt) {
 	}
 }
 
-function printStatuses(statuses) {
+function renderStatuses(statuses) {
     if (statuses && statuses.length > 0) {
         let settings = $('#divStatuses');
 

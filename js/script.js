@@ -251,7 +251,7 @@ function recalculateDashboard() {
 	$('#dishes').empty();
 	let meals = window.meals;
 	let mealRequests = parseMeals(meals);
-	printDashboard(mealRequests);
+	renderDashboard(mealRequests);
 	console.log('Done refreshing dashboard.');
 }
 
@@ -279,7 +279,7 @@ function bindSettings() {
 
 async function startup() {
 	setSettings();
-	printStatuses(window.showStatuses);
+	renderStatuses(window.showStatuses);
 
 	await refreshAuth(true);
 

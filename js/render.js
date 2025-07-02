@@ -1,4 +1,4 @@
-function printMeals(toPrepareMeals) {
+function renderMeals(toPrepareMeals) {
 	let domMeals = $("#meals");
 	let table = $('<table></table>');
 	let header = $("<tr><th>Mesa</th><th>Estado</th><th>Item</th></tr>");
@@ -16,29 +16,28 @@ function printMeals(toPrepareMeals) {
 	domMeals.append(table);
 }
 
-function printDashboard(mealRequests) {
+function renderDashboard(mealRequests) {
 	let domDishes = $("#dishes");
     domDishes.html('');
 
     if (!window.showOrders) {
         if (!window.showTables) {
-            printByDish(domDishes);
+            renderByDish(domDishes);
         }
 
         if (window.showTables) {
-            printByTableOrdered(domDishes, mealRequests);
+            renderByTableOrdered(domDishes, mealRequests);
         }
     } else {
-        printByOrders(domDishes, mealRequests);
+        renderByOrders(domDishes, mealRequests);
     }
 }
 
-function printByDish(domDishes) {
+function renderByDish(domDishes) {
     let menus = window.menus;
     for (let x = 0; x < menus.length; x++) {
         const categoryItem = menus[x];
         if (inSelectedAllCategories() || (isSelectedCategory(categoryItem.category) && isSelectedDescription(categoryItem.category, categoryItem.description))) {
-            let div = $('<div id="cell-' + categoryItem.itemId + '" class="board-cell"></div>');
             let nrDishes = 0;
             let status = '--';
             if (categoryItem.dishes.length > 0) {
@@ -58,6 +57,7 @@ function printByDish(domDishes) {
                 }
             }
             if (categoryItem.available || nrDishes > 0) {
+                let div = $('<div id="cell-' + categoryItem.itemId + '" class="board-cell"></div>');
                 div.append('<span class="top-left tiny">'+status+'</span>');
                 div.append('<span>'+ categoryItem.name +'</span><br />');
                 div.append('<span class="alignBottom">'+ nrDishes.toString() +'</span>');
@@ -77,7 +77,7 @@ function isShowTable(table) {
     return result;
 }
 
-function printByTableOrdered(domDishes, mealRequests) {
+function renderByTableOrdered(domDishes, mealRequests) {
     if (mealRequests) {
         let dishes = mealRequests.reduce((acc, dish) => {
             if (isSelected(dish)) {
@@ -90,7 +90,7 @@ function printByTableOrdered(domDishes, mealRequests) {
             return acc;
         }, {});
 
-        printCellsOrdered(dishes, '', domDishes);
+        renderCellsOrdered(dishes, '', domDishes);
     } else {
         let div = $('<div class="dynamic">Sem refeições</div>');
         domDishes.append(div);
@@ -107,7 +107,7 @@ function insertOrdered(arr, dish) {
   return arr;
 }
 
-function printCellsOrdered(dishes,status, domDishes) {
+function renderCellsOrdered(dishes,status, domDishes) {
     // console.log("Dishes: " + JSON.stringify(dishes));
     let dishNames = Object.keys(dishes);
     for (let j = 0; j < dishNames.length; j ++) {
@@ -141,7 +141,7 @@ function printCellsOrdered(dishes,status, domDishes) {
     }
 }
 
-function printByOrders(domDishes, mealRequests) {
+function renderByOrders(domDishes, mealRequests) {
     let groupByTables = groupByTable(mealRequests);
     let tables = Object.keys(groupByTables);
     for (let i = 0; i < tables.length; i++) {
