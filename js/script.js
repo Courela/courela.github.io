@@ -225,9 +225,12 @@ function inSelectedDescription(dish, inCategory) {
 
 async function render(restaurantId, showMenus) {
 	if (showMenus) {
-		await getMenus(restaurantId);
+		let menus = await getMenus(restaurantId);
+		let categories = getCategories(menus);
+		renderCategories(categories, window.descriptionSplit);
 	}
-	await getMeals(restaurantId);
+	let mealRequests = await getMeals(restaurantId);
+	renderDashboard(mealRequests);
 }
 
 function displayAll(show) {

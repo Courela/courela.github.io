@@ -12,11 +12,12 @@ async function getMenus(restaurantId) {
 		
 		let menus = parseMenus(res);
 		window.menus = menus;
-		let categories = getCategories(menus);
-		renderCategories(categories, window.descriptionSplit);
+        return menus;
 	} catch (err) {
 		console.log(err);
+        alert('Falha a obter menu!');
 	}
+    return [];
 }
 
 async function getMeals(restaurantId) {
@@ -37,10 +38,13 @@ async function getMeals(restaurantId) {
         window.meals = res;
         let mealRequests = parseMeals(res);
         
-        renderDashboard(mealRequests);
+        return mealRequests;
     } catch (err) {
         console.log(err);
+        alert('Falha a obter refei\xE7\xF5es!');
     }
+
+    return [];
 }
 
 async function getOrder(orderId) {
@@ -58,6 +62,7 @@ async function getOrder(orderId) {
         return res;
     } catch (err) {
         console.log(err);
+        alert('Falha a obter pedido "' + orderId + '"!');
     }
 
     return null;
@@ -78,6 +83,7 @@ async function updateOrder(orderId, order) {
         console.log('Update order "' + orderId + '"');
     } catch (err) {
         console.log(err);
+        alert('Falha a actualizar pedido "' + orderId + '"!');
         return false;
     }
     return true;

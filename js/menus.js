@@ -147,7 +147,9 @@ async function onRefreshMenu() {
     domCategories.remove();
 
 	let restaurantId = sessionStorage.getItem("restaurantId");
-	await getMenus(restaurantId);
+	let menus = await getMenus(restaurantId);
+	let categories = getCategories(menus);
+	renderCategories(categories, window.descriptionSplit);
 
 	refreshAuth();
 }
