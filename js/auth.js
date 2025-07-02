@@ -2,9 +2,7 @@ function prepareAuthentication(username, password) {
 	let authCred = username + ':' + password;
 	let base64Str = btoa(authCred);
 	let now = Date.now();
-	let body = '{"authenticationType":"Basic ","authenticationCredentials":"' + base64Str + '","device":{"_id":"51f6a9113758960f3a9ee701","creationTime":' + now + ',"lastEditTime":' + now + ',"networkAdapters":[],"browser":true,"os":"Windows","size":"desktop"},"referrer":"www.bing.com","referrers":"www.bing.com,www.waiterio.com,www.waiterio.com/pt/pricing,www.waiterio.com/docs/pt,undefined","user":{"language":"pt","_id":"9ea102d713fb1ce2832209ba","creationTime":' + now + ',"lastEditTime":' + now + ',"firstName":"","lastName":"","settings":{"showTips":"NEVER","showSuggestions":true,"ratedAndroidApp":false,"sortOrdersBy":"TABLE_NAME","showOnlyMyOrders":false,"hidePaidOrders":true,"hideOrdersAutomatically":"AT_6AM","ordersLayout":"MULTI_COLUMN_VIEW"}},"expireTime":0}';
 	
-	/*
 	let body = {
 		"authenticationType":"Basic ",
 		"authenticationCredentials": base64Str,
@@ -28,19 +26,19 @@ function prepareAuthentication(username, password) {
 			"lastName":"",
 			"settings": {
 				"showTips":"NEVER",
-				"showSuggestions":true,
+				"showSuggestions":false,
 				"ratedAndroidApp":false,
 				"sortOrdersBy":"TABLE_NAME",
 				"showOnlyMyOrders":false,
 				"hidePaidOrders":true,
-				"hideOrdersAutomatically":"AT_6AM",
+				"hideOrdersAutomatically":"AT_" + window.getMealsBackTo + "AM",
 				"ordersLayout":"MULTI_COLUMN_VIEW"
 			}
-		}
+		},
 		"expireTime":0
 	};
-	*/
-	return body;
+	
+	return JSON.stringify(body);
 }
 
 function authenticateXhr(url, body) {
