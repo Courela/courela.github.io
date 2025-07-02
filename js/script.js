@@ -223,7 +223,7 @@ function inSelectedDescription(dish, inCategory) {
 	return result;
 }
 
-async function print(restaurantId, showMenus) {
+async function render(restaurantId, showMenus) {
 	if (showMenus) {
 		await getMenus(restaurantId);
 	}
@@ -296,7 +296,7 @@ async function refreshAuth(showMenus) {
 		console.log("Session authentication used");
 		if (window.location.href.indexOf("index.html") === -1) {
 			displayAll(true);
-			await print(restaurantId, showMenus);
+			await render(restaurantId, showMenus);
 		}
 	} else {
 		console.log('Not authenticated');
