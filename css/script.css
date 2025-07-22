@@ -17,9 +17,88 @@ div.timer > span {
     right: 20px;
 }
 
+/* Login Page */
+body.main-app {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom, #007BFF, #ADD8E6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 div.credentials {
-    margin: 20px;
-}    
+  background: white;
+  width: 300px;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  position: relative;
+  text-align: center;
+}
+
+div.credentials .title {
+  font-size: 20px;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+div.credentials .subtitle {
+  font-weight: 300;
+  font-size: 14px;
+}
+
+div.credentials input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 14px;
+  background: transparent;
+}
+
+div.credentials input:focus {
+  outline: none;
+  border-bottom: 2px solid #007BFF;
+}
+
+div.credentials button {
+  background: #007BFF;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 20px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+div.credentials button:hover {
+  background: #0056b3;
+}
+
+.spinner-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.spinner-overlay img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+}
 
 div.option {
     display: inline;
