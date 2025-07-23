@@ -1,13 +1,13 @@
 p {
-    margin: 3px 3px;
+  margin: 3px 3px;
 }    
 
 table, th, td {
-    border: 1px solid black;
+  border: 1px solid black;
 }    
 
 td {
-    text-align: center;
+  text-align: center;
 }
 
 div.timer > span {
@@ -20,6 +20,7 @@ div.timer > span {
 /* Login Page */
 body.main-app {
   margin: 0;
+  padding: 0;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(to bottom, #007BFF, #ADD8E6);
   display: flex;
@@ -80,6 +81,12 @@ div.credentials button:hover {
   background: #0056b3;
 }
 
+@media (max-width: 768px) {
+  div.credentials {
+    width: 70vw;
+  }
+}
+
 .spinner-overlay {
   display: none;
   position: absolute;
@@ -101,51 +108,51 @@ div.credentials button:hover {
 }
 
 div.option {
-    display: inline;
-    margin: 0px 10px;
+  display: inline;
+  margin: 0px 10px;
 }    
 
 div.sub-options {
-    margin: 0px 10px;
+  margin: 0px 10px;
 }
 
 .board-cell {
-    position: relative;
-    text-align: center;
-    border: 1px solid black;
+  position: relative;
+  text-align: center;
+  border: 1px solid black;
 }    
 
 .collapse {
-    display: inline;
+  display: inline;
 }    
 
 .alignBottom {
-    position: absolute;
-    bottom: 0px;
+  position: absolute;
+  bottom: 0px;
 }
 
 .top-left {
-    position: absolute;
-    top: 0px;
-    left: 0px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 
 .tiny {
-    font-size: x-small;
+  font-size: x-small;
 }
 
 .small-number {
-    width: 80px;
+  width: 80px;
 }
 
 #collapseSettings {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 #sltPrintServerURL {
-    width: 200px;
+  width: 200px;
 }
 
 #sltPrinterAddr {
-    width: 150px;
+  width: 150px;
 }
