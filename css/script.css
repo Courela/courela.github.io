@@ -81,7 +81,7 @@ div.credentials button:hover {
   background: #0056b3;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   div.credentials {
     width: 70vw;
   }
