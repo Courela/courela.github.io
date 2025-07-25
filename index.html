@@ -20,13 +20,19 @@
 				await startup();
 			});
 		</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</header>
-	<body>
+	<body class="main-app">
 		<div id="credentials" class="credentials">
-			<label for="username">Utilizador: </label><input id="username"></input>&nbsp;
-			<label for="password">Password: </label><input id="password" type="password"></input>&nbsp;
-			<button id="login">Entrar</button>
-			<img id="spinner" src="images/spinner.gif" alt="Wait spinner" style="width: 15px; height: 15px; display: none;"/>
+      <h1 class="title">Meal Order<br><span class="subtitle">Manager</span></h1>
+      <div>
+        <input id="username" placeholder="Utilizador"></input>&nbsp;
+        <input id="password" placeholder="Password" type="password"></input>&nbsp;
+        <button id="login">Entrar</button>
+      </div>
 		</div>
+    <div id="spinner" class="spinner-overlay">
+      <img src="images/spinner.gif" alt="Wait spinner"/>
+    </div>
 	</body>
 </html>
