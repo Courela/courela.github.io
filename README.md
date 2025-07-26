@@ -1,0 +1,1 @@
+Pages that show data from Waiterio in different views. Ideal for showing dishes to kitchen and change the status of them. Pages are also able to connect to printers (through a server, using POC protocol) an print/reprint data from Waiterio.
