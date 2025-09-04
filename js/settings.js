@@ -8,9 +8,9 @@ function setSettings() {
 	window.showFullDate = false;
 	window.getMealsBackTo = 3;                    // valid values are (in hours): 1, 3, 6, 12, 24
 	window.dishWarningThreshold = 20;             // show different cell color upon higher requests
-	window.printServerURLOptions = [ '1.64:3000/api', '10.116:3000/api' ];
+	window.printServerURLOptions = [ '10.33:3000/api' ];
 	window.printServerURL = ''                    // additional printer server
-	window.printerAddrOptions = [ '1.201', '1.202', '1.203', '1.204', '10.201', '10.202', '10.203', '10.204' ];
+	window.printerAddrOptions = [ '10.201', '10.202', '10.103', '10.104' ];
 	window.printerAddr = '';                      // address of printer to use (printServerURL must be set)
 	window.printOnly = false;                     // print only orders, do not change their status
 	window.showTableThreshold = 700;              // do not show table with name higher than
