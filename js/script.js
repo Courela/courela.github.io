@@ -282,6 +282,7 @@ function bindSettings() {
 
 async function startup() {
 	setSettings();
+	searchPrinterServer();
 	renderStatuses(window.showStatuses);
 
 	await refreshAuth(true);
@@ -289,6 +290,7 @@ async function startup() {
 	bindSettings();
 
 	$('#username').html(sessionStorage.getItem("username"));
+
 }
 
 async function refreshAuth(showMenus) {

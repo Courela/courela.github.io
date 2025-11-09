@@ -1,3 +1,47 @@
+async function searchPrinterServer()
+{
+    for (let idx = 1; idx < 254; idx++) {
+        // TODO find ip range automatically
+        let url = `https://${window.localIP}${idx}:3000/api/ping`;
+        $.ajax({
+            url: url,
+            type: "GET",
+            timeout: 500,
+            success: function(res) {
+                console.log(`Server ping response for ${idx}: ${res}`);
+                window.printServerURLOptions.push(`1.${idx}:3000/api`);
+            },
+            error: function(xhr, status, error) {
+                if (status != 'timeout') {
+                    console.warn("An error occurred:", error);
+                }
+            }
+        });
+    }
+}
+
+async function searchPrinters()
+{
+    for (let idx = 1; idx < 254; idx++) {
+        // TODO find ip range automatically
+        let url = `${window.localIP}${idx}`;
+        $.ajax({
+            url: url,
+            type: "GET",
+            timeout: 500,
+            success: function(res) {
+                console.log(`Printer response for ${idx}: ${res}`);
+                window.printerAddrOptions.push(`1.${idx}`);
+            },
+            error: function(xhr, status, error) {
+                if (status != 'timeout') {
+                    console.warn("An error occurred:", error);
+                }
+            }
+        });
+    }
+}
+
 async function getMenus(restaurantId) {
 	let url = window.apiURL + '/menus?restaurantId=' + restaurantId;
 	try {
