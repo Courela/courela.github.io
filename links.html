@@ -1,12 +1,55 @@
 <html lang="pt">
 	<header>
 		<title>Links</title>
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous">
+		</script>
+		<script src="js/settings.js"></script>
+		<script src="js/communications.js"></script>
+		<script>
+			$(document).ready(async function() {
+				setSettings();
+
+				await searchPrinterServer();
+
+				console.log("Starting to bind printer servers...");
+				let printServerURL = $('#sltPrintServerURL');
+				for (let i = 0; i < window.printServerURLOptions.length; i++) {
+					const element = window.printServerURLOptions[i];
+					printServerURL.append(new Option(element, element));
+				}
+
+				printServerURL.on('change', function() {
+					const url = $(this).val();
+					if (url) {
+						let link = 'https://' + window.localIP + url + '/ping';
+						$('#spn_ping').text(link);
+						$('#lnk_ping').attr('href', link);
+						$('#divPing').show();
+					} else {
+						$('#divPing').hide();
+					}
+				});
+			});
+		</script>
     </header>
 	<body>
 		<div id="links" style="padding: 30px;">
 			<p><a href="dishes.html">Pratos</a></p>
 			<p><a href="tables.html">Mesas</a></p>
 			<p><a href="orders.html">Pedidos</a></p>
+		</div>
+		<div id="ping" style="padding: 30px;"></div>
+			<strong><span>Servidor impressoras: </span></strong>
+			<select id="sltPrintServerURL" name="printServerURL" title="URL Print Server">
+				<option value="">Sem servidor</option>
+			</select>
+			<div id="divPing" style="display: none;">
+				<p><span id="spn_ping"></span></p>
+				<p><a id="lnk_ping" href="#" target="_blank">Ping</a></p>
+			</div>
 		</div>
 	</body>
 </html>

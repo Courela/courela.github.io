@@ -1,3 +1,16 @@
+async function startup() {
+	setSettings();
+	await searchPrinterServer();
+	renderStatuses(window.showStatuses);
+
+	await refreshAuth(true);
+
+	bindSettings();
+
+	$('#username').html(sessionStorage.getItem("username"));
+
+}
+
 function bindSettingsEvents() {
 	bindCheckBoxes();
 
@@ -278,19 +291,6 @@ function bindRefresh() {
 function bindSettings() {
 	bindSettingsEvents();
 	bindRefresh();
-}
-
-async function startup() {
-	setSettings();
-	searchPrinterServer();
-	renderStatuses(window.showStatuses);
-
-	await refreshAuth(true);
-
-	bindSettings();
-
-	$('#username').html(sessionStorage.getItem("username"));
-
 }
 
 async function refreshAuth(showMenus) {

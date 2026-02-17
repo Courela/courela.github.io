@@ -1,23 +1,32 @@
 async function searchPrinterServer()
 {
-    for (let idx = 1; idx < 254; idx++) {
+    let promises = [];
+    for (let idx = window.printerServerURLRange[0]; idx <= window.printerServerURLRange[window.printerServerURLRange.length - 1]; idx++) {
+        let index = idx;
         // TODO find ip range automatically
-        let url = `https://${window.localIP}${idx}:3000/api/ping`;
-        $.ajax({
-            url: url,
-            type: "GET",
-            timeout: 500,
-            success: function(res) {
-                console.log(`Server ping response for ${idx}: ${res}`);
-                window.printServerURLOptions.push(`1.${idx}:3000/api`);
-            },
-            error: function(xhr, status, error) {
-                if (status != 'timeout') {
-                    console.warn("An error occurred:", error);
+        let url = `https://${window.localIP}${index}:3000/api/ping`;
+        promises.push(
+            $.ajax({
+                url: url,
+                type: "GET",
+                timeout: 1000,
+                success: function(res) {
+                    console.log(`Server ping response for ${index}: ${res}`);
+                    window.printServerURLOptions.push(`${window.localIP.substring(8)}${index}:3000/api`);
+                },
+                error: function(xhr, status, error) {
+                    if (status != 'timeout') {
+                        console.warn("An error occurred:", error);
+                    }
                 }
-            }
-        });
+            })
+        );
     }
+    
+    await Promise.all(promises)
+        .catch(_ => {
+            // do nothing, errors are handled individually in the ajax error callback
+        });
 }
 
 async function searchPrinters()
