@@ -4,13 +4,125 @@ div.timer {
     right: 20px;
 }
 
+/* Base styles for board cells */
 .board-cell {
     width: 19%;
     font-size: 48px;
     height: 210px;
     overflow: hidden;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    background-color: white;
 }
 
 .warning {
     background-color: lightyellow;
+}
+
+/* Extra Large Screens (1400px and above) - 5+ columns */
+@media (min-width: 1400px) {
+    .board-cell {
+        width: 19%;
+        font-size: 48px;
+        height: 210px;
+    }
+    
+    .board-cell span {
+        font-size: 48px;
+    }
+    
+    .board-cell .alignBottom {
+        font-size: 48px;
+    }
+}
+
+/* Large Screens (1024px to 1399px) - 4 columns */
+@media (min-width: 1024px) and (max-width: 1399px) {
+    .board-cell {
+        width: 24%;
+        font-size: 40px;
+        height: 190px;
+    }
+    
+    .board-cell span {
+        font-size: 40px;
+    }
+    
+    .board-cell .alignBottom {
+        font-size: 40px;
+    }
+}
+
+/* Medium Screens (768px to 1023px) - 3 columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .board-cell {
+        width: 31%;
+        font-size: 32px;
+        height: 170px;
+    }
+    
+    .board-cell span {
+        font-size: 32px;
+    }
+    
+    .board-cell .alignBottom {
+        font-size: 32px;
+    }
+}
+
+/* Tablet Landscape (600px to 767px) - 2-3 columns */
+@media (min-width: 600px) and (max-width: 767px) {
+    .board-cell {
+        width: 48%;
+        font-size: 24px;
+        height: 150px;
+    }
+    
+    .board-cell span {
+        font-size: 24px;
+    }
+    
+    .board-cell .alignBottom {
+        font-size: 24px;
+    }
+}
+
+/* Small Screens (480px to 599px) - 2 columns */
+@media (min-width: 480px) and (max-width: 599px) {
+    .board-cell {
+        width: 48%;
+        font-size: 18px;
+        height: 130px;
+    }
+    
+    .board-cell span {
+        font-size: 18px;
+    }
+    
+    .board-cell .alignBottom {
+        font-size: 18px;
+    }
+}
+
+/* Extra Small Screens (below 480px) - 1 column */
+@media (max-width: 479px) {
+    .board-cell {
+        width: 100%;
+        font-size: 16px;
+        height: 120px;
+    }
+    
+    .board-cell span {
+        font-size: 16px;
+    }
+    
+    .board-cell .alignBottom {
+        font-size: 16px;
+    }
 }
