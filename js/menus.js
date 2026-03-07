@@ -146,7 +146,7 @@ async function onRefreshMenu() {
 	let domCategories = $("#divCategories .option");
     domCategories.remove();
 
-	let restaurantId = sessionStorage.getItem("restaurantId");
+	let restaurantId = getCurrentRestaurantId();
 	let menus = await getMenus(restaurantId);
 	let categories = getCategories(menus);
 	renderCategories(categories, window.descriptionSplit);

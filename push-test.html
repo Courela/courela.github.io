@@ -1,0 +1,71 @@
+<html lang="pt">
+	<header>
+		<title>Pedidos</title>
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous">
+		</script>
+		<script src="js/communications.js"></script>
+		<script src="js/script.js"></script>
+		<script src="js/auth.js"></script>
+        <script src="js/settings.js"></script>
+		<script src="js/menus.js"></script>
+		<script src="js/meals.js"></script>
+        <script src="js/render.js"></script>
+        <script src="js/pusher.js"></script>
+        <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+        <link rel="stylesheet" href="css/script.css" />
+		<link rel="stylesheet" href="css/orders.css" />
+		<script>
+            window.showOrders = true;
+			$(document).ready(() =>{
+                startup();
+                subscribe();
+            });
+		</script>
+	</header>
+	<body>
+		<div id="settings" style="display: none;">
+			<span style="font-size: small;"><b>Utilizador:</b> <span id="username" style="font-size: small;"></span>&nbsp;&nbsp;<a href="links.html">Voltar</a></span><br />
+			<p id="collapseSettings"><strong>Definições</strong> <img src="images/collapse.png" height="15px" width="15px" title="Encolher" /></p>
+            <div class="collapse">
+                <div style="display: flex; flex-flow: row wrap;">
+                    <strong><span>Recarregar em (segundos): </span></strong>
+                    <input id="iptRefreshPeriod" type="number" class="small-number" title="Recarregar" />
+					<strong><span>Servidor impressoras: </span></strong>
+                    <select id="sltPrintServerURL" name="printServerURL" title="URL Print Server">
+						<option value="">Sem servidor</option>
+					</select>
+					<strong><span>Imprimir para: </span></strong>
+					<select id="sltPrinterAddr" name="printerAddr" title="Printer Address">
+						<option value="">Sem impressora</option>
+					</select>
+					<img id="imgChanges" src="images/red-circle.png" alt="red-cicle" style="width: 15px; height: 15px; display: none;"/>
+                    <button id="btnApply" title="Aplicar">Aplicar</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					<button id="btnRefreshMenu" title="Actualizar Menus">Actualizar Menus</button>&nbsp;&nbsp;
+					<span>Imprimir apenas</span>
+					<input id="chkPrintOnly" type="checkbox" title="Imprimir apenas" placeholder="" />
+                </div>
+				<div id="divCategories" style="display: flex; align-items: flex-start;">
+					<strong><span>Categorias: </span></strong>
+					<span>Todas</span>
+					<input id="chkAllCategories" type="checkbox" title="Todas" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
+				</div>
+				<br />
+				<div id="divStatuses">
+					<strong><span>Estado: </span></strong>
+					<span>Todos</span>
+					<input id="chkAllStatuses" type="checkbox" title="Todos" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
+				</div>
+			</div>
+			<div style="position: absolute; top: 20px; right: 20px;">
+				<span id="timer" style="font-size: 40px;">--</span>
+			</div>
+		</div>
+        <div id="dashboard" style="display: none;">
+			<p>Pedidos</p>
+			<div id="dishes" style="display: flex; flex-flow: row wrap;"></div>
+		</div>
+    </body>
+</html>
