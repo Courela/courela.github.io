@@ -4,13 +4,8 @@ function renderMeals(toPrepareMeals) {
 	let header = $("<tr><th>Mesa</th><th>Estado</th><th>Item</th></tr>");
 	table.append(header);
 	for (let i = 0; i < toPrepareMeals.length; i++) {
-		let row = $("<tr></tr>");
-		row.append('<td>' + toPrepareMeals[i].table + "</td>");
-		row.append('<td>' + toPrepareMeals[i].status + "</td>");
-        row.append('<td>' + toPrepareMeals[i].itemName + "</td>");
-		row.append('<td>' + toPrepareMeals[i].description + "</td>");
-		
-		table.append(row);
+        let meal = buildHtmlOrder(toPrepareMeals[i]);
+		table.append(meal);
 	}
 	
 	domMeals.append(table);
@@ -55,13 +50,7 @@ function renderByDish(domDishes) {
                 }
             }
             if (categoryItem.available || nrDishes > 0) {
-                let div = $('<div id="cell-' + categoryItem.itemId + '" class="board-cell"></div>');
-                if (nrDishes > window.dishWarningThreshold) {
-                    div.addClass('warning');
-                }
-                div.append('<span class="top-left tiny">'+status+'</span>');
-                div.append('<span>'+ categoryItem.name +'</span><br />');
-                div.append('<span class="alignBottom">'+ nrDishes.toString() +'</span>');
+                let div = buildHtmlDish(categoryItem, nrDishes, nrDishes > window.dishWarningThreshold);
                 domDishes.append(div);
             }
         }
@@ -112,15 +101,12 @@ function renderCellsOrdered(dishes,status, domDishes) {
     // console.log("Dishes: " + JSON.stringify(dishes));
     let dishNames = Object.keys(dishes);
     for (let j = 0; j < dishNames.length; j ++) {
-        let div = $('<div class="board-cell"></div>');
-        div.append('<span class="top-left tiny">'+status+'</span>');
-        div.append('<span>'+ dishNames[j] +'</span><br /><span>'+ dishes[dishNames[j]].length +'</span>');
+        let tables =  dishes[dishNames[j]];
+        let div = $(buildHtmlItemCell(dishNames[j], tables.length, status));
         if (window.showTables) {
-            let tables =  dishes[dishNames[j]];
             if (tables) {
                 for (let l = 0; l < tables.length; l++) {
-                    let orderId = $('<input name="' + tables[l].table + '_orderId" type="hidden" value="' + tables[l].orderId + '"></input>')
-                    let itemId = $('<input name="' + tables[l].table + '_itemId" type="hidden" value="' + tables[l].itemId + '"></input>')
+                    let identifiers = buildHtmlHiddenIdentifiers(tables[l]);
                     //if (status[statusKeys[idx]] === 'ORDERED') {
                         let link = $('<a href="#">' + tables[l].table + '</a>');
                         let createdDom = $('<span class="time">' + toDateTime(tables[l].createdAt, window.showFullDate) + '</span>');
@@ -131,7 +117,7 @@ function renderCellsOrdered(dishes,status, domDishes) {
                                 markAsServed(evt);
                             }
                         });
-                        div.append('<br />', orderId, itemId, link, createdDom);
+                        div.append('<br />', identifiers, link, createdDom);
                     // } else {
                     //     div.append(orderId, itemId);
                     // }
@@ -322,4 +308,29 @@ function inSelectedDescription(dish, inCategory) {
 	}
 
 	return result;
+}
+
+function buildHtmlOrder(order) {
+    let template = '<tr><td><%= order.table %><td><%= order.status %><td><%= order.itemName %><td><%= order.description %></td></tr>';
+    return ejs.render(template, { order: order });
+}
+
+function buildHtmlDish(categoryItem, nrDishes, isWarning) {
+    let template = '<div id="cell-<%= categoryItem.itemId %>" class="board-cell <% isWarning ? "warning" : "" %>"><span class="top-left tiny"><%= categoryItem.status %></span><span><%= categoryItem.name %></span><br /><span class="alignBottom"><%= nrDishes %></span></div>';
+    return ejs.render(template, { categoryItem: categoryItem, nrDishes: nrDishes.toString(), isWarning: isWarning });
+}
+
+function buildHtmlItemCell(dishName, count, status) {
+    let template =
+        '<div class="board-cell">' +
+        '<span class="top-left tiny"><%= status %></span>' +
+        '<span><%= dishName %></span><br />' +
+        '<span><%= count %></span>' +
+        '</div>';
+    return ejs.render(template, { dishName: dishName, count: count.toString(), status: status });
+}
+
+function buildHtmlHiddenIdentifiers(table){
+    let template = '<input name="<%= table.table %>_orderId" type="hidden" value="<%= table.orderId %>"></input><input name="<%= table.table %>_itemId" type="hidden" value="<%= table.itemId %>"></input>';
+    return ejs.render(template, { table: table });    
 }
