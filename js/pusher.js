@@ -48,10 +48,63 @@
 // } from '../forage/SubscriptionsForage.js'
 // import { plantTerminal, burnTerminal } from '../forage/TerminalsForage.js'
 // import { pickUser, plantUser, burnUser } from '../forage/UsersForage.js'
+const Event = {
+  ACCOUNT_ADDED_EVENT: 'ACCOUNT_ADDED_EVENT',
+  ACCOUNT_REMOVED_EVENT: 'ACCOUNT_REMOVED_EVENT',
+  ACCOUNT_UPDATED_EVENT: 'ACCOUNT_UPDATED_EVENT',
+  CATEGORY_ADDED_EVENT: 'CATEGORY_ADDED_EVENT',
+  CATEGORY_REMOVED_EVENT: 'CATEGORY_REMOVED_EVENT',
+  CATEGORY_UPDATED_EVENT: 'CATEGORY_UPDATED_EVENT',
+  CHARGE_ADDED_EVENT: 'CHARGE_ADDED_EVENT',
+  CHARGE_REMOVED_EVENT: 'CHARGE_REMOVED_EVENT',
+  CHARGE_UPDATED_EVENT: 'CHARGE_UPDATED_EVENT',
+  DEVICE_ADDED_EVENT: 'DEVICE_ADDED_EVENT',
+  DEVICE_REMOVED_EVENT: 'DEVICE_REMOVED_EVENT',
+  DEVICE_UPDATED_EVENT: 'DEVICE_UPDATED_EVENT',
+  CURRENT_MEALS_UPDATED_EVENT: 'CURRENT_MEALS_UPDATED_EVENT',
+  INVITE_ADDED_EVENT: 'INVITE_ADDED_EVENT',
+  INVITE_REMOVED_EVENT: 'INVITE_REMOVED_EVENT',
+  INVITE_UPDATED_EVENT: 'INVITE_UPDATED_EVENT',
+  ITEM_ADDED_EVENT: 'ITEM_ADDED_EVENT',
+  ITEM_REMOVED_EVENT: 'ITEM_REMOVED_EVENT',
+  ITEM_UPDATED_EVENT: 'ITEM_UPDATED_EVENT',
+  ITEMSTAMP_ADDED_EVENT: 'ITEMSTAMP_ADDED_EVENT',
+  ITEMSTAMP_REMOVED_EVENT: 'ITEMSTAMP_REMOVED_EVENT',
+  ITEMSTAMP_UPDATED_EVENT: 'ITEMSTAMP_UPDATED_EVENT',
+  MAP_ADDED_EVENT: 'MAP_ADDED_EVENT',
+  MAP_REMOVED_EVENT: 'MAP_REMOVED_EVENT',
+  MAP_UPDATED_EVENT: 'MAP_UPDATED_EVENT',
+  MEAL_ADDED_EVENT: 'MEAL_ADDED_EVENT',
+  MEAL_REMOVED_EVENT: 'MEAL_REMOVED_EVENT',
+  MEAL_UPDATED_EVENT: 'MEAL_UPDATED_EVENT',
+  MENU_ADDED_EVENT: 'MENU_ADDED_EVENT',
+  MENU_REMOVED_EVENT: 'MENU_REMOVED_EVENT',
+  MENU_UPDATED_EVENT: 'MENU_UPDATED_EVENT',
+  PAYMENT_ADDED_EVENT: 'PAYMENT_ADDED_EVENT',
+  PAYMENT_REMOVED_EVENT: 'PAYMENT_REMOVED_EVENT',
+  PAYMENT_UPDATED_EVENT: 'PAYMENT_UPDATED_EVENT',
+  PRINTER_ADDED_EVENT: 'PRINTER_ADDED_EVENT',
+  PRINTER_REMOVED_EVENT: 'PRINTER_REMOVED_EVENT',
+  PRINTER_UPDATED_EVENT: 'PRINTER_UPDATED_EVENT',
+  RESTAURANT_ADDED_EVENT: 'RESTAURANT_ADDED_EVENT',
+  RESTAURANT_REMOVED_EVENT: 'RESTAURANT_REMOVED_EVENT',
+  RESTAURANT_UPDATED_EVENT: 'RESTAURANT_UPDATED_EVENT',
+  ROLE_ADDED_EVENT: 'ROLE_ADDED_EVENT',
+  ROLE_REMOVED_EVENT: 'ROLE_REMOVED_EVENT',
+  ROLE_UPDATED_EVENT: 'ROLE_UPDATED_EVENT',
+  SUBSCRIPTION_ADDED_EVENT: 'SUBSCRIPTION_ADDED_EVENT',
+  SUBSCRIPTION_REMOVED_EVENT: 'SUBSCRIPTION_REMOVED_EVENT',
+  SUBSCRIPTION_UPDATED_EVENT: 'SUBSCRIPTION_UPDATED_EVENT',
+  TERMINAL_ADDED_EVENT: 'TERMINAL_ADDED_EVENT',
+  TERMINAL_REMOVED_EVENT: 'TERMINAL_REMOVED_EVENT',
+  TERMINAL_UPDATED_EVENT: 'TERMINAL_UPDATED_EVENT',
+  TEST_EVENT: 'TEST_EVENT',
+  USER_ADDED_EVENT: 'USER_ADDED_EVENT',
+  USER_REMOVED_EVENT: 'USER_REMOVED_EVENT',
+  USER_UPDATED_EVENT: 'USER_UPDATED_EVENT',
+};
 
-const forceTLS = true;
-
-const pusher = new Pusher('8af67bd4bfc5f2d7874b', { cluster: 'mt1', forceTLS });
+const pusher = new Pusher('8af67bd4bfc5f2d7874b', { cluster: 'mt1', forceTLS: window.forceTLS });
 
 // Pusher.log = function (message) {
 //
@@ -230,6 +283,52 @@ function subscribe() {
       channel.bind(Event.USER_UPDATED_EVENT, this.handleUserUpdatedEvent, this)
     }
 }
+
+const produceImmer = producer => state => {
+  const draft = deepClone(state)
+  producer(draft)
+
+  return draft
+};
+
+const produceScope = produce => (first, second) => {
+  let producer
+  let scope
+
+  if (first) {
+    if (typeof first === 'function') {
+      producer = first
+    } else if (first.constructor === Array) {
+      scope = first
+    }
+  }
+
+  if (second) {
+    if (typeof second === 'function') {
+      producer = second
+    } else if (second.constructor === Array) {
+      scope = second
+    }
+  }
+
+  if (producer && scope) {
+    return produce(draft => producer(path(draft, scope)))
+  } else if (scope) {
+    return producer =>
+      produce(draft => {
+        if (producer) {
+          producer(path(draft, scope))
+        } else {
+          path(draft, scope.slice(0, -1))[scope.slice(-1)[0]] = {}
+        }
+      })
+  } else {
+    return produce(producer)
+  }
+};
+
+const produce = produceScope(producer =>
+  window.state = produceImmer(producer));
 
 function handleAccountAddedEvent(accountAddedEvent) {
     if (
@@ -465,13 +564,14 @@ function handleCategoryAddedEvent(categoryAddedEvent) {
       mealEvent.restaurantId === getCurrentRestaurantId()
     ) {
       if (mealEvent.meal) {
-        pickMeal(mealEvent.mealId).then(oldMeal => {
-          handleMealUpdatedEvent(mealEvent.meal, oldMeal)
+        alert("Meal updated! " + JSON.stringify(mealEvent));
+        // pickMeal(mealEvent.mealId).then(oldMeal => {
+        //   handleMealUpdatedEvent(mealEvent.meal, oldMeal)
 
-          printNewTicket(new Meal(mealEvent.meal), oldMeal, true)
+        //   printNewTicket(new Meal(mealEvent.meal), oldMeal, true)
 
-          plantMeal(mealEvent.meal)
-        })
+        //   plantMeal(mealEvent.meal)
+        // })
       } else {
         getMeal(mealEvent.mealId).then(meal => {
           mealEvent.meal = meal
