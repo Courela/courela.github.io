@@ -133,7 +133,10 @@ async function render(restaurantId, showMenus) {
 		let categories = getCategories(menus);
 		renderCategories(categories, window.descriptionSplit);
 	}
-	let mealRequests = await getMeals(restaurantId);
+	let meals = await getMeals(restaurantId);
+	window.meals = meals;
+	let mealRequests = parseMeals(meals);
+	console.log("Meals parsed.");
 	renderDashboard(mealRequests);
 }
 

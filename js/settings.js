@@ -3,10 +3,10 @@ function setSettings() {
 	window.descriptionSplit = true;               // split dishes based on their description
 	window.nullDescription = 'Geral';             // when no description, use this value
 	window.showStatuses = ["ORDERED", "COOKING", "READY", "SERVED", "CANCELLED" ];
-	window.refreshPeriod = 60000;                 // in milisecconds
+	window.refreshPeriod = 600000;                // in milisecconds
 	window.markedAsStatus = 'SERVED';             // when changing status of an item, use this value
 	window.showFullDate = false;
-	window.getMealsBackTo = 3;                    // valid values are (in hours): 1, 3, 6, 12, 24
+	window.getMealsBackTo = 6;                    // valid values are (in hours): 1, 3, 6, 12, 24
 	window.dishWarningThreshold = 20;             // show different cell color upon higher requests
 	window.printServerURLOptions = [ '1.101:3000/api', '1.102:3000/api', '100.100:3000/api', '100.101:3000/api', '100.102:3000/api' ];
 	window.printServerURL = ''                    // additional printer server

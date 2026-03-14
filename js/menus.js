@@ -30,18 +30,8 @@ function renderMenus(menus) {
 	let domMenus = $("#menus");
 	domMenus.html('');
 
-	let table = $('<table></table>');
-	let header = $("<tr><th>Categoria</th><th>Item</th></tr>");
-	table.append(header);
-	for (let i = 0; i < menus.length; i++) {
-		let row = $("<tr></tr>");
-		row.append('<td>' + menus[i].category + "</td>");
-		row.append('<td>' + menus[i].name + "</td>");
-		
-		table.append(row);
-	}
-	
-	domMenus.append(table);
+	let menuHtml = buildHtmlMenu(menus);
+	domMenus.append(menuHtml);
 }
 
 function getCategories(menus) {
@@ -152,4 +142,17 @@ async function onRefreshMenu() {
 	renderCategories(categories, window.descriptionSplit);
 
 	refreshAuth();
+}
+
+function buildHtmlMenu(menus) {
+	let template =
+		'<table>'+
+			'<tr><th>Categoria</th><th>Item</th></tr>'+
+			'<% for(let i = 0; i < menus.length; i++) { %>'+
+			'<tr>'+
+				'<td><%= menus[i].category %></td>'+
+				'<td><%= menus[i].name %></td>'+
+			'</tr><% } %>'+
+		'</table>';
+	return ejs.render(template, { menus: menus });
 }

@@ -79,16 +79,35 @@ async function getMeals(restaurantId) {
 
         console.log('Receive meals: ' + res.length);
 
-        window.meals = res;
-        let mealRequests = parseMeals(res);
-        
-        return mealRequests;
+        return res;
     } catch (err) {
         console.log(err);
         alert('Falha a obter refei\xE7\xF5es!');
     }
 
-    return [];
+    return null;
+}
+
+async function getMeal(mealId) {
+	let url = window.apiURL + '/meals/' + mealId;
+
+    try {
+        let res = await $.ajax({
+            type: "get",
+            url: url,
+            contentType: "application/json",
+            headers: getAuthHeader()
+        });
+
+        console.log('Meal ' + mealId + 'received.');
+
+        return res;
+    } catch (err) {
+        console.log(err);
+        alert('Falha a obter refei\xE7\xE3o!');
+    }
+
+    return null;
 }
 
 async function getOrder(orderId) {

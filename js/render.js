@@ -143,15 +143,7 @@ function renderByOrders(domDishes, mealRequests) {
             }
         }
         if (showTable) {
-            let domTable = $('<p class="box"></p>');
-            let domTableLink = $('<a href="#">'+ table +'</a><br/>');
-            domTable.append(domTableLink);
-            for (let j = 0; j < selectedItems.length; j++) {
-                const item = selectedItems[j];
-                let domTime = toDateTime(item.createdAt, window.showFullDate);
-                domTable.append($('<div>' + item.itemName + ' ' + domTime + '</div>'));
-            }
-            domTableLink.on('click', (evt) => onTableClick(evt, items));
+            let domTable = buildTable(table, selectedItems);
             domDishes.append(domTable);
         }
     }
@@ -311,26 +303,50 @@ function inSelectedDescription(dish, inCategory) {
 }
 
 function buildHtmlOrder(order) {
-    let template = '<tr><td><%= order.table %><td><%= order.status %><td><%= order.itemName %><td><%= order.description %></td></tr>';
+    let template =
+        '<tr>'+
+            '<td><%= order.table %></td>'+
+            '<td><%= order.status %></td>'+
+            '<td><%= order.itemName %></td>'+
+            '<td><%= order.description %></td>'+
+        '</tr>';
     return ejs.render(template, { order: order });
 }
 
 function buildHtmlDish(categoryItem, nrDishes, isWarning) {
-    let template = '<div id="cell-<%= categoryItem.itemId %>" class="board-cell <% isWarning ? "warning" : "" %>"><span class="top-left tiny"><%= categoryItem.status %></span><span><%= categoryItem.name %></span><br /><span class="alignBottom"><%= nrDishes %></span></div>';
+    let template =
+        '<div id="cell-<%= categoryItem.itemId %>" class="board-cell flashing <% isWarning ? "warning" : "" %>">'+
+            '<span class="top-left tiny"><%= categoryItem.status %></span><span><%= categoryItem.name %></span><br />'+
+            '<span class="alignBottom"><%= nrDishes %></span>'+
+        '</div>';
     return ejs.render(template, { categoryItem: categoryItem, nrDishes: nrDishes.toString(), isWarning: isWarning });
 }
 
 function buildHtmlItemCell(dishName, count, status) {
     let template =
-        '<div class="board-cell">' +
-        '<span class="top-left tiny"><%= status %></span>' +
-        '<span><%= dishName %></span><br />' +
-        '<span><%= count %></span>' +
+        '<div class="board-cell flashing">' +
+            '<span class="top-left tiny"><%= status %></span><span><%= dishName %></span><br />' +
+            '<span><%= count %></span>' +
         '</div>';
     return ejs.render(template, { dishName: dishName, count: count.toString(), status: status });
 }
 
 function buildHtmlHiddenIdentifiers(table){
-    let template = '<input name="<%= table.table %>_orderId" type="hidden" value="<%= table.orderId %>"></input><input name="<%= table.table %>_itemId" type="hidden" value="<%= table.itemId %>"></input>';
+    let template =
+        '<input name="<%= table.table %>_orderId" type="hidden" value="<%= table.orderId %>"></input>'+
+        '<input name="<%= table.table %>_itemId" type="hidden" value="<%= table.itemId %>"></input>';
     return ejs.render(template, { table: table });    
+}
+
+function buildTable(table, items) {
+    let domTable = $('<p class="box flashing"></p>');
+    let domTableLink = $('<a href="#">'+ table +'</a><br/>');
+    domTable.append(domTableLink);
+    for (let j = 0; j < items.length; j++) {
+        const item = items[j];
+        let domTime = toDateTime(item.createdAt, window.showFullDate);
+        domTable.append($('<div>' + item.itemName + ' ' + domTime + '</div>'));
+    }
+    domTableLink.on('click', (evt) => onTableClick(evt, items));
+    return domTable;
 }

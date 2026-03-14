@@ -48,7 +48,13 @@
 // } from '../forage/SubscriptionsForage.js'
 // import { plantTerminal, burnTerminal } from '../forage/TerminalsForage.js'
 // import { pickUser, plantUser, burnUser } from '../forage/UsersForage.js'
+
 const Event = {
+  MEAL_ADDED_EVENT: 'MEAL_ADDED_EVENT',
+  MEAL_UPDATED_EVENT: 'MEAL_UPDATED_EVENT',
+  
+  /*
+  MEAL_REMOVED_EVENT: 'MEAL_REMOVED_EVENT',
   ACCOUNT_ADDED_EVENT: 'ACCOUNT_ADDED_EVENT',
   ACCOUNT_REMOVED_EVENT: 'ACCOUNT_REMOVED_EVENT',
   ACCOUNT_UPDATED_EVENT: 'ACCOUNT_UPDATED_EVENT',
@@ -74,9 +80,6 @@ const Event = {
   MAP_ADDED_EVENT: 'MAP_ADDED_EVENT',
   MAP_REMOVED_EVENT: 'MAP_REMOVED_EVENT',
   MAP_UPDATED_EVENT: 'MAP_UPDATED_EVENT',
-  MEAL_ADDED_EVENT: 'MEAL_ADDED_EVENT',
-  MEAL_REMOVED_EVENT: 'MEAL_REMOVED_EVENT',
-  MEAL_UPDATED_EVENT: 'MEAL_UPDATED_EVENT',
   MENU_ADDED_EVENT: 'MENU_ADDED_EVENT',
   MENU_REMOVED_EVENT: 'MENU_REMOVED_EVENT',
   MENU_UPDATED_EVENT: 'MENU_UPDATED_EVENT',
@@ -102,6 +105,7 @@ const Event = {
   USER_ADDED_EVENT: 'USER_ADDED_EVENT',
   USER_REMOVED_EVENT: 'USER_REMOVED_EVENT',
   USER_UPDATED_EVENT: 'USER_UPDATED_EVENT',
+  */
 };
 
 const pusher = new Pusher('8af67bd4bfc5f2d7874b', { cluster: 'mt1', forceTLS: window.forceTLS });
@@ -134,60 +138,67 @@ function subscribe() {
         // console.log(pusherStates)
 
         produce(draft => {
-          draft.connection.pusherStates = pusherStates
-        });
-
+            draft.connection.pusherStates = pusherStates  
+        });  
+        
         previous_previous = pusherStates.previous
-      });
+      });  
 
       channelName = 'restaurant_' + restaurantId;
 
-    //   if (!IS_PRODUCTION) {
-    //     channelName += '_' + ENVIRONMENT
-    //   }
-
+      //   if (!IS_PRODUCTION) {
+      //     channelName += '_' + ENVIRONMENT        
+      //   }
+      
       channel = pusher.subscribe(channelName);
 
+      channel.bind(Event.MEAL_ADDED_EVENT, this.handleMealAddedEvent, this);
+      channel.bind(Event.MEAL_UPDATED_EVENT, this.handleMealUpdatedEvent, this);
+      channel.bind(Event.MEAL_REMOVED_EVENT, this.handleMealDeletedEvent, this);
+
+      channel.bind(Event.MENU_UPDATED_EVENT, this.handleMenuUpdatedEvent, this)
+      
+      /*
       channel.bind(
-        Event.ACCOUNT_ADDED_EVENT,
+        Event.ACCOUNT_ADDED_EVENT,  
         this.handleAccountAddedEvent,
         this,
-      )
+      )  
       channel.bind(
-        Event.ACCOUNT_REMOVED_EVENT,
+        Event.ACCOUNT_REMOVED_EVENT,  
         this.handleAccountDeletedEvent,
         this,
-      )
+      )  
       channel.bind(
-        Event.ACCOUNT_UPDATED_EVENT,
+        Event.ACCOUNT_UPDATED_EVENT,  
         this.handleAccountUpdatedEvent,
         this,
-      )
+      )  
 
       channel.bind(
-        Event.CATEGORY_ADDED_EVENT,
+        Event.CATEGORY_ADDED_EVENT,  
         this.handleCategoryAddedEvent,
         this,
-      )
+      )  
       channel.bind(
-        Event.CATEGORY_REMOVED_EVENT,
+        Event.CATEGORY_REMOVED_EVENT,  
         this.handleCategoryDeletedEvent,
         this,
-      )
+      )  
       channel.bind(
-        Event.CATEGORY_UPDATED_EVENT,
+        Event.CATEGORY_UPDATED_EVENT,  
         this.handleCategoryUpdatedEvent,
         this,
-      )
+      )  
 
       channel.bind(Event.INVITE_ADDED_EVENT, this.handleInviteAddedEvent, this)
       channel.bind(
-        Event.INVITE_REMOVED_EVENT,
+        Event.INVITE_REMOVED_EVENT,  
         this.handleInviteDeletedEvent,
         this,
-      )
+      )  
       channel.bind(
-        Event.INVITE_UPDATED_EVENT,
+        Event.INVITE_UPDATED_EVENT,  
         this.handleInviteAddedEvent,
         this,
       )
@@ -197,12 +208,6 @@ function subscribe() {
       channel.bind(Event.ITEM_UPDATED_EVENT, this.handleItemAddedEvent, this)
 
       channel.bind(Event.MAP_UPDATED_EVENT, this.handleMapUpdatedEvent, this)
-
-      channel.bind(Event.MENU_UPDATED_EVENT, this.handleMenuUpdatedEvent, this)
-
-      channel.bind(Event.MEAL_ADDED_EVENT, this.handleMealAddedEvent, this)
-      channel.bind(Event.MEAL_REMOVED_EVENT, this.handleMealDeletedEvent, this)
-      channel.bind(Event.MEAL_UPDATED_EVENT, this.handleMealUpdatedEvent, this)
 
       channel.bind(
         Event.PAYMENT_ADDED_EVENT,
@@ -281,6 +286,7 @@ function subscribe() {
       channel.bind(Event.USER_ADDED_EVENT, this.handleUserAddedEvent, this)
       channel.bind(Event.USER_REMOVED_EVENT, this.handleUserDeletedEvent, this)
       channel.bind(Event.USER_UPDATED_EVENT, this.handleUserUpdatedEvent, this)
+        */
     }
 }
 
@@ -330,6 +336,62 @@ const produceScope = produce => (first, second) => {
 const produce = produceScope(producer =>
   window.state = produceImmer(producer));
 
+function handleMealAddedEvent(mealEvent) {
+    if (
+      mealEvent.restaurantId &&
+      mealEvent.restaurantId === getCurrentRestaurantId()
+    ) {
+      if (mealEvent.meal) {
+        console.log("Meal added! " + JSON.stringify(mealEvent));
+        addMeal(mealEvent.meal);
+      } else {
+        getMeal(mealEvent.mealId)
+          .then(meal => {
+            mealEvent.meal = meal
+            this.handleMealAddedOrUpdatedEvent(mealEvent)
+          })
+          .catch(console.error)
+      }
+    }
+}
+
+function handleMealUpdatedEvent(mealEvent) {
+    if (
+      mealEvent.restaurantId &&
+      mealEvent.restaurantId === getCurrentRestaurantId()
+    ) {
+      if (mealEvent.meal) {
+        console.log("Meal '" + mealEvent.mealId + "' updated! ");
+        updateMeal(mealEvent.mealId, mealEvent.meal);
+      } else {
+        console.log("Meal '" + mealEvent.mealId + "' updated without meal data! Fetching meal... ");
+        getMeal(mealEvent.mealId).then(meal => {
+          mealEvent.meal = meal
+          this.handleMealAddedOrUpdatedEvent(mealEvent)
+        })
+      }
+    }
+}
+
+function handleMealDeletedEvent(mealDeletedEvent) {
+    if (
+      mealDeletedEvent.restaurantId &&
+      mealDeletedEvent.restaurantId === getCurrentRestaurantId()
+    ) {
+      burnMeal(mealDeletedEvent.mealId)
+    }
+}
+
+function handleMenuUpdatedEvent(menuUpdatedEvent) {
+    if (
+      menuUpdatedEvent.restaurantId &&
+      menuUpdatedEvent.restaurantId === getCurrentRestaurantId()
+    ) {
+        onRefreshMenu();
+    }
+}
+
+/********************* TODO *****************************/
 function handleAccountAddedEvent(accountAddedEvent) {
     if (
       accountAddedEvent.restaurantId &&
@@ -461,11 +523,12 @@ function handleCategoryAddedEvent(categoryAddedEvent) {
       itemAddedEvent.restaurantId === getCurrentRestaurantId()
     ) {
       if (itemAddedEvent.item) {
-        plantItem(
-          itemAddedEvent.menuId,
-          itemAddedEvent.categoryId,
-          itemAddedEvent.item,
-        )
+        console.log("Item added! " + JSON.stringify(itemAddedEvent));
+        // plantItem(
+        //   itemAddedEvent.menuId,
+        //   itemAddedEvent.categoryId,
+        //   itemAddedEvent.item,
+        // )
       } else {
         fetchItem(
           itemAddedEvent.restaurantId,
@@ -521,75 +584,6 @@ function handleCategoryAddedEvent(categoryAddedEvent) {
         plantMap(mapUpdatedEvent.map)
       } else {
         fetchMap()
-      }
-    }
-  }
-
-  function handleMealAddedEvent(mealEvent) {
-    if (
-      mealEvent.restaurantId &&
-      mealEvent.restaurantId === getCurrentRestaurantId()
-    ) {
-      if (mealEvent.meal) {
-        pickMeal(mealEvent.mealId).then(oldMeal => {
-          handleMealAddedEvent(mealEvent.meal)
-
-          printNewTicket(new Meal(mealEvent.meal), oldMeal, true)
-
-          plantMeal(mealEvent.meal)
-        })
-      } else {
-        getMeal(mealEvent.mealId)
-          .then(meal => {
-            mealEvent.meal = meal
-            this.handleMealAddedOrUpdatedEvent(mealEvent)
-          })
-          .catch(console.error)
-      }
-    }
-  }
-
-  function handleMealDeletedEvent(mealDeletedEvent) {
-    if (
-      mealDeletedEvent.restaurantId &&
-      mealDeletedEvent.restaurantId === getCurrentRestaurantId()
-    ) {
-      burnMeal(mealDeletedEvent.mealId)
-    }
-  }
-
-  function handleMealUpdatedEvent(mealEvent) {
-    if (
-      mealEvent.restaurantId &&
-      mealEvent.restaurantId === getCurrentRestaurantId()
-    ) {
-      if (mealEvent.meal) {
-        alert("Meal updated! " + JSON.stringify(mealEvent));
-        // pickMeal(mealEvent.mealId).then(oldMeal => {
-        //   handleMealUpdatedEvent(mealEvent.meal, oldMeal)
-
-        //   printNewTicket(new Meal(mealEvent.meal), oldMeal, true)
-
-        //   plantMeal(mealEvent.meal)
-        // })
-      } else {
-        getMeal(mealEvent.mealId).then(meal => {
-          mealEvent.meal = meal
-          this.handleMealAddedOrUpdatedEvent(mealEvent)
-        })
-      }
-    }
-  }
-
-  function handleMenuUpdatedEvent(menuUpdatedEvent) {
-    if (
-      menuUpdatedEvent.restaurantId &&
-      menuUpdatedEvent.restaurantId === getCurrentRestaurantId()
-    ) {
-      if (menuUpdatedEvent.menu) {
-        plantMenu(menuUpdatedEvent.menu)
-      } else {
-        fetchMenu()
       }
     }
   }
@@ -739,7 +733,8 @@ function handleCategoryAddedEvent(categoryAddedEvent) {
       subscriptionAddedEvent.restaurantId === getCurrentRestaurantId()
     ) {
       if (subscriptionAddedEvent.subscription) {
-        plantSubscription(subscriptionAddedEvent.subscription)
+        console.log("Subscription added! " + JSON.stringify(subscriptionAddedEvent));
+        // plantSubscription(subscriptionAddedEvent.subscription)
       } else {
         fetchSubscription(
           subscriptionAddedEvent.restaurantId,
