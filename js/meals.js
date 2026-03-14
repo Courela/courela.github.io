@@ -149,3 +149,22 @@ async function markCategoriesAsServed(order) {
 
     return updateOrder(order._id, order);
 }
+
+function addMeal(meal) {
+    let meals = window.meals;
+    meals.push(meal);
+    let mealRequests = parseMeals(meals);
+    let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
+    recalculateDashboard(groupByStatuses);
+}
+
+function updateMeal(mealId, meal) {
+    let meals = window.meals;
+    let mealIndex = meals.findIndex(m => m._id === mealId);
+    if (mealIndex !== -1) {
+        meals[mealIndex] = meal;
+        let mealRequests = parseMeals(meals);
+        let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
+        recalculateDashboard(groupByStatuses);
+    }
+}
