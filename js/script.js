@@ -77,8 +77,9 @@ function bindCheckBoxes() {
 function bindPrinterSettings() {
 	let printServerURL = $('#sltPrintServerURL');
 	for (let i = 0; i < window.printServerURLOptions.length; i++) {
-		const element = window.printServerURLOptions[i];
-		printServerURL.append(new Option(element, element));
+		const label = window.printServerURLOptions[i].label;
+		const val = window.printServerURLOptions[i].value;
+		printServerURL.append(new Option(label, val));
 	}
 	printServerURL.on('change', function() {
         $('#imgChanges').show();
@@ -86,8 +87,9 @@ function bindPrinterSettings() {
 
 	let printerAddr = $('#sltPrinterAddr');
 	for (let i = 0; i < window.printerAddrOptions.length; i++) {
-		const element = window.printerAddrOptions[i];
-		printerAddr.append(new Option(element, element));
+		const label = window.printerAddrOptions[i].label;
+		const val = window.printerAddrOptions[i].value;
+		printerAddr.append(new Option(label, val));
 	}
 	printerAddr.on('change', function() {
         $('#imgChanges').show();
@@ -108,14 +110,14 @@ function onApplyClick() {
 
 	let printServerURL = $('#sltPrintServerURL').val();
 	if (printServerURL) {
-		window.printServerURL = 'https://192.168.' + printServerURL;
+		window.printServerURL = `https://${window.localIP}${printServerURL}:${window.printServerPort}${window.printServerPath}`;
 	} else {
 		window.printServerURL = '';
 	}
 
 	let printerAddr = $('#sltPrinterAddr').val();
 	if (printerAddr) {
-		window.printerAddr = '192.168.' + printerAddr;
+		window.printerAddr = `${window.localIP}${printerAddr}`;
 	} else {
 		window.printerAddr = '';
 	}

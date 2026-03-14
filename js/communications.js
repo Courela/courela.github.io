@@ -9,7 +9,8 @@ async function searchPrinterServer()
             timeout: 500,
             success: function(res) {
                 console.log(`Server ping response for ${idx}: ${res}`);
-                window.printServerURLOptions.push(`1.${idx}:3000/api`);
+                window.printServerURLOptions.push(
+                    { label: `Auto ${idx}`, value: `${idx}` });
             },
             error: function(xhr, status, error) {
                 if (status != 'timeout') {
@@ -31,7 +32,7 @@ async function searchPrinters()
             timeout: 500,
             success: function(res) {
                 console.log(`Printer response for ${idx}: ${res}`);
-                window.printerAddrOptions.push(`1.${idx}`);
+                window.printerAddrOptions.push({ label: `Auto ${idx}`, value: `${idx}` });
             },
             error: function(xhr, status, error) {
                 if (status != 'timeout') {
@@ -154,12 +155,14 @@ async function updateOrder(orderId, order) {
 
 async function sendToPrinter(table, quantity, itemName) {
     let url = window.printServerURL + '/item';
-    if (window.printerAddr) {
-        url = url + '?printer=' + window.printerAddr;
+    if (!window.printerAddr) {
+        console.warn('Printer address not set, skipping printing.');
+        return;
     }
 	try {
+        url = url + '?printer=' + window.printerAddr;
         console.log('Sending to printer: ' + table + ' ' + quantity + ' ' + itemName);
-		let res = await $.ajax({
+		await $.ajax({
 			type: "post",
 			url: url,
             data: JSON.stringify({ "table": table, "quantity": quantity, "itemName": itemName }),
