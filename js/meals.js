@@ -2,7 +2,7 @@ function parseMeals(data) {
 	let toPrepareMeals = [];
 
     resetMenuDishes();
-    let menus = window.menus;
+    let menus = getLocalMenus();
 
 	for (let i = 0; i < data.length; i++) {
 		let order = data[i];
@@ -48,7 +48,7 @@ function parseMeals(data) {
 }
 
 function resetMenuDishes() {
-    let menus = window.menus;
+    let menus = getLocalMenus();
     for (let z = 0; z < menus.length; z++) {
         const menu = menus[z];
         menu.dishes = [];

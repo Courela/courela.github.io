@@ -46,7 +46,7 @@ function getCategories(menus) {
 }
 
 function getItemDescription(itemId) {
-	let menus = window.menus;
+	let menus = getLocalMenus();
 	let item = menus.find(m => m.itemId === itemId);
 	return item && item.description ? item.description : window.nullDescription;
 }
@@ -137,11 +137,48 @@ async function onRefreshMenu() {
     domCategories.remove();
 
 	let restaurantId = getCurrentRestaurantId();
-	let menus = await getMenus(restaurantId);
+	let res = await getMenus(restaurantId);
+	let menus = getLocalMenus();
+
 	let categories = getCategories(menus);
 	renderCategories(categories, window.descriptionSplit);
 
 	refreshAuth();
+}
+
+function addOrUpdateMenuItem(categoryId, item) {
+	let rawMenus = window.menus || [];
+	let category = rawMenus[0].categories.find(c => c.id === categoryId);
+	if (category) {
+		let itemIndex = category.items.findIndex(i => i.id === item.id); 
+		if (itemIndex !== -1) {
+			category.items[itemIndex] = item;
+		} else {
+			category.items.push(item);
+		}
+	}
+}
+
+function deleteMenuItem(categoryId, itemId) {
+	let rawMenus = window.menus || [];
+	let category = rawMenus[0].categories.find(c => c.id === categoryId);
+	if (category) {
+		let itemIndex = category.items.findIndex(i => i.id === itemId); 
+		if (itemIndex !== -1) {
+			category.items.splice(itemIndex, 1);
+		}
+	}
+}
+
+function getLocalMenus() {
+	let rawMenus = window.menus || [];
+	if (!rawMenus || rawMenus.length === 0) {
+		console.warn("No menus found!");
+		return [];
+	}
+    let menus = parseMenus(rawMenus);
+	console.log("Menus parsed.");
+	return menus;
 }
 
 function buildHtmlMenu(menus) {

@@ -29,7 +29,8 @@ function renderDashboard(mealRequests) {
 }
 
 function renderByDish(domDishes) {
-    let menus = window.menus;
+    let menus = getLocalMenus();
+    
     let allCategories = inSelectedAllCategories();
     for (let x = 0; x < menus.length; x++) {
         const categoryItem = menus[x];
@@ -241,7 +242,7 @@ function inSelectedCategory(dish) {
 	let result = false;
 	
 	const productId = dish.productId;
-	let menus = window.menus;
+	let menus = getLocalMenus();
 	
 	const categories = $('#divCategories input[type="checkbox"]:checked');
 	categories.each(function () {
@@ -279,7 +280,7 @@ function inSelectedDescription(dish, inCategory) {
 		return result;
 	}
 
-	let menus = window.menus;
+	let menus = getLocalMenus();
 	const productId = dish.productId;
 	let menu =  menus.find(m => m.itemId === productId);
 

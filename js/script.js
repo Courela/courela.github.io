@@ -131,7 +131,10 @@ function onApplyClick() {
 
 async function render(restaurantId, showMenus) {
 	if (showMenus) {
-		let menus = await getMenus(restaurantId);
+		let res = await getMenus(restaurantId);
+		window.menus = res;
+		let menus = getLocalMenus();
+		
 		let categories = getCategories(menus);
 		renderCategories(categories, window.descriptionSplit);
 	}
