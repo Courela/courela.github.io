@@ -1,6 +1,6 @@
 async function startup() {
 	setSettings();
-	// searchPrinterServer();
+	searchPrinterServer();
 	renderStatuses(window.showStatuses);
 	
 	await refreshAuth(true);
