@@ -133,7 +133,7 @@ async function render(restaurantId, showMenus) {
 	if (showMenus) {
 		let res = await getMenus(restaurantId);
 		window.menus = res;
-		let menus = getLocalMenus();
+		let menus = getRawMenus();
 		
 		let categories = getCategories(menus);
 		renderCategories(categories, window.descriptionSplit);

@@ -17,7 +17,7 @@ function renderDashboard(mealRequests) {
 
     if (!window.showOrders) {
         if (!window.showTables) {
-            renderByDish(domDishes);
+            renderByDish(domDishes, mealRequests);
         }
 
         if (window.showTables) {
@@ -28,8 +28,17 @@ function renderDashboard(mealRequests) {
     }
 }
 
-function renderByDish(domDishes) {
-    let menus = getLocalMenus();
+function renderByDish(domDishes, mealRequests) {
+    let menus = getRawMenus();
+    mealRequests.forEach(meal => {
+        let categoryItem = menus.find(m => m.itemId === meal.productId);
+        if (categoryItem) {
+            if (!categoryItem.dishes) {
+                categoryItem.dishes = [];
+            }
+            categoryItem.dishes.push(meal);
+        }
+    });
     
     let allCategories = inSelectedAllCategories();
     for (let x = 0; x < menus.length; x++) {
@@ -242,7 +251,7 @@ function inSelectedCategory(dish) {
 	let result = false;
 	
 	const productId = dish.productId;
-	let menus = getLocalMenus();
+	let menus = getRawMenus();
 	
 	const categories = $('#divCategories input[type="checkbox"]:checked');
 	categories.each(function () {
@@ -280,7 +289,7 @@ function inSelectedDescription(dish, inCategory) {
 		return result;
 	}
 
-	let menus = getLocalMenus();
+	let menus = getRawMenus();
 	const productId = dish.productId;
 	let menu =  menus.find(m => m.itemId === productId);
 

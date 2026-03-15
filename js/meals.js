@@ -1,8 +1,8 @@
 function parseMeals(data) {
 	let toPrepareMeals = [];
 
-    resetMenuDishes();
-    let menus = getLocalMenus();
+    // resetMenuDishes();
+    // let menus = getRawMenus();
 
 	for (let i = 0; i < data.length; i++) {
 		let order = data[i];
@@ -35,10 +35,10 @@ function parseMeals(data) {
                 "itemName": itemName,
                 "itemDescription": description
             };
-            let categoryItem = menus.find(m => m.itemId === productId);
-            if (categoryItem) {
-                categoryItem.dishes.push(dish);
-            }
+            // let categoryItem = menus.find(m => m.itemId === productId);
+            // if (categoryItem) {
+            //     categoryItem.dishes.push(dish);
+            // }
 
 			toPrepareMeals.push(dish);
 		}
@@ -47,13 +47,13 @@ function parseMeals(data) {
 	return toPrepareMeals;
 }
 
-function resetMenuDishes() {
-    let menus = getLocalMenus();
-    for (let z = 0; z < menus.length; z++) {
-        const menu = menus[z];
-        menu.dishes = [];
-    }
-}
+// function resetMenuDishes() {
+//     let menus = getRawMenus();
+//     for (let z = 0; z < menus.length; z++) {
+//         const menu = menus[z];
+//         menu.dishes = [];
+//     }
+// }
 
 function groupByStatus(toPrepareMeals, descriptionSplit) {
 	return toPrepareMeals.reduce((acc, meal) => {
