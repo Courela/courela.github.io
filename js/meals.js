@@ -125,6 +125,7 @@ async function markAsServed(table, orderId, itemId) {
 
 async function markCategoriesAsServed(order) {
     const categories = $('#divCategories input[type="checkbox"]:checked');
+    let hasChanges = false;
     categories.each(function () {
         const category = $(this).val();
         let menus = getParsedMenus();
@@ -134,6 +135,7 @@ async function markCategoriesAsServed(order) {
             const requestedItem = order.itemstamps[keys[i]];
             let selectedItem = selectedItems.filter(m => m.itemId === requestedItem.item.id);
             if (selectedItem && selectedItem.length > 0) {
+                hasChanges = true;
                 requestedItem.status = window.markedAsStatus;
                 let now = Date.now();
                 order.lastEditTime = now;
@@ -142,7 +144,12 @@ async function markCategoriesAsServed(order) {
         }
     });
 
-    return updateOrder(order._id, order);
+    if (hasChanges) {
+        return updateOrder(order._id, order);
+    }
+
+    console.warn('No categories selected or no matching items found.');
+    return true;
 }
 
 function addMeal(meal) {
