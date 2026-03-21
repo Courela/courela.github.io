@@ -32,6 +32,7 @@ p.box a {
 @media (min-width: 1400px) {
     p.box {
         width: 31%;
+        max-width: 31%;
         font-size: 16px;
         min-height: 150px;
     }
