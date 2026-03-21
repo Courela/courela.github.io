@@ -2,7 +2,7 @@ function parseMeals(data) {
 	let toPrepareMeals = [];
 
     // resetMenuDishes();
-    // let menus = getRawMenus();
+    // let menus = getParsedMenus();
 
 	for (let i = 0; i < data.length; i++) {
 		let order = data[i];
@@ -48,7 +48,7 @@ function parseMeals(data) {
 }
 
 // function resetMenuDishes() {
-//     let menus = getRawMenus();
+//     let menus = getParsedMenus();
 //     for (let z = 0; z < menus.length; z++) {
 //         const menu = menus[z];
 //         menu.dishes = [];
@@ -127,6 +127,7 @@ async function markCategoriesAsServed(order) {
     const categories = $('#divCategories input[type="checkbox"]:checked');
     categories.each(function () {
         const category = $(this).val();
+        let menus = getParsedMenus();
         let selectedItems = menus.filter(m => m.category === category);
         let keys = Object.keys(order.itemstamps);
         for (let i = 0; i < keys.length; i++) {

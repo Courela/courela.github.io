@@ -29,7 +29,7 @@ function renderDashboard(mealRequests) {
 }
 
 function renderByDish(domDishes, mealRequests) {
-    let menus = getRawMenus();
+    let menus = getParsedMenus();
     mealRequests.forEach(meal => {
         let categoryItem = menus.find(m => m.itemId === meal.productId);
         if (categoryItem) {
@@ -163,8 +163,7 @@ function renderByOrders(domDishes, mealRequests) {
     }
 }
 
-async function onTableClick (evt, items) {
-    let tbl = evt.currentTarget.childNodes[0].data;
+async function onTableClick (tbl, items) {
     let req = { "table": tbl, "items": [] };
     for (let j = 0; j < items.length; j++) {
         if (isSelected(items[j])) {
@@ -255,7 +254,7 @@ function inSelectedCategory(dish) {
 	let result = false;
 	
 	const productId = dish.productId;
-	let menus = getRawMenus();
+	let menus = getParsedMenus();
 	
 	const categories = $('#divCategories input[type="checkbox"]:checked');
 	categories.each(function () {
@@ -293,7 +292,7 @@ function inSelectedDescription(dish, inCategory) {
 		return result;
 	}
 
-	let menus = getRawMenus();
+	let menus = getParsedMenus();
 	const productId = dish.productId;
 	let menu =  menus.find(m => m.itemId === productId);
 
@@ -361,6 +360,6 @@ function buildTable(table, items) {
         let domTime = toDateTime(item.createdAt, window.showFullDate);
         domTable.append($('<div>' + item.itemName + ' ' + domTime + '</div>'));
     }
-    domTableLink.on('click', (evt) => onTableClick(evt, items));
+    domTableLink.on('click', { table: table, items: items }, (evt) => onTableClick(evt.data.table, evt.data.items));
     return domTable;
 }

@@ -46,7 +46,7 @@ function getCategories(menus) {
 }
 
 function getItemDescription(itemId) {
-	let menus = getRawMenus();
+	let menus = getParsedMenus();
 	let item = menus.find(m => m.itemId === itemId);
 	return item && item.description ? item.description : window.nullDescription;
 }
@@ -137,8 +137,8 @@ async function onRefreshMenu() {
     domCategories.remove();
 
 	let restaurantId = getCurrentRestaurantId();
-	let res = await getMenus(restaurantId);
-	let menus = getRawMenus();
+	// let res = await getMenus(restaurantId);
+	let menus = getParsedMenus();
 
 	let categories = getCategories(menus);
 	renderCategories(categories, window.descriptionSplit);
@@ -170,7 +170,7 @@ function deleteMenuItem(categoryId, itemId) {
 	}
 }
 
-function getRawMenus() {
+function getParsedMenus() {
 	let rawMenus = window.menus || [];
 	if (!rawMenus || rawMenus.length === 0) {
 		console.warn("No menus found!");
