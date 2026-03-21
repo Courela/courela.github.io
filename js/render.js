@@ -118,6 +118,7 @@ function renderCellsOrdered(dishes,status, domDishes) {
                 for (let l = 0; l < tables.length; l++) {
                     let identifiers = buildHtmlHiddenIdentifiers(tables[l]);
                     //if (status[statusKeys[idx]] === 'ORDERED') {
+                        let dish = $('<div></div>');
                         let link = $('<a href="#">' + tables[l].table + '</a>');
                         let createdDom = $('<span class="time">' + toDateTime(tables[l].createdAt, window.showFullDate) + '</span>');
                         link.on('click', (evt) => {
@@ -127,7 +128,8 @@ function renderCellsOrdered(dishes,status, domDishes) {
                                 markAsServed(evt);
                             }
                         });
-                        div.append('<br />', identifiers, link, createdDom);
+                        dish.append(link, createdDom);
+                        div.append(identifiers, dish);
                     // } else {
                     //     div.append(orderId, itemId);
                     // }
@@ -335,7 +337,7 @@ function buildHtmlDish(categoryItem, nrDishes, isWarning) {
 function buildHtmlItemCell(dishName, count, status) {
     let template =
         '<div class="board-cell flashing">' +
-            '<span class="top-left tiny"><%= status %></span><span><%= dishName %></span><br />' +
+            '<span class="top-left tiny"><%= status %></span><span><%= dishName %></span>' +
             '<span><%= count %></span>' +
         '</div>';
     return ejs.render(template, { dishName: dishName, count: count.toString(), status: status });
