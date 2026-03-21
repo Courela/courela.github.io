@@ -1,14 +1,13 @@
-div.timer {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+/* Container for dishes */
+#dishes {
+    gap: 0;
 }
 
 /* Base styles for board cells */
 .board-cell {
     width: 19%;
     font-size: 48px;
-    height: 210px;
+    min-height: 210px;
     overflow: hidden;
     border: 1px solid #ddd;
     padding: 10px;
@@ -19,10 +18,16 @@ div.timer {
     align-items: center;
     text-align: center;
     background-color: white;
+    flex-grow: 1;
 }
 
 .warning {
     background-color: lightyellow;
+}
+
+.board-cell span {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Extra Large Screens (1400px and above) - 5+ columns */
@@ -30,7 +35,7 @@ div.timer {
     .board-cell {
         width: 19%;
         font-size: 48px;
-        height: 210px;
+        min-height: 210px;
     }
     
     .board-cell span {
@@ -47,7 +52,7 @@ div.timer {
     .board-cell {
         width: 24%;
         font-size: 40px;
-        height: 190px;
+        min-height: 190px;
     }
     
     .board-cell span {
@@ -64,7 +69,7 @@ div.timer {
     .board-cell {
         width: 31%;
         font-size: 32px;
-        height: 170px;
+        min-height: 170px;
     }
     
     .board-cell span {
@@ -76,53 +81,64 @@ div.timer {
     }
 }
 
-/* Tablet Landscape (600px to 767px) - 2-3 columns */
+/* Tablet Landscape (600px to 767px) - 2 columns */
 @media (min-width: 600px) and (max-width: 767px) {
     .board-cell {
-        width: 48%;
-        font-size: 24px;
-        height: 150px;
+        width: calc(50% - 4px);
+        font-size: 20px;
+        min-height: 140px;
     }
     
     .board-cell span {
-        font-size: 24px;
+        font-size: 20px;
     }
     
     .board-cell .alignBottom {
-        font-size: 24px;
+        font-size: 20px;
     }
 }
 
 /* Small Screens (480px to 599px) - 2 columns */
 @media (min-width: 480px) and (max-width: 599px) {
     .board-cell {
-        width: 48%;
-        font-size: 18px;
-        height: 130px;
+        width: calc(50% - 4px);
+        font-size: 16px;
+        min-height: 120px;
     }
     
     .board-cell span {
-        font-size: 18px;
+        font-size: 16px;
     }
     
     .board-cell .alignBottom {
-        font-size: 18px;
+        font-size: 16px;
     }
 }
 
 /* Extra Small Screens (below 480px) - 1 column */
 @media (max-width: 479px) {
+    #dishes {
+        padding: 0 5px;
+    }
+    
     .board-cell {
         width: 100%;
-        font-size: 16px;
-        height: 120px;
+        font-size: 14px;
+        min-height: 100px;
+        padding: 8px;
+        margin-bottom: 5px;
     }
     
     .board-cell span {
-        font-size: 16px;
+        font-size: 14px;
+        line-height: 1.2;
     }
     
     .board-cell .alignBottom {
-        font-size: 16px;
+        font-size: 14px;
+    }
+    
+    .board-cell .top-left.tiny {
+        font-size: 10px;
     }
 }

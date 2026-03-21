@@ -1,9 +1,55 @@
 <html lang="pt">
 	<header>
 		<title>Links</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="css/script.css" />
+		<style>
+			body {
+				font-family: 'Segoe UI', sans-serif;
+				padding: 15px;
+				background-color: #f5f5f5;
+			}
+			
+			div#links {
+				max-width: 500px;
+				margin: 0 auto;
+			}
+			
+			div#links p {
+				margin: 10px 0;
+			}
+			
+			div#links a {
+				display: block;
+				padding: 15px 20px;
+				background-color: #007BFF;
+				color: white;
+				text-decoration: none;
+				border-radius: 5px;
+				font-size: 16px;
+				text-align: center;
+				transition: background-color 0.3s ease;
+			}
+			
+			div#links a:hover {
+				background-color: #0056b3;
+			}
+			
+			@media (max-width: 479px) {
+				body {
+					padding: 10px;
+				}
+				
+				div#links a {
+					padding: 12px 15px;
+					font-size: 14px;
+				}
+			}
+		</style>
     </header>
 	<body>
-		<div id="links" style="padding: 30px;">
+		<div id="links">
 			<p><a href="dishes.html">Pratos</a></p>
 			<p><a href="tables.html">Mesas</a></p>
 			<p><a href="orders.html">Pedidos</a></p>
