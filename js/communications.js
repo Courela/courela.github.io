@@ -43,6 +43,27 @@ async function searchPrinters()
     }
 }
 
+async function getItem(menuId, categoryId, itemId) {
+	let url = window.apiURL + 'menus/' + menuId + '/categories/' + categoryId + '/items/' + itemId;
+    try {
+        let res = await $.ajax({
+            type: "get",
+            url: url,
+            contentType: "application/json",
+            headers: getAuthHeader()
+        });
+
+        console.log('Item ' + itemId + 'received.');
+
+        return res;
+    } catch (err) {
+        console.log(err);
+        alert('Falha a obter item!');
+    }
+
+    return null;
+}
+
 async function getMenus(restaurantId) {
 	let url = window.apiURL + '/menus?restaurantId=' + restaurantId;
 	try {
@@ -55,9 +76,7 @@ async function getMenus(restaurantId) {
 
         console.log('Receive menus: ' + (res.length > 0 && res[0].categories ? res[0].categories.length : 0));
 		
-		let menus = parseMenus(res);
-		window.menus = menus;
-        return menus;
+		return res;
 	} catch (err) {
 		console.log(err);
         alert('Falha a obter menu!');

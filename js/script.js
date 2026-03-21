@@ -1,6 +1,6 @@
 async function startup() {
 	setSettings();
-	// searchPrinterServer();
+	searchPrinterServer();
 	renderStatuses(window.showStatuses);
 	
 	await refreshAuth(true);
@@ -131,7 +131,10 @@ function onApplyClick() {
 
 async function render(restaurantId, showMenus) {
 	if (showMenus) {
-		let menus = await getMenus(restaurantId);
+		let res = await getMenus(restaurantId);
+		window.menus = res;
+		let menus = getRawMenus();
+		
 		let categories = getCategories(menus);
 		renderCategories(categories, window.descriptionSplit);
 	}
