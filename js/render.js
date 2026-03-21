@@ -119,13 +119,15 @@ function renderCellsOrdered(dishes,status, domDishes) {
                     let identifiers = buildHtmlHiddenIdentifiers(tables[l]);
                     //if (status[statusKeys[idx]] === 'ORDERED') {
                         let dish = $('<div></div>');
-                        let link = $('<a href="#">' + tables[l].table + '</a>');
+                        let link = $('<a href="#" data="' + tables[l].orderId + '">' + tables[l].table + '</a>');
                         let createdDom = $('<span class="time">' + toDateTime(tables[l].createdAt, window.showFullDate) + '</span>');
-                        link.on('click', (evt) => {
-                            let tbl = evt.currentTarget.childNodes[0].data;
+                        link.on('click', { table: tables[l].table, orderId: tables[l].orderId, itemId: tables[l].itemId }, (evt) => {
+                            let tbl = evt.data.table;
+                            let orderId = evt.data.orderId;
+                            let itemId = evt.data.itemId;
                             let ok = confirm('Marcar prato "' + dishNames[j] + '" para a mesa "' + tbl + '" como servido?');
                             if (ok) {
-                                markAsServed(evt);
+                                markAsServed(tbl, orderId, itemId);
                             }
                         });
                         dish.append(link, createdDom);

@@ -100,13 +100,7 @@ function getTablesForDish(dishName, ordersByStatus) {
     return result;
 }
 
-async function markAsServed(evt) {
-    let anchor = $($(evt)[0].target);
-    let table = anchor.text();
-    let ids = anchor.parent().find('input');
-    let orderId = ids.filter('[name='+ table +'_orderId]').val();
-    let itemId = ids.filter('[name='+ table +'_itemId]').val();
-
+async function markAsServed(table, orderId, itemId) {
     let order = await getOrder(orderId);
 
     if (order && order.itemstamps[itemId]) {
