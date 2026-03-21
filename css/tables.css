@@ -33,6 +33,7 @@
 @media (min-width: 1400px) {
     .board-cell {
         width: 16.5%;
+        max-width: 16.5%;
         font-size: 20px;
         min-height: 110px;
     }
@@ -42,6 +43,7 @@
 @media (min-width: 1200px) and (max-width: 1399px) {
     .board-cell {
         width: 19%;
+        max-width: 19%;
         font-size: 18px;
         min-height: 105px;
     }
@@ -51,6 +53,7 @@
 @media (min-width: 1024px) and (max-width: 1199px) {
     .board-cell {
         width: 24%;
+        max-width: 24%;
         font-size: 16px;
         min-height: 100px;
     }
@@ -60,7 +63,8 @@
 @media (min-width: 768px) and (max-width: 1023px) {
     .board-cell {
         width: 31%;
-        font-size: 14px;
+        max-width: 31%;
+        font-size: 16px;
         min-height: 95px;
     }
     
@@ -72,8 +76,9 @@
 /* Tablet Landscape (600px to 767px) - 2 columns */
 @media (min-width: 600px) and (max-width: 767px) {
     .board-cell {
-        width: calc(50% - 4px);
-        font-size: 13px;
+        width: calc(50% - 10px);
+        max-width: calc(50% - 10px);
+        font-size: 16px;
         min-height: 90px;
     }
     
@@ -85,8 +90,9 @@
 /* Small Screens (480px to 599px) - 2 columns */
 @media (min-width: 480px) and (max-width: 599px) {
     .board-cell {
-        width: calc(50% - 4px);
-        font-size: 12px;
+        width: calc(50% - 10px);
+        max-width: calc(50% - 10px);
+        font-size: 16px;
         min-height: 85px;
         padding: 8px;
     }

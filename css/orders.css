@@ -32,7 +32,7 @@ p.box a {
 @media (min-width: 1400px) {
     p.box {
         width: 31%;
-        font-size: 14px;
+        font-size: 16px;
         min-height: 150px;
     }
 }
@@ -41,7 +41,7 @@ p.box a {
 @media (min-width: 1200px) and (max-width: 1399px) {
     p.box {
         width: 31%;
-        font-size: 13px;
+        font-size: 16px;
         min-height: 140px;
     }
 }
@@ -49,8 +49,9 @@ p.box a {
 /* Large Screens (1024px to 1199px) - 2-3 columns */
 @media (min-width: 1024px) and (max-width: 1199px) {
     p.box {
-        width: calc(50% - 6px);
-        font-size: 12px;
+        max-width: calc(50% - 10px);
+        width: calc(50%);
+        font-size: 16px;
         min-height: 130px;
     }
 }
@@ -58,8 +59,9 @@ p.box a {
 /* Medium Screens (768px to 1023px) - 2 columns */
 @media (min-width: 768px) and (max-width: 1023px) {
     p.box {
-        width: calc(50% - 6px);
-        font-size: 12px;
+        max-width: calc(50% - 10px);
+        width: calc(50%);
+        font-size: 16px;
         min-height: 120px;
     }
 }
@@ -71,7 +73,8 @@ p.box a {
     }
     
     p.box {
-        width: calc(50% - 6px);
+        max-width: calc(50% - 10px);
+        width: calc(50%);
         font-size: 11px;
         min-height: 110px;
     }
@@ -85,7 +88,7 @@ p.box a {
     
     p.box {
         width: 100%;
-        font-size: 12px;
+        font-size: 14px;
         min-height: 100px;
         padding: 6px;
         margin: 3px;
