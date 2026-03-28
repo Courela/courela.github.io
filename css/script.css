@@ -272,7 +272,6 @@ div.sub-options {
 .flashing {
   animation: flash 1s linear 1;
 }
-}
 
 /* Tablet and small screens */
 @media (max-width: 767px) {

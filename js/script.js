@@ -20,7 +20,12 @@ function bindSettingsEvents() {
 
 	let refreshPeriod = window.refreshPeriod / 1000;
 	$('#iptRefreshPeriod').val(refreshPeriod);
+	$('#iptIPRange').val(window.localIP);
 	$('#iptdishWarningThreshold').val(window.dishWarningThreshold);
+	
+	// bindColumns();
+
+	bindFontSize();
 
 	bindPrinterSettings();
 
@@ -74,6 +79,37 @@ function bindCheckBoxes() {
 	});
 }
 
+function bindColumns() {
+	// TODO absolute value instead of pixels
+	let columns = $(".board-cell").css("width");
+	$('#iptCols').val(parseInt(columns));
+	$('#iptCols').change(function () {
+		let newCols = $('#iptCols').val();
+		if (newCols && newCols > 0) {
+			$(".board-cell").css("width", newCols + "px");
+		}
+	});
+}
+
+function bindFontSize() {
+	let currentFontSize = $(".board-cell span").css("font-size");
+	$('#iptFontSize').val(parseInt(currentFontSize));
+	$('#iptFontSize').change(function (evt) {
+		let newFontSize = evt.target.value;
+		if (newFontSize && newFontSize > 0) {
+			let boardCells = $(".board-cell");
+			let spanElements = boardCells.find("span");
+			let previousFontSize = spanElements.first().css("font-size");
+			spanElements.css("font-size", newFontSize + "px");
+			// if (newFontSize % 2 === 0) {
+			// 	let diff = parseInt(newFontSize) > parseInt(previousFontSize) ? 10 : -10;
+			// 	let minHeight = parseInt(boardCells.css("min-height"));
+			// 	boardCells.css("min-height", minHeight + diff.toString() + "px");
+			// }
+		}
+	});
+}
+
 function bindPrinterSettings() {
 	let printServerURL = $('#sltPrintServerURL');
 	for (let i = 0; i < window.printServerURLOptions.length; i++) {
@@ -107,6 +143,12 @@ function onApplyClick() {
 
 	let newRefreshPeriod = $('#iptRefreshPeriod').val();
 	window.refreshPeriod = parseInt(newRefreshPeriod) * 1000;
+
+	let newIPRange = $('#iptIPRange').val();
+	if (newIPRange && newIPRange !== window.localIP) {
+		window.localIP = newIPRange;
+		searchPrinterServer();
+	}
 
 	let printServerURL = $('#sltPrintServerURL').val();
 	if (printServerURL) {
