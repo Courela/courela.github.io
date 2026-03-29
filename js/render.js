@@ -337,9 +337,10 @@ function buildHtmlDish(categoryItem, nrDishes, isWarning) {
 
 function buildHtmlItemCell(dishName, count, status) {
     let template =
-        '<div class="board-cell flashing">' +
-            '<span class="top-left tiny"><%= status %></span><span><%= dishName %></span>' +
-            '<span><%= count %></span>' +
+        '<div class="board-cell flashing"><div>' +
+            '<span class="top-left tiny"><%= status %></span>' +
+            '<span><%= dishName %></span>' +
+            '<span style="display: block;"><%= count %></span>' +
         '</div>';
     return ejs.render(template, { dishName: dishName, count: count.toString(), status: status });
 }
@@ -353,12 +354,12 @@ function buildHtmlHiddenIdentifiers(table){
 
 function buildTable(table, items) {
     let domTable = $('<p class="box flashing"></p>');
-    let domTableLink = $('<a href="#">'+ table +'</a><br/>');
+    let domTableLink = $('<a href="#">'+ table +'</a>');
     domTable.append(domTableLink);
     for (let j = 0; j < items.length; j++) {
         const item = items[j];
         let domTime = toDateTime(item.createdAt, window.showFullDate);
-        domTable.append($('<div>' + item.itemName + ' ' + domTime + '</div>'));
+        domTable.append($('<div><span>' + item.itemName + '</span> <span style="float: right;">' + domTime + '</span></div>'));
     }
     domTableLink.on('click', { table: table, items: items }, (evt) => onTableClick(evt.data.table, evt.data.items));
     return domTable;

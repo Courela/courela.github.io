@@ -92,22 +92,39 @@ function bindColumns() {
 }
 
 function bindFontSize() {
-	let currentFontSize = $(".board-cell span").css("font-size");
-	$('#iptFontSize').val(parseInt(currentFontSize));
-	$('#iptFontSize').change(function (evt) {
-		let newFontSize = evt.target.value;
-		if (newFontSize && newFontSize > 0) {
-			let boardCells = $(".board-cell");
-			let spanElements = boardCells.find("span");
-			let previousFontSize = spanElements.first().css("font-size");
-			spanElements.css("font-size", newFontSize + "px");
-			// if (newFontSize % 2 === 0) {
-			// 	let diff = parseInt(newFontSize) > parseInt(previousFontSize) ? 10 : -10;
-			// 	let minHeight = parseInt(boardCells.css("min-height"));
-			// 	boardCells.css("min-height", minHeight + diff.toString() + "px");
-			// }
+	let boardCells = $(".board-cell");
+	if (boardCells.length > 0) {
+		let currentFontSize = boardCells.find("span").css("font-size");
+		$('#iptFontSize').val(parseInt(currentFontSize));
+		$('#iptFontSize').change(function (evt) {
+			let newFontSize = evt.target.value;
+			if (newFontSize && newFontSize > 0) {
+				let boardCells = $(".board-cell");
+				let spanElements = boardCells.find("span");
+				spanElements.css("font-size", newFontSize + "px");
+				// let previousFontSize = spanElements.first().css("font-size");
+				// if (newFontSize % 2 === 0) {
+				// 	let diff = parseInt(newFontSize) > parseInt(previousFontSize) ? 10 : -10;
+				// 	let minHeight = parseInt(boardCells.css("min-height"));
+				// 	boardCells.css("min-height", minHeight + diff.toString() + "px");
+				// }
+			}
+		});
+	} else {
+		let box = $(".box");
+		if (box.length > 0) {
+			let currentFontSize = box.css("font-size");
+			$('#iptFontSize').val(parseInt(currentFontSize));
+			$('#iptFontSize').change(function (evt) {
+				let newFontSize = evt.target.value;
+				if (newFontSize && newFontSize > 0) {
+					let box = $(".box");
+					box.css("font-size", newFontSize + "px");
+					// let previousFontSize = box.css("font-size");
+				}
+			});
 		}
-	});
+	}
 }
 
 function bindPrinterSettings() {
