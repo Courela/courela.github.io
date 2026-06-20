@@ -21,6 +21,12 @@ function parseMeals(data) {
             let id = item.id;
 			let status = item.status;
             let created = item.creationTime;
+            let filterDate = Date.now() - window.filterMealsOlderThan * 60 * 1000;
+            // console.log("item: " + item.item.name + ", created: " + created + ", typeof created: " + typeof created + ", filterDate: " + filterDate + ", typeof filterDate: " + typeof filterDate);
+            if (created < filterDate) {
+                // console.log("item: " + item.item.name + " is older than filterDate, skipping...");
+                continue;
+            }
 			let productId = item.item.id;
             let itemName = item.item.name;
 			let description = getItemDescription(productId);
