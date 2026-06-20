@@ -6,7 +6,7 @@ function setSettings() {
 	window.refreshPeriod = 600000;                // in milisecconds
 	window.markedAsStatus = 'SERVED';             // when changing status of an item, use this value
 	window.showFullDate = false;
-	window.getMealsBackTo = 6;                    // valid values are (in hours): 1, 3, 6, 12, 24
+	window.getMealsBackTo = 1;                    // valid values are (in hours): 1, 3, 6, 12, 24
 	window.dishWarningThreshold = 20;             // show different cell color upon higher requests
 	window.printServerURLOptions = [ { label: 'Manual 100', value: '100' }, { label: 'Manual 101', value: '101' }, { label: 'Manual 102', value: '102' } ];
 	window.printServerPort = '3000';
