@@ -15,5 +15,5 @@ function setSettings() {
 	window.printOnly = false;                     // print only orders, do not change their status
 	window.showTableThreshold = 700;              // do not show table with name higher than
 	window.localIP = '192.168.100.';                // local IP address
-	window.filterMealsOlderThan = 60;              // in minutes, filter out meals created before this value
+	window.filterMealsOlderThan = 90;              // in minutes, filter out meals created before this value
 }
