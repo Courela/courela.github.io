@@ -53,10 +53,7 @@ async function getMenus(restaurantId) {
 		});
 
         console.log('Receive menus: ' + (res.length > 0 && res[0].categories ? res[0].categories.length : 0));
-		
-		let menus = parseMenus(res);
-		window.menus = menus;
-        return menus;
+		return res;
 	} catch (err) {
 		console.log(err);
         alert('Falha a obter menu!');
@@ -78,11 +75,7 @@ async function getMeals(restaurantId) {
         });
 
         console.log('Receive meals: ' + res.length);
-
-        window.meals = res;
-        let mealRequests = parseMeals(res);
-        
-        return mealRequests;
+        return res;
     } catch (err) {
         console.log(err);
         alert('Falha a obter refei\xE7\xF5es!');

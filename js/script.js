@@ -1,3 +1,20 @@
+async function startup() {
+	setSettings();
+	// searchPrinterServer();
+	renderStatuses(window.showStatuses);
+	
+	bindSettings();
+	
+	$('#username').html(sessionStorage.getItem("username"));
+
+	await refreshAuth(true, false);
+}
+
+function bindSettings() {
+	bindSettingsEvents();
+	bindRefresh();
+}
+
 function bindSettingsEvents() {
 	bindCheckBoxes();
 
@@ -20,7 +37,7 @@ function bindSettingsEvents() {
 }
 
 function bindCheckBoxes() {
-	$('#chkAllCategories').change(function () {
+	$('#chkAllCategories').change(async function () {
 		const categories = $('#divCategories input[type="checkbox"]:checked');
 		categories.each(function () {
 			let checkBox = $(this);
@@ -30,12 +47,12 @@ function bindCheckBoxes() {
 		});
 
 		let meals = window.meals;
-		let mealRequests = parseMeals(meals);
+		let mealRequests = await parseMeals(meals);
 		let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
 		recalculateDashboard(groupByStatuses);
 	});
 
-	$('#chkAllStatuses').change(function () {
+	$('#chkAllStatuses').change(async function () {
 		const statuses = $('#divStatuses input[type="checkbox"]:checked');
 		statuses.each(function () {
 			let checkBox = $(this);
@@ -45,7 +62,7 @@ function bindCheckBoxes() {
 		});
 
 		let meals = window.meals;
-		let mealRequests = parseMeals(meals);
+		let mealRequests = await parseMeals(meals);
 		let groupByStatuses = groupByStatus(mealRequests, window.descriptionSplit);
 		recalculateDashboard(groupByStatuses);
 	});
@@ -165,7 +182,7 @@ function inSelectedCategory(dish) {
 	let result = false;
 	
 	const productId = dish.productId;
-	let menus = window.menus;
+	let menus = window.appMenus;
 	
 	const categories = $('#divCategories input[type="checkbox"]:checked');
 	categories.each(function () {
@@ -203,7 +220,7 @@ function inSelectedDescription(dish, inCategory) {
 		return result;
 	}
 
-	let menus = window.menus;
+	let menus = window.appMenus;
 	const productId = dish.productId;
 	let menu =  menus.find(m => m.itemId === productId);
 
@@ -226,18 +243,30 @@ function inSelectedDescription(dish, inCategory) {
 	return result;
 }
 
-async function render(restaurantId, showMenus) {
+async function render(restaurantId, showMenus, refreshMenus) {
 	if (showMenus) {
-		let menus = await getMenus(restaurantId);
-		let categories = getCategories(menus);
+		if (!window.appMenus || refreshMenus) {
+			let menus = await getMenus(restaurantId);
+			window.appMenus = parseMenus(menus);
+		}
+		let categories = getCategories(window.appMenus);
 		renderCategories(categories, window.descriptionSplit);
 	}
-	let mealRequests = await getMeals(restaurantId);
-	renderDashboard(mealRequests);
+
+	$('#spinner').show();
+	try {
+		let meals = await getMeals(restaurantId);
+		window.meals = meals;
+		let mealRequests = await parseMeals(meals);
+		renderDashboard(mealRequests);
+	} catch (error) {
+		console.error('Error occurred while fetching meals:', error);
+	}
+	$('#spinner').hide();
 }
 
-function displayAll(show) {
-	if (show) {
+function displayAll(isAuthenticated) {
+	if (isAuthenticated) {
 		$('#credentials').hide();
 		// $('#menusContent').show();
 		// $('#mealsContent').show();
@@ -252,12 +281,22 @@ function displayAll(show) {
 	}
 }
 
-function recalculateDashboard() {
+async function recalculateDashboard() {
 	console.log('Refreshing dashboard...');
-	$('#dishes').empty();
-	let meals = window.meals;
-	let mealRequests = parseMeals(meals);
-	renderDashboard(mealRequests);
+	$('#spinner').show();
+	
+	try
+	{
+		$('#dishes').empty();
+		let meals = window.meals;
+		let mealRequests = await parseMeals(meals);
+		renderDashboard(mealRequests);
+	}
+	catch (error) {
+		console.error('Error occurred while refreshing dashboard:', error);
+	}
+
+	$('#spinner').hide();
 	console.log('Done refreshing dashboard.');
 }
 
@@ -278,25 +317,7 @@ function bindRefresh() {
 	}, 1000);
 }
 
-function bindSettings() {
-	bindSettingsEvents();
-	bindRefresh();
-}
-
-async function startup() {
-	setSettings();
-	searchPrinterServer();
-	renderStatuses(window.showStatuses);
-
-	await refreshAuth(true);
-
-	bindSettings();
-
-	$('#username').html(sessionStorage.getItem("username"));
-
-}
-
-async function refreshAuth(showMenus) {
+async function refreshAuth(showMenus, refreshMenus) {
 	let restaurantId = sessionStorage.getItem("restaurantId");
 	let expire = Number(sessionStorage.getItem("expire"));
 	
@@ -304,7 +325,7 @@ async function refreshAuth(showMenus) {
 		console.log("Session authentication used");
 		if (window.location.href.indexOf("index.html") === -1) {
 			displayAll(true);
-			await render(restaurantId, showMenus);
+			await render(restaurantId, showMenus, refreshMenus);
 		}
 	} else {
 		console.log('Not authenticated');

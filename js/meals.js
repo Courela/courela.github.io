@@ -1,8 +1,11 @@
-function parseMeals(data) {
+const tablePrefix = 'table_';
+
+async function parseMeals(data) {
+    console.log('Start parsing meals at ' + new Date().toISOString() + ': ' + data.length);
 	let toPrepareMeals = [];
 
     resetMenuDishes();
-    let menus = window.menus;
+    let menus = window.appMenus;
 
 	for (let i = 0; i < data.length; i++) {
 		let order = data[i];
@@ -29,7 +32,7 @@ function parseMeals(data) {
             }
 			let productId = item.item.id;
             let itemName = item.item.name;
-			let description = getItemDescription(productId);
+			let description = await getItemDescription(productId);
 			
             let dish = {
                 "orderId": orderId,
@@ -49,12 +52,13 @@ function parseMeals(data) {
 			toPrepareMeals.push(dish);
 		}
 	}
+    console.log('Finished parsing meals at ' + new Date().toISOString() + ': ' + toPrepareMeals.length);
 	
 	return toPrepareMeals;
 }
 
 function resetMenuDishes() {
-    let menus = window.menus;
+    let menus = window.appMenus;
     for (let z = 0; z < menus.length; z++) {
         const menu = menus[z];
         menu.dishes = [];
@@ -86,13 +90,12 @@ function groupByStatus(toPrepareMeals, descriptionSplit) {
 
 function groupByTable(orders) {
 	return orders.reduce((acc, order) => {
-		const key = order.table;
+		const key = tablePrefix + order.table;
 		if (!acc[key]) {
 			acc[key] = [];
 		}
-
         acc[key].push(order);
-		return acc;
+        return acc;
 	}, {});
 }
 
@@ -139,7 +142,7 @@ async function markCategoriesAsServed(order) {
     const categories = $('#divCategories input[type="checkbox"]:checked');
     categories.each(function () {
         const category = $(this).val();
-        let selectedItems = menus.filter(m => m.category === category);
+        let selectedItems = window.appMenus.filter(m => m.category === category);
         let keys = Object.keys(order.itemstamps);
         for (let i = 0; i < keys.length; i++) {
             const requestedItem = order.itemstamps[keys[i]];

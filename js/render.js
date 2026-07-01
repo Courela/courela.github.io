@@ -29,12 +29,12 @@ function renderDashboard(mealRequests) {
             renderByTableOrdered(domDishes, mealRequests);
         }
     } else {
-        renderByOrders(domDishes, mealRequests);
+        renderByOrdersOrdered(domDishes, mealRequests);
     }
 }
 
 function renderByDish(domDishes) {
-    let menus = window.menus;
+    let menus = window.appMenus;
     let allCategories = inSelectedAllCategories();
     for (let x = 0; x < menus.length; x++) {
         const categoryItem = menus[x];
@@ -141,7 +141,8 @@ function renderCellsOrdered(dishes,status, domDishes) {
     }
 }
 
-function renderByOrders(domDishes, mealRequests) {
+function renderByOrdersOrdered(domDishes, mealRequests) {
+    // mealRequests.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
     let groupByTables = groupByTable(mealRequests);
     let tables = Object.keys(groupByTables);
 
@@ -158,7 +159,7 @@ function renderByOrders(domDishes, mealRequests) {
         }
         if (showTable) {
             let domTable = $('<p class="box"></p>');
-            let domTableLink = $('<a href="#">'+ table +'</a><br/>');
+            let domTableLink = $('<a href="#">'+ table.replace(tablePrefix, '') +'</a><br/>');
             domTable.append(domTableLink);
             for (let j = 0; j < selectedItems.length; j++) {
                 const item = selectedItems[j];

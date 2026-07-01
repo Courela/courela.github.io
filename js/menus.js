@@ -55,8 +55,12 @@ function getCategories(menus) {
     }, {});
 }
 
-function getItemDescription(itemId) {
-	let menus = window.menus;
+async function getItemDescription(itemId) {
+	let menus = window.appMenus;
+	if (!menus) {
+		menus = await getMenus(sessionStorage.getItem("restaurantId"));
+		window.appMenus = parseMenus(menus);
+	}
 	let item = menus.find(m => m.itemId === itemId);
 	return item && item.description ? item.description : window.nullDescription;
 }
@@ -148,8 +152,9 @@ async function onRefreshMenu() {
 
 	let restaurantId = sessionStorage.getItem("restaurantId");
 	let menus = await getMenus(restaurantId);
-	let categories = getCategories(menus);
+	window.appMenus = parseMenus(menus);
+	let categories = getCategories(window.appMenus);
 	renderCategories(categories, window.descriptionSplit);
 
-	refreshAuth();
+	refreshAuth(false, true);
 }
