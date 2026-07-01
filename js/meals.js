@@ -123,9 +123,7 @@ async function markAsServed(evt) {
         let now = Date.now();
         order.lastEditTime = now;
         order.itemstamps[itemId].lastEditTime = now;
-        if (!updateOrder(orderId, order)) {
-            showModal('Ocorreu um erro! Verifique os logs.');
-        } else {
+        if (await updateOrder(orderId, order)) {
             if (window.printServerURL) {
                 let item = order.itemstamps[itemId].item;
                 await sendToPrinter(table, 1, item.name);
@@ -133,8 +131,8 @@ async function markAsServed(evt) {
             await refreshAuth();
         };
     } else {
-        showModal('Não encontrado!');
-        console.err('Not found: ' + itemId);
+        showModal('Pedido não encontrado!', 3000);
+        console.error('Not found: ' + itemId);
     };
 }
 

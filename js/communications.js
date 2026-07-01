@@ -56,7 +56,7 @@ async function getMenus(restaurantId) {
 		return res;
 	} catch (err) {
 		console.log(err);
-        showModal('Falha a obter menu!');
+        showModal('Falha a obter menu!', 10000);
 	}
     return [];
 }
@@ -78,7 +78,7 @@ async function getMeals(restaurantId) {
         return res;
     } catch (err) {
         console.log(err);
-        showModal('Falha a obter refei\xE7\xF5es!');
+        showModal('Falha a obter refei\xE7\xF5es!', 10000);
     }
 
     return [];
@@ -99,7 +99,7 @@ async function getOrder(orderId) {
         return res;
     } catch (err) {
         console.log(err);
-        showModal('Falha a obter pedido "' + orderId + '"!');
+        showModal('Falha a obter pedido "' + orderId + '"!', 3000);
     }
 
     return null;
@@ -120,7 +120,7 @@ async function updateOrder(orderId, order) {
         console.log('Update order "' + orderId + '"');
     } catch (err) {
         console.log(err);
-        showModal('Falha a actualizar pedido "' + orderId + '"!');
+        showModal('Falha a actualizar pedido "' + orderId + '"!', 3000);
         return false;
     }
     return true;
@@ -141,7 +141,7 @@ async function sendToPrinter(table, quantity, itemName) {
 		});
 	} catch (err) {
 		console.log(err);
-        showModal('Impressora falhou.');
+        showModal('Falha a imprimir "' + itemName + '" para a mesa "' + table + '"!', 3000);
 	}
 }
 
@@ -160,7 +160,7 @@ async function sendItemsToPrinter(data) {
 		});
 	} catch (err) {
 		console.log(err);
-        showModal('Impressora falhou.');
+        showModal('Impressora falhou.', 3000);
 	}
 }
 
