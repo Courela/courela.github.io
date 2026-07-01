@@ -191,7 +191,7 @@ async function onTableClick (evt, items) {
         }
     }
     if (req.items.length === 0) {
-        alert('Nada para imprimir.');
+        showModal('Nada para imprimir.');
         return;
     }
     let ok = confirm('Marcar items das categorias seleccionadas, para a mesa ' + tbl + ', como servidos? ' );
@@ -201,7 +201,7 @@ async function onTableClick (evt, items) {
         if (!window.printOnly) {
             let updated = await markCategoriesAsServed(order);
             if (!updated) {
-                alert('Ocorreu um erro! Verifique os logs.');
+                showModal('Ocorreu um erro! Verifique os logs.');
                 return;
             }
             await refreshAuth();

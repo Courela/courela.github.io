@@ -124,7 +124,7 @@ async function markAsServed(evt) {
         order.lastEditTime = now;
         order.itemstamps[itemId].lastEditTime = now;
         if (!updateOrder(orderId, order)) {
-            alert('Ocorreu um erro! Verifique os logs.');
+            showModal('Ocorreu um erro! Verifique os logs.');
         } else {
             if (window.printServerURL) {
                 let item = order.itemstamps[itemId].item;
@@ -133,7 +133,7 @@ async function markAsServed(evt) {
             await refreshAuth();
         };
     } else {
-        alert('Não encontrado!');
+        showModal('Não encontrado!');
         console.err('Not found: ' + itemId);
     };
 }
