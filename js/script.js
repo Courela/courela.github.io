@@ -4,6 +4,7 @@ function bindSettingsEvents() {
 	let refreshPeriod = window.refreshPeriod / 1000;
 	$('#iptRefreshPeriod').val(refreshPeriod);
 	$('#iptdishWarningThreshold').val(window.dishWarningThreshold);
+	$('#iptItemsPerPage').val(window.itemsPerPage);
 
 	bindPrinterSettings();
 
@@ -102,6 +103,8 @@ function onApplyClick() {
 	} else {
 		window.printerAddr = '';
 	}
+
+	window.itemsPerPage = $('#iptItemsPerPage').val();
 
 	bindRefresh();
 

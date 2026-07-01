@@ -109,7 +109,6 @@ function insertOrdered(arr, dish) {
 }
 
 function renderCellsOrdered(dishes,status, domDishes) {
-    // console.log("Dishes: " + JSON.stringify(dishes));
     let dishNames = Object.keys(dishes);
     for (let j = 0; j < dishNames.length; j ++) {
         let div = $('<div class="board-cell"></div>');
@@ -118,7 +117,7 @@ function renderCellsOrdered(dishes,status, domDishes) {
         if (window.showTables) {
             let tables =  dishes[dishNames[j]];
             if (tables) {
-                for (let l = 0; l < tables.length; l++) {
+                for (let l = 0; l < tables.length && l < window.itemsPerPage; l++) {
                     let orderId = $('<input name="' + tables[l].table + '_orderId" type="hidden" value="' + tables[l].orderId + '"></input>')
                     let itemId = $('<input name="' + tables[l].table + '_itemId" type="hidden" value="' + tables[l].itemId + '"></input>')
                     //if (status[statusKeys[idx]] === 'ORDERED') {
@@ -145,7 +144,8 @@ function renderCellsOrdered(dishes,status, domDishes) {
 function renderByOrders(domDishes, mealRequests) {
     let groupByTables = groupByTable(mealRequests);
     let tables = Object.keys(groupByTables);
-    for (let i = 0; i < tables.length; i++) {
+
+    for (let i = 0; i < tables.length && i < window.itemsPerPage; i++) {
         let table = tables[i];
         const items = groupByTables[table];
         let showTable = false;

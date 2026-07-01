@@ -16,4 +16,5 @@ function setSettings() {
 	window.showTableThreshold = 700;              // do not show table with name higher than
 	window.localIP = '192.168.100.';                // local IP address
 	window.filterMealsOlderThan = 90;              // in minutes, filter out meals created before this value
+	window.itemsPerPage = 5;                      // number of items to show per page
 }

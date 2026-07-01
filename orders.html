@@ -29,15 +29,17 @@
             <div class="collapse">
                 <div style="display: flex; flex-flow: row wrap;">
                     <strong><span>Recarregar em (segundos): </span></strong>
-                    <input id="iptRefreshPeriod" type="number" class="small-number" title="Recarregar" />
+                    <input id="iptRefreshPeriod" type="number" class="small-number" title="Recarregar" />&nbsp;
+					<strong><span>Itens por página: </span></strong>
+					<input id="iptItemsPerPage" type="number" class="small-number" title="Itens por página" />&nbsp;
 					<strong><span>Servidor impressoras: </span></strong>
                     <select id="sltPrintServerURL" name="printServerURL" title="URL Print Server">
 						<option value="">Sem servidor</option>
-					</select>
+					</select>&nbsp;
 					<strong><span>Imprimir para: </span></strong>
 					<select id="sltPrinterAddr" name="printerAddr" title="Printer Address">
 						<option value="">Sem impressora</option>
-					</select>
+					</select>&nbsp;
 					<img id="imgChanges" src="images/red-circle.png" alt="red-cicle" style="width: 15px; height: 15px; display: none;"/>
                     <button id="btnApply" title="Aplicar">Aplicar</button>&nbsp;&nbsp;&nbsp;&nbsp;
 					<button id="btnRefreshMenu" title="Actualizar Menus">Actualizar Menus</button>&nbsp;&nbsp;
