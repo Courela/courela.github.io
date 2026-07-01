@@ -13,8 +13,10 @@
 		<script src="js/menus.js"></script>
 		<script src="js/meals.js"></script>
         <script src="js/render.js"></script>
+		<script src="js/modal.js"></script>
         <link rel="stylesheet" href="css/script.css" />
 		<link rel="stylesheet" href="css/orders.css" />
+		<link rel="stylesheet" href="css/modal.css" />
 		<script>
             window.showOrders = true;
 			$(document).ready(startup);
@@ -61,6 +63,18 @@
         <div id="dashboard" style="display: none;">
 			<p>Pedidos</p>
 			<div id="dishes" style="display: flex; flex-flow: row wrap;"></div>
+		</div>
+		<div id="spinner" class="spinner-overlay">
+			<img src="images/spinner.gif" alt="Wait spinner"/>
+		</div>
+
+		<!-- The Modal -->
+		<div id="appModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<p></p>
+			</div>
 		</div>
     </body>
 </html>

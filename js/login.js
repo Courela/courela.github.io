@@ -23,10 +23,10 @@ async function login() {
 			window.location.href = "links.html";
 			result = true;
 		} else {
-			alert('Autentica\xE7\xE3o falhou!');
+			showModal('Autentica\xE7\xE3o falhou!');
 		}
 	} else {
-		alert("Utilizador e Password obrigat\xF3rios");
+		showModal("Utilizador e Password obrigat\xF3rios");
 	}
 
 	return result;
