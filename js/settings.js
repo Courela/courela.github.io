@@ -8,13 +8,13 @@ function setSettings() {
 	window.showFullDate = false;
 	window.getMealsBackTo = 3;                    // valid values are (in hours): 1, 3, 6, 12, 24
 	window.dishWarningThreshold = 20;             // show different cell color upon higher requests
-	window.printServerURLOptions = [ '100.100:3000/api', '100.198:3000/api' ];  // options for additional printer server
+	window.printServerURLOptions = [ '10.100:3000/api', '10.198:3000/api' ];  // options for additional printer server
 	window.printServerURL = ''                    // additional printer server
-	window.printerAddrOptions = [ '100.201', '100.202', '100.203', '100.204' ];
+	window.printerAddrOptions = [ '10.201', '10.202', '10.203', '10.204' ];
 	window.printerAddr = '';                      // address of printer to use (printServerURL must be set)
 	window.printOnly = false;                     // print only orders, do not change their status
 	window.showTableThreshold = 700;              // do not show table with name higher than
 	window.localIP = '192.168.100.';                // local IP address
-	window.filterMealsOlderThan = 90;              // in minutes, filter out meals created before this value
+	window.filterMealsOlderThan = 180;              // in minutes, filter out meals created before this value
 	window.itemsPerPage = 5;                      // number of items to show per page
 }
