@@ -1,32 +1,292 @@
-/* Container for tables */
+/* ===== App bar ===== */
+.app-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: var(--color-primary);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+}
+
+.app-bar-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.app-bar-back:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.app-bar-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.app-bar-user {
+    margin-left: auto;
+    font-size: 14px;
+}
+
+.app-bar-timer {
+    font-size: 24px;
+    font-weight: 700;
+    min-width: 48px;
+    text-align: right;
+}
+
+@media (max-width: 479px) {
+    .app-bar-title { font-size: 18px; }
+    .app-bar-user { font-size: 12px; }
+    .app-bar-timer { font-size: 20px; }
+}
+
+/* ===== Connected settings card ===== */
+#collapseSettings {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    user-select: none;
+}
+
+#collapseSettings:hover {
+    background: var(--color-primary-softer);
+}
+
+#settings #collapseSettings:not(.collapsed) {
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.collapse-gear {
+    color: var(--color-primary);
+    font-size: 18px;
+}
+
+.collapse-label {
+    flex: 1;
+}
+
+.collapse-chevron {
+    color: var(--color-text-muted);
+    transition: transform 0.2s ease;
+}
+
+#collapseSettings.collapsed .collapse-chevron {
+    transform: rotate(-90deg);
+}
+
+#settings .collapse {
+    display: block;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top: none;
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 10px;
+}
+
+#settings .collapse > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#settings .collapse strong span {
+    color: var(--color-text-muted);
+    font-weight: 600;
+}
+
+div#settings span {
+    margin: 0;
+}
+
+div#settings input[type="number"],
+div#settings input[type="text"],
+div#settings select {
+    margin: 0;
+    padding: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    background: var(--color-surface);
+}
+
+div#settings button {
+    margin: 0;
+    padding: 8px 16px;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+div#settings button:hover {
+    background: var(--color-primary-dark);
+}
+
+div#settings input[type="checkbox"] {
+    accent-color: var(--color-primary);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* ===== Filter chips ===== */
+#divCategories,
+#divStatuses {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+#divCategories .option,
+#divStatuses .option {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 6px 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+#divCategories .option:hover,
+#divStatuses .option:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-softer);
+}
+
+#divCategories .sub-options {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid var(--color-border);
+}
+
+/* ===== Board ===== */
 #dishes {
-    gap: 0;
+    gap: 8px;
 }
 
 /* Base styles for board cells */
 .board-cell {
     width: 16.5%;
     font-size: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     padding: 10px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     text-align: center;
-    background-color: white;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     min-height: 100px;
     flex-grow: 1;
+    gap: 6px;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
+.board-cell:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Card header: dish name + count badge */
+.board-cell > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.board-cell > div:first-child > span:nth-child(2) {
+    font-weight: 600;
+}
+
+.board-cell > div:first-child > span:last-child {
+    display: block;
+    width: max-content;
+    margin: 0 auto;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 2px 12px;
+    font-size: 16px;
+}
+
+.board-cell .top-left.tiny {
+    position: static;
+    padding: 0;
+}
+
+.board-cell .top-left.tiny:empty {
+    display: none;
+}
+
+/* Table rows: clickable table chip + timestamp */
+.board-cell > div:not(:first-child) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.board-cell > div:not(:first-child) > a {
+    display: inline-block;
+    background: var(--color-primary);
+    color: #fff;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    padding: 4px 12px;
+    font-size: 15px;
+}
+
+.board-cell > div:not(:first-child) > a:hover {
+    background: var(--color-primary-dark);
+}
+
 .time {
-    font-size: 14px;
-    position: absolute;
-    right: 5px;
-    padding: 0px 5px;
+    position: static;
+    font-size: 13px;
+    color: var(--color-text-muted);
+    padding: 0;
+    white-space: nowrap;
 }
 
 /* Extra Large Screens (1400px and above) - 6 columns */

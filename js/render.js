@@ -326,13 +326,22 @@ function buildHtmlOrder(order) {
     return ejs.render(template, { order: order });
 }
 
+function statusToClass(status) {
+    if (!status) {
+        return '';
+    }
+    let token = String(status).toLowerCase().replace(/[^a-z]/g, '');
+    return token ? 'status-' + token : '';
+}
+
 function buildHtmlDish(categoryItem, nrDishes, isWarning) {
+    let statusClass = statusToClass(categoryItem.status);
     let template =
-        '<div id="cell-<%= categoryItem.itemId %>" class="board-cell flashing <% isWarning ? "warning" : "" %>">'+
+        '<div id="cell-<%= categoryItem.itemId %>" class="board-cell flashing <%= isWarning ? "warning" : "" %> <%= statusClass %>">'+
             '<span class="top-left tiny"><%= categoryItem.status %></span><span><%= categoryItem.name %></span><br />'+
             '<span class="alignBottom"><%= nrDishes %></span>'+
         '</div>';
-    return ejs.render(template, { categoryItem: categoryItem, nrDishes: nrDishes.toString(), isWarning: isWarning });
+    return ejs.render(template, { categoryItem: categoryItem, nrDishes: nrDishes.toString(), isWarning: isWarning, statusClass: statusClass });
 }
 
 function buildHtmlItemCell(dishName, count, status) {

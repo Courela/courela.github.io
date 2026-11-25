@@ -1,5 +1,5 @@
 <html lang="pt">
-	<header>
+	<head>
 		<title>Pratos</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +11,14 @@
 		<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 		<script src="js/communications.js"></script>
 		<script src="js/script.js"></script>
-        <script src="js/settings.js"></script>
+    <script src="js/settings.js"></script>
 		<script src="js/auth.js"></script>
 		<script src="js/menus.js"></script>
 		<script src="js/meals.js"></script>
 		<script src="js/render.js"></script>
 		<script src="js/pusher.js"></script>
 		<script src="js/ejs.js"></script>
-        <link rel="stylesheet" href="css/script.css" />
+    <link rel="stylesheet" href="css/script.css" />
 		<link rel="stylesheet" href="css/dishes.css" />
 		<script>
             window.showTables = false;
@@ -27,11 +27,20 @@
                 subscribe();
             });
 		</script>
-	</header>
+	</head>
 	<body>
-		<div id="settings" style="display: none; padding-left: 10px;">
-			<span style="font-size: small;"><b>Utilizador:</b> <span id="username" style="font-size: small;"></span>&nbsp;&nbsp;<a href="links.html">Voltar</a></span><br />
-			<p id="collapseSettings"><strong>Definições</strong> <img src="images/collapse.png" height="15px" width="15px" title="Encolher"/></p>
+		<div id="settings" style="display: none;">
+			<div class="app-bar">
+				<a class="app-bar-back" href="links.html" title="Voltar">&#8592;</a>
+				<span class="app-bar-title">Pratos</span>
+				<span class="app-bar-user"><b>Utilizador:</b> <span id="username"></span></span>
+				<span class="app-bar-timer" id="timer">--</span>
+			</div>
+			<div id="collapseSettings">
+				<span class="collapse-gear">&#9881;</span>
+				<span class="collapse-label"><strong>Definições e filtros</strong></span>
+				<span class="collapse-chevron">&#9662;</span>
+			</div>
             <div class="collapse">
                 <div>
                     <strong><span>Recarregar em (segundos): </span></strong>
@@ -45,7 +54,7 @@
                     <button id="btnApply" title="Aplicar">Aplicar</button>&nbsp;&nbsp;&nbsp;&nbsp;
 					<button id="btnRefreshMenu" title="Actualizar Menus">Actualizar Menus</button>
                 </div>
-                <div id="divCategories" style="display: flex; align-items: flex-start;">
+                <div id="divCategories">
                     <strong><span>Categorias: </span></strong>
                     <span>Todas</span>
                     <input id="chkAllCategories" type="checkbox" title="Todas" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
@@ -57,9 +66,6 @@
                     <input id="chkAllStatuses" type="checkbox" title="Todos" placeholder="" value="all" checked="checked" />&nbsp;&nbsp;
                 </div>
             </div>
-			<div class="timer">
-				<span id="timer">--</span>
-			</div>
 		</div>
 		<div id="menusContent" style="display: none;">
 			<!-- <p>Response</p> -->
