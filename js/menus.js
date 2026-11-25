@@ -35,14 +35,14 @@ function renderMenus(menus) {
 }
 
 function getCategories(menus) {
-    return menus.reduce((acc, menu) =>{
-        let key = menu.category;
-        if (!acc[key]) {
-            acc[key] = [];
-        }
-        acc[key].push(menu);
-        return acc;
-    }, {});
+  return menus.reduce((acc, menu) =>{
+    let key = menu.category;
+    if (!acc[key]) {
+        acc[key] = [];
+    }
+    acc[key].push(menu);
+    return acc;
+  }, {});
 }
 
 function getItemDescription(itemId) {
@@ -53,30 +53,54 @@ function getItemDescription(itemId) {
 
 function renderCategories(categories, descriptionSplit) {
     if (categories) {
-        let settings = $('#divCategories');
+      let settings = $('#divCategories');
+      let keys = Object.keys(categories);
 
-        let keys = Object.keys(categories);
-		for (let i = 0; i < keys.length; i++) {
-			let category = keys[i];
-			let opt = $('<div class="option"></div>');
-			let checkBox = $('<input type="checkbox" value="' + category + '" title="' + category +'" placeholder="" />');
-			checkBox.change(function () {
-				$('#chkAllCategories').prop('checked', false);
-				let self = $(this);
-				let inputs = self.parent().find('div input');
-				inputs.prop('checked', false);
-				recalculateDashboard();
-			});
-			opt.append('<span>' + category + '</span>', checkBox);
+		  for (let i = 0; i < keys.length; i++) {
+			  let category = keys[i];
+			  let opt = $('<div class="option"></div>');
+			  let checkBox = $('<input type="checkbox" value="' + category + '" title="' + category +'" placeholder="" />');
+			  checkBox.change(function () {
+          $('#chkAllCategories').prop('checked', false);
+          let self = $(this);
+          let inputs = self.parent().find('div input');
+          inputs.prop('checked', false);
+          recalculateDashboard();
+        });
+			  opt.append('<span>' + category + '</span>', checkBox);
 
-			if (descriptionSplit) {
-				let items = categories[category];
-				renderSubCategories(items, opt);
-			}
-
-			settings.append(opt);
+        if (descriptionSplit) {
+          let items = categories[category];
+          renderSubCategories(items, opt);
         }
+
+        bindOptionClick(opt);
+        settings.append(opt);
+      }
     }
+}
+
+function bindOptionClick(opt) {
+	opt.on('click', function (evt) {
+		let target = $(evt.target);
+		if (target.is('input[type="checkbox"]')) {
+			return;
+		}
+
+		let checkbox;
+		if (target.closest('.sub-options').length > 0) {
+			if (target.is('span')) {
+				checkbox = target.next('input[type="checkbox"]');
+			}
+		} else {
+			checkbox = opt.children('input[type="checkbox"]').first();
+		}
+
+		if (checkbox && checkbox.length > 0) {
+			checkbox.prop('checked', !checkbox.prop('checked')).trigger('change');
+			evt.stopPropagation();
+		}
+	});
 }
 
 function renderSubCategories(items, opt) {
@@ -116,19 +140,19 @@ function renderSubCategories(items, opt) {
 
 function renderStatuses(statuses) {
     if (statuses && statuses.length > 0) {
-        let settings = $('#divStatuses');
-
-		for (let i = 0; i < statuses.length; i++) {
-			let status = statuses[i];
-			let opt = $('<div class="option"></div>');
+      let settings = $('#divStatuses');
+      for (let i = 0; i < statuses.length; i++) {
+        let status = statuses[i];
+        let opt = $('<div class="option"></div>');
 		    let checkBox = $('<input type="checkbox" value="' + status + '" title="' + status +'" placeholder="" />');
-            checkBox.change(function () {
-                $('#chkAllStatuses').prop('checked', false);
-                recalculateDashboard();
-            });
-			opt.append('<span>' + status + '</span>', checkBox);
-            settings.append(opt);
-        }
+        checkBox.change(function () {
+            $('#chkAllStatuses').prop('checked', false);
+            recalculateDashboard();
+        });
+			  opt.append('<span>' + status + '</span>', checkBox);
+        bindOptionClick(opt);
+        settings.append(opt);
+      }
     }
 }
 

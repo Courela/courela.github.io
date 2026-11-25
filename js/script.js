@@ -37,6 +37,7 @@ function bindSettingsEvents() {
 		let div = $(evt.currentTarget).parent();
 		let collapseElements = div.children().filter('.collapse');
 		collapseElements.toggle();
+		$(evt.currentTarget).toggleClass('collapsed');
 	});
 }
 

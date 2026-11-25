@@ -1,58 +1,191 @@
 <html lang="pt">
-	<header>
+	<head>
 		<title>Links</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="css/script.css" />
 		<style>
 			body {
-				font-family: 'Segoe UI', sans-serif;
+				font-family: var(--font-family);
 				padding: 15px;
-				background-color: #f5f5f5;
+				box-sizing: border-box;
+				min-height: 100vh;
+				margin: 0;
+				background: linear-gradient(to bottom, var(--color-primary), var(--color-primary-light));
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 			}
-			
-			div#links {
-				max-width: 500px;
-				margin: 0 auto;
-			}
-			
-			div#links p {
-				margin: 10px 0;
-			}
-			
-			div#links a {
-				display: block;
-				padding: 15px 20px;
-				background-color: #007BFF;
-				color: white;
-				text-decoration: none;
-				border-radius: 5px;
-				font-size: 16px;
+
+			.links-title {
+				color: #fff;
 				text-align: center;
-				transition: background-color 0.3s ease;
+				margin: 0 0 4px 0;
+				font-size: 28px;
+				letter-spacing: 1px;
 			}
-			
-			div#links a:hover {
-				background-color: #0056b3;
+
+			.links-subtitle {
+				color: rgba(255, 255, 255, 0.85);
+				text-align: center;
+				margin: 0 0 24px 0;
+				font-size: 14px;
+				font-weight: 300;
 			}
-			
+
+			div#links {
+				width: 100%;
+				max-width: 500px;
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+			}
+
+			.nav-card {
+				display: flex;
+				align-items: center;
+				gap: 14px;
+				padding: 18px 20px;
+				background: var(--color-surface);
+				color: var(--color-text);
+				text-decoration: none;
+				border-radius: var(--radius-md);
+				border-top: 4px solid transparent;
+				box-shadow: var(--shadow-sm);
+				transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+			}
+
+			.nav-card:hover {
+				border-top-color: var(--color-primary);
+				transform: translateY(-2px);
+				box-shadow: var(--shadow-md);
+			}
+
+			.nav-icon {
+				font-size: 28px;
+				line-height: 1;
+			}
+
+			.nav-text {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.nav-label {
+				font-size: 18px;
+				font-weight: 600;
+			}
+
+			.nav-desc {
+				font-size: 13px;
+				color: var(--color-text-muted);
+			}
+
+			.logout-row {
+				display: flex;
+				justify-content: center;
+				margin-top: 8px;
+			}
+
+			.logout-btn {
+				display: inline-block;
+				padding: 12px 24px;
+				background: transparent;
+				color: #fff;
+				border: 2px solid #fff;
+				border-radius: 20px;
+				font-size: 15px;
+				cursor: pointer;
+				transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+			}
+
+			.logout-btn:hover {
+				background: var(--color-danger);
+				border-color: var(--color-danger);
+				color: #fff;
+			}
+
+			@media (min-width: 720px) {
+				div#links {
+					max-width: 820px;
+					flex-direction: row;
+					flex-wrap: wrap;
+					justify-content: center;
+				}
+
+				.nav-card {
+					flex: 1;
+					flex-direction: column;
+					text-align: center;
+				}
+
+				.nav-text {
+					align-items: center;
+				}
+
+				.logout-row {
+					flex: 1 0 100%;
+				}
+			}
+
 			@media (max-width: 479px) {
 				body {
 					padding: 10px;
 				}
-				
-				div#links a {
-					padding: 12px 15px;
-					font-size: 14px;
+
+				.nav-card {
+					padding: 14px 16px;
+				}
+
+				.nav-label {
+					font-size: 16px;
+				}
+
+				.links-title {
+					font-size: 24px;
 				}
 			}
 		</style>
-    </header>
+    </head>
 	<body>
+		<h1 class="links-title">Meal Order Manager</h1>
+		<p class="links-subtitle">Selecione uma vista</p>
 		<div id="links">
-			<p><a href="dishes.html">Pratos</a></p>
-			<p><a href="tables.html">Mesas</a></p>
-			<p><a href="orders.html">Pedidos</a></p>
+			<a class="nav-card" href="dishes.html">
+				<span class="nav-icon">&#127869;</span>
+				<span class="nav-text">
+					<span class="nav-label">Pratos</span>
+					<span class="nav-desc">Vista de cozinha por prato</span>
+				</span>
+			</a>
+			<a class="nav-card" href="tables.html">
+				<span class="nav-icon">&#129681;</span>
+				<span class="nav-text">
+					<span class="nav-label">Mesas</span>
+					<span class="nav-desc">Pratos agrupados por mesa</span>
+				</span>
+			</a>
+			<a class="nav-card" href="orders.html">
+				<span class="nav-icon">&#129534;</span>
+				<span class="nav-text">
+					<span class="nav-label">Pedidos</span>
+					<span class="nav-desc">Pedidos por mesa e impressão</span>
+				</span>
+			</a>
+			<div class="logout-row">
+				<button class="logout-btn" onclick="logout()">Terminar sessão</button>
+			</div>
 		</div>
+		<script>
+			function logout() {
+				sessionStorage.removeItem('userId');
+				sessionStorage.removeItem('restaurantId');
+				sessionStorage.removeItem('token');
+				sessionStorage.removeItem('expire');
+				sessionStorage.removeItem('username');
+				window.location.href = 'index.html';
+			}
+		</script>
 	</body>
 </html>
